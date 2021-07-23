@@ -1,3 +1,5 @@
+![Build Status](https://github.com/catalyst/moodle-local_activity_notifications/actions/workflows/ci.yml/badge.svg?branch=master)
+
 # Activity notifications #
 
 TODO Describe the plugin shortly here.
@@ -27,18 +29,21 @@ Alternatively, you can run
 
 to complete the installation from the command line.
 
-## License ##
+# Crafted by Catalyst IT
 
-2021 Your Name <you@example.com>
+This plugin was developed by Catalyst IT Australia:
 
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
+https://www.catalyst-au.net/
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+![Catalyst IT](/pix/catalyst-logo.png?raw=true)
 
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <https://www.gnu.org/licenses/>.
+# Contributing and Support
+
+Issues, and pull requests using github are welcome and encouraged!
+
+https://github.com/catalyst/moodle-local_activity_notifications/issues
+
+If you would like commercial support or would like to sponsor additional improvements
+to this plugin please contact us:
+
+https://www.catalyst-au.net/contact-us
