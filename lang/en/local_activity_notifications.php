@@ -27,3 +27,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Activity notifications';
+$string['privacy:metadata:local_activity_notifications'] = 'Details of activity notifications.';
+$string['privacy:metadata:local_activity_notifications:cmid'] = 'CMID of the activity the notification is for.';
+$string['privacy:metadata:local_activity_notifications:usermodified'] = 'ID of user who last created or modified the activity notifications.';
+$string['privacy:metadata:local_activity_notifications:timecreated'] = 'Unix time that the activity notifications was created.';
+$string['privacy:metadata:local_activity_notifications:timemodified'] = 'Unix time that the activity notifications was modified.';
