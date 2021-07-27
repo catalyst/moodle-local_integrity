@@ -26,6 +26,7 @@
 namespace local_activity_notifications\plugininfo;
 
 use core\plugininfo\base;
+use core_plugin_manager;
 use local_activity_notifications\notification_base;
 
 defined('MOODLE_INTERNAL') || die();
@@ -41,12 +42,25 @@ defined('MOODLE_INTERNAL') || die();
 class activitynotif extends base {
 
     /**
+     * Gets all enabled plugins.
+     *
+     * @return activitynotif[]
+     */
+    public static function get_enabled_plugins(): array {
+        return core_plugin_manager::instance()->get_plugins_of_type('activitynotif');
+    }
+
+    /**
      * Get notification instance for the given subplugin.
      *
      * @return \local_activity_notifications\notification_base
      */
     public function get_notification(): notification_base {
         $class = '\\activitynotif_' . $this->name . '\\notification';
+
+        if (!class_exists($class)) {
+            throw new \coding_exception('Incorrect activity notification plugin.');
+        }
 
         return new $class($this->name);
     }
