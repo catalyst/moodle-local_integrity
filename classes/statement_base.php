@@ -65,15 +65,15 @@ abstract class statement_base {
      *
      * @return array
      */
-    abstract protected function get_apply_urls(): array;
+    abstract protected function get_display_urls(): array;
 
     /**
-     * Get statement message.
+     * Get statement test.
      *
      * @return string
      */
-    final public function get_message(): string {
-        return get_config('integritystmt_' . $this->name, 'message');
+    final public function get_notice(): string {
+        return get_config('integritystmt_' . $this->name, 'notice');
     }
 
     /**
@@ -91,8 +91,8 @@ abstract class statement_base {
      * @param \moodle_url $pageurl
      * @return bool
      */
-    final public function should_apply(moodle_url $pageurl): bool {
-        foreach ($this->get_apply_urls() as $url) {
+    final public function should_display(moodle_url $pageurl): bool {
+        foreach ($this->get_display_urls() as $url) {
             if (is_string($url)) {
                 if ($pageurl->compare(new moodle_url($url), URL_MATCH_BASE)) {
                     return true;
@@ -108,7 +108,7 @@ abstract class statement_base {
      *
      * @return string
      */
-    public function get_redirect_url(): string {
+    public function get_decline_url(): string {
         global $COURSE;
 
         $url = new moodle_url('/course/view.php', ['id' => $COURSE]);
@@ -129,9 +129,9 @@ abstract class statement_base {
         );
 
         $settings->add(new admin_setting_confightmleditor(
-                "integritystmt_{$this->name}/message",
-                'Message',
-                'Message Description',
+                "integritystmt_{$this->name}/notice",
+                get_string('settings:notice', 'local_integrity'),
+                get_string('settings:notice_description', 'local_integrity'),
                 '')
         );
     }
@@ -143,13 +143,13 @@ abstract class statement_base {
      * @param \MoodleQuickForm $form Form instance.
      */
     public function coursemodule_standard_elements(moodleform_mod $modform, MoodleQuickForm $form): void {
-        $form->addElement('header', 'integrityheader', 'Integrity');
-        $form->addElement('selectyesno', 'integrity', 'Display integrity statement');
+        $form->addElement('header', 'integrityheader', get_string('modform:header', 'local_integrity'));
+        $form->addElement('selectyesno', 'enabled', get_string('modform:enabled', 'local_integrity'));
 
         $cm = $modform->get_coursemodule();
         if ($cm) {
             if ($record = mod_settings::get_record(['cmid' => $cm->id])) {
-                $form->setDefault('integrity', $record->get('enabled'));
+                $form->setDefault('enabled', $record->get('enabled'));
             }
         }
     }

@@ -34,7 +34,7 @@ if ($hassiteconfig && $ADMIN->locate('localplugins')) {
         new admin_category('local_integrity', get_string('pluginname', 'local_integrity'))
     );
 
-    $settings = new admin_settingpage('local_integrity_settings', 'Settings');
+    $settings = new admin_settingpage('local_integrity_settings', get_string('settings'));
     $ADMIN->add('local_integrity', $settings);
 
     foreach (statement_factory::get_statements() as $statement) {

@@ -1,6 +1,6 @@
 ![Build Status](https://github.com/catalyst/moodle-local_integrity/actions/workflows/ci.yml/badge.svg?branch=master)
 
-# Integrity #
+# Academic integrity #
 
 TODO Describe the plugin shortly here.
 

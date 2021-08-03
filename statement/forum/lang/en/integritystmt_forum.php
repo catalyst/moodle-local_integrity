@@ -26,6 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Integrity - forum';
-$string['privacy:metadata'] = 'Integrity - forum does not store any personal data.';
+$string['pluginname'] = 'Academic Integrity - Forum';
+$string['privacy:metadata'] = 'Academic Integrity - Forum does not store any personal data.';
 $string['forum:apply'] = 'Apply integrity - forum';

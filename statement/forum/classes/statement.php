@@ -44,7 +44,7 @@ class statement extends statement_base {
      *
      * @return string[]
      */
-    protected function get_apply_urls(): array {
+    protected function get_display_urls(): array {
         return [
             '/mod/forum/view.php',
             '/mod/forum/discuss.php'

@@ -26,9 +26,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Integrity';
-$string['privacy:metadata:local_integrity_mod_settings'] = 'Details of Local integrity settings for activities.';
+$string['pluginname'] = 'Academic integrity';
+$string['modform:header'] = 'Academic integrity';
+$string['modform:enabled'] = 'Display academic integrity notice?';
+$string['privacy:metadata:local_integrity_mod_settings'] = 'Details of Integrity settings for activities.';
 $string['privacy:metadata:local_integrity_mod_settings:cmid'] = 'CMID of the activity.';
 $string['privacy:metadata:local_integrity_mod_settings:usermodified'] = 'ID of user who last created or modified the settings.';
 $string['privacy:metadata:local_integrity_mod_settings:timecreated'] = 'Unix time that the settings were created.';
 $string['privacy:metadata:local_integrity_mod_settings:timemodified'] = 'Unix time that the setting were modified.';
+$string['settings:notice'] = 'Notice text';
+$string['settings:notice_description'] = 'This text will be displayed to the users.';
