@@ -34,5 +34,7 @@ $string['privacy:metadata:local_integrity_mod_settings:cmid'] = 'CMID of the act
 $string['privacy:metadata:local_integrity_mod_settings:usermodified'] = 'ID of user who last created or modified the settings.';
 $string['privacy:metadata:local_integrity_mod_settings:timecreated'] = 'Unix time that the settings were created.';
 $string['privacy:metadata:local_integrity_mod_settings:timemodified'] = 'Unix time that the setting were modified.';
+$string['settings:default_enabled'] = 'Enabled by default';
+$string['settings:default_enabled_description'] = 'If yes, the notice will be displayed by default, irrespective of wether the staff member is permitted or not to have control of setting.';
 $string['settings:notice'] = 'Notice text';
 $string['settings:notice_description'] = 'This text will be displayed to the users.';

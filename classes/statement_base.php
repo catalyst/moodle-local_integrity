@@ -32,6 +32,7 @@ use moodle_url;
 use admin_settingpage;
 use admin_setting_confightmleditor;
 use admin_setting_heading;
+use admin_setting_configselect;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -74,6 +75,15 @@ abstract class statement_base {
      */
     final public function get_notice(): string {
         return get_config('integritystmt_' . $this->name, 'notice');
+    }
+
+    /**
+     * Get statement test.
+     *
+     * @return int
+     */
+    final public function get_default_enabled(): int {
+        return (int) get_config('integritystmt_' . $this->name, 'default_enabled');
     }
 
     /**
@@ -128,6 +138,18 @@ abstract class statement_base {
                 '')
         );
 
+        $settings->add(new admin_setting_configselect(
+                "integritystmt_{$this->name}/default_enabled",
+                get_string('settings:default_enabled', 'local_integrity'),
+                get_string('settings:default_enabled_description', 'local_integrity'),
+                0,
+                [
+                    0 => get_string('no'),
+                    1 => get_string('yes'),
+                ]
+            )
+        );
+
         $settings->add(new admin_setting_confightmleditor(
                 "integritystmt_{$this->name}/notice",
                 get_string('settings:notice', 'local_integrity'),
@@ -145,6 +167,8 @@ abstract class statement_base {
     public function coursemodule_standard_elements(moodleform_mod $modform, MoodleQuickForm $form): void {
         $form->addElement('header', 'integrityheader', get_string('modform:header', 'local_integrity'));
         $form->addElement('selectyesno', 'enabled', get_string('modform:enabled', 'local_integrity'));
+
+        $form->setDefault('enabled', $this->get_default_enabled());
 
         $cm = $modform->get_coursemodule();
         if ($cm) {
