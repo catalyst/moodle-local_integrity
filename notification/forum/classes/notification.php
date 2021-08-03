@@ -39,4 +39,16 @@ defined('MOODLE_INTERNAL') || die;
  */
 class notification extends notification_base {
 
+    /**
+     * Get a list of URL to fire off the notification.
+     *
+     * @return string[]
+     */
+    protected function get_apply_urls(): array {
+        return [
+            '/mod/forum/view.php',
+            '/mod/forum/discuss.php'
+        ];
+    }
+
 }
