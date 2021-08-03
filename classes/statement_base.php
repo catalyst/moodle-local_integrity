@@ -33,6 +33,7 @@ use admin_settingpage;
 use admin_setting_confightmleditor;
 use admin_setting_heading;
 use admin_setting_configselect;
+use context_course;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -92,8 +93,8 @@ abstract class statement_base {
      * @param \context $context Context to check against.
      * @return bool
      */
-    final public function can_apply(\context $context): bool {
-        return has_capability('integritystmt/' . $this->name . ':apply', $context);
+    final public function can_change_default(\context $context): bool {
+        return has_capability('integritystmt/' . $this->name . ':changedefault', $context);
     }
 
     /**
@@ -166,15 +167,18 @@ abstract class statement_base {
      */
     public function coursemodule_standard_elements(moodleform_mod $modform, MoodleQuickForm $form): void {
         $form->addElement('header', 'integrityheader', get_string('modform:header', 'local_integrity'));
-        $form->addElement('selectyesno', 'enabled', get_string('modform:enabled', 'local_integrity'));
-
-        $form->setDefault('enabled', $this->get_default_enabled());
+        $form->addElement('selectyesno', 'integrity_enabled', get_string('modform:enabled', 'local_integrity'));
+        $form->setDefault('integrity_enabled', $this->get_default_enabled());
 
         $cm = $modform->get_coursemodule();
         if ($cm) {
             if ($record = mod_settings::get_record(['cmid' => $cm->id])) {
-                $form->setDefault('enabled', $record->get('enabled'));
+                $form->setDefault('integrity_enabled', $record->get('enabled'));
             }
+        }
+
+        if (!$this->can_change_default(context_course::instance($modform->get_course()->id))) {
+            $form->freeze(['integrity_enabled']);
         }
     }
 
@@ -187,6 +191,23 @@ abstract class statement_base {
      * @return \stdClass Mutated module info data.
      */
     public function coursemodule_edit_post_actions(stdClass $moduleinfo, stdClass $course): stdClass {
+        if (isset($moduleinfo->integrity_enabled)) {
+            $cmid = $moduleinfo->coursemodule;
+            $enabled = $moduleinfo->integrity_enabled;
+
+            if ($record = mod_settings::get_record(['cmid' => $cmid])) {
+                if ($record->get('enabled') != $enabled) {
+                    $record->set('enabled', $enabled);
+                    $record->save();
+                }
+            } else {
+                $record = new mod_settings();
+                $record->set('cmid', $cmid);
+                $record->set('enabled', $enabled);
+                $record->save();
+            }
+        }
+
         return $moduleinfo;
     }
 

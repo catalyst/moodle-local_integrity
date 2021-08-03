@@ -61,10 +61,8 @@ function local_integrity_coursemodule_standard_elements(moodleform_mod $modform,
  * @return \stdClass Mutated module info data.
  */
 function local_integrity_coursemodule_edit_post_actions(stdClass $moduleinfo, stdClass $course): stdClass {
-    $modname = $moduleinfo->modulename;
-
-    if (!empty($modname)) {
-        $statement = statement_factory::get_statement($modname);
+    if (!empty($moduleinfo->modulename)) {
+        $statement = statement_factory::get_statement($moduleinfo->modulename);
         if (!empty($statement)) {
             $moduleinfo = $statement->coursemodule_edit_post_actions($moduleinfo, $course);
         }
