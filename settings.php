@@ -24,11 +24,20 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_activity_notifications\notification_factory;
+
 defined('MOODLE_INTERNAL') || die();
 
-if ($hassiteconfig) {
-    // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
-    if ($ADMIN->fulltree) {
-        // TODO: Define the plugin settings page - {@link https://docs.moodle.org/dev/Admin_settings}.
+if ($hassiteconfig && $ADMIN->locate('localplugins')) {
+
+    $ADMIN->add('localplugins',
+        new admin_category('local_activity_notifications', get_string('pluginname', 'local_activity_notifications'))
+    );
+
+    $settings = new admin_settingpage('local_activity_notifications_settings', 'Settings');
+    $ADMIN->add('local_activity_notifications', $settings);
+
+    foreach (notification_factory::get_notifications() as $notification) {
+        $notification->add_settings($settings);
     }
 }
