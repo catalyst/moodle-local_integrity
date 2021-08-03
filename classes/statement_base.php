@@ -157,6 +157,34 @@ abstract class statement_base {
                 get_string('settings:notice_description', 'local_integrity'),
                 '')
         );
+
+        $settings->add(new \admin_setting_description(
+                "integritystmt_{$this->name}/lastupdatedate",
+                '',
+                get_string('settings:lastupdatedated', 'local_integrity', $this->get_setting_last_updated_date('notice'))
+            )
+        );
+    }
+
+    /**
+     * Get the last updated date for the given setting name.
+     *
+     * @param string $name Name of the setting.
+     * @return string
+     */
+    final public function get_setting_last_updated_date(string $name): string {
+        global $DB;
+
+        $timemodified = $DB->get_field_sql('SELECT max(timemodified) FROM {config_log} WHERE plugin = :plugin AND name = :name', [
+            'plugin' => 'integritystmt_' . $this->name,
+            'name' => $name
+        ]);
+
+        if (!empty($timemodified)) {
+            return userdate($timemodified);
+        } else {
+            return '-';
+        }
     }
 
     /**

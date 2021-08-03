@@ -36,5 +36,6 @@ $string['privacy:metadata:local_integrity_mod_settings:timecreated'] = 'Unix tim
 $string['privacy:metadata:local_integrity_mod_settings:timemodified'] = 'Unix time that the setting were modified.';
 $string['settings:default_enabled'] = 'Enabled by default';
 $string['settings:default_enabled_description'] = 'If yes, the notice will be displayed by default, irrespective of wether the staff member is permitted or not to have control of setting.';
+$string['settings:lastupdatedated'] = 'Last updated date on {$a}';
 $string['settings:notice'] = 'Notice text';
 $string['settings:notice_description'] = 'This text will be displayed to the users.';
