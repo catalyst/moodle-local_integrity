@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Sub plugin class.
+ * Tests for sub plugins system.
  *
  * @package     local_activity_notifications
  * @copyright   2021 Catalyst IT
@@ -23,30 +23,29 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_activity_notifications\plugininfo;
+namespace local_activity_notifications\tests;
 
-use core\plugininfo\base;
-use core_plugin_manager;
+use advanced_testcase;
+use local_activity_notifications\plugininfo\activitynotif;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Sub plugin class.
+ * Tests for sub plugins system.
  *
  * @package     local_activity_notifications
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class activitynotif extends base {
+class plugin_info_test extends advanced_testcase {
 
     /**
-     * Gets all enabled plugins.
-     *
-     * @return string[]
+     * Test a list of enabled plugins.
      */
-    public static function get_enabled_plugins(): array {
-        return array_keys(core_plugin_manager::instance()->get_installed_plugins('activitynotif'));
+    public function test_get_enabled_plugins() {
+        $expected = ['forum'];
+        $this->assertSame($expected, activitynotif::get_enabled_plugins());
     }
 
 }
