@@ -1,6 +1,6 @@
-![Build Status](https://github.com/catalyst/moodle-local_activity_notifications/actions/workflows/ci.yml/badge.svg?branch=master)
+![Build Status](https://github.com/catalyst/moodle-local_integrity/actions/workflows/ci.yml/badge.svg?branch=master)
 
-# Activity notifications #
+# Integrity #
 
 TODO Describe the plugin shortly here.
 
@@ -18,7 +18,7 @@ TODO Provide more detailed description here.
 
 The plugin can be also installed by putting the contents of this directory to
 
-    {your/moodle/dirroot}/local/activity_notifications
+    {your/moodle/dirroot}/local/integrity
 
 Afterwards, log in to your Moodle site as an admin and go to _Site administration >
 Notifications_ to complete the installation.
@@ -41,7 +41,7 @@ https://www.catalyst-au.net/
 
 Issues, and pull requests using github are welcome and encouraged!
 
-https://github.com/catalyst/moodle-local_activity_notifications/issues
+https://github.com/catalyst/moodle-local_integrity/issues
 
 If you would like commercial support or would like to sponsor additional improvements
 to this plugin please contact us:

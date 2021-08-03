@@ -17,7 +17,7 @@
 /**
  * Plugin version and other meta-data are defined here.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_activity_notifications';
+$plugin->component = 'local_integrity';
 $plugin->release = '0.1.0';
 $plugin->version = 2021072300;
 $plugin->requires = 2020061500;

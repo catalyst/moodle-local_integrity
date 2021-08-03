@@ -15,10 +15,9 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin strings are defined here.
+ * Plugin version and other meta-data are defined here.
  *
- * @package     activitynotif_forum
- * @category    string
+ * @package     integritystmt_forum
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Activity notifications - forum';
-$string['privacy:metadata'] = 'Activity notifications - forum does not store any personal data.';
-$string['forum:apply'] = 'Apply Activity notifications - forum';
+$plugin->component = 'integritystmt_forum';
+$plugin->release = '0.1.0';
+$plugin->version = 2021072300;
+$plugin->requires = 2020061500;
+$plugin->maturity = MATURITY_STABLE;

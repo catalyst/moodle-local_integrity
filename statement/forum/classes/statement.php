@@ -15,37 +15,40 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy Subsystem implementation.
+ * Forum statement class.
  *
- * @package     activitynotif_forum
+ * @package     integritystmt_forum
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace activitynotif_forum\privacy;
+namespace integritystmt_forum;
 
-use core_privacy\local\metadata\null_provider;
+use local_integrity\statement_base;
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
 /**
- * Privacy Subsystem implementation.
+ * Forum statement class.
  *
- * @package     activitynotif_forum
+ * @package     integritystmt_forum
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements null_provider {
+class statement extends statement_base {
+
     /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
+     * Get a list of URL to fire off the statement on.
      *
-     * @return string
+     * @return string[]
      */
-    public static function get_reason() : string {
-        return 'privacy:metadata';
+    protected function get_apply_urls(): array {
+        return [
+            '/mod/forum/view.php',
+            '/mod/forum/discuss.php'
+        ];
     }
 
 }

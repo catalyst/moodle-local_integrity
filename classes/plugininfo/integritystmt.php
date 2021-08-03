@@ -15,40 +15,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Forum notification class.
+ * Sub plugin class.
  *
- * @package     activitynotif_forum
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace activitynotif_forum;
+namespace local_integrity\plugininfo;
 
-use local_activity_notifications\notification_base;
+use core\plugininfo\base;
+use core_plugin_manager;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 /**
- * Forum notification class.
+ * Sub plugin class for.
  *
- * @package     activitynotif_forum
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class notification extends notification_base {
+class integritystmt extends base {
 
     /**
-     * Get a list of URL to fire off the notification.
+     * Gets all enabled plugins.
      *
      * @return string[]
      */
-    protected function get_apply_urls(): array {
-        return [
-            '/mod/forum/view.php',
-            '/mod/forum/discuss.php'
-        ];
+    public static function get_enabled_plugins(): array {
+        return array_keys(core_plugin_manager::instance()->get_installed_plugins('integritystmt'));
     }
 
 }

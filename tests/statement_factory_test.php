@@ -15,67 +15,67 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Tests for notification factory.
+ * Tests for statement factory.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_activity_notifications\tests;
+namespace local_integrity\tests;
 
 use advanced_testcase;
-use local_activity_notifications\notification_factory;
+use local_integrity\statement_factory;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Tests for notification factory.
+ * Tests for statement factory.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class notification_factory_test extends advanced_testcase {
+class statement_factory_test extends advanced_testcase {
 
     /**
-     * A list of known notifications.
+     * A list of known statements.
      * @var string[]
      */
-    private $knownnotifications = [
+    private $knownstatements = [
         'forum',
     ];
 
     /**
-     * Test get notifications.
+     * Test get statements.
      */
-    public function test_get_notifications() {
-        $actual = notification_factory::get_notifications();
+    public function test_get_statements() {
+        $actual = statement_factory::get_statements();
 
-        $this->assertCount(1, notification_factory::get_notifications());
+        $this->assertCount(1, statement_factory::get_statements());
 
-        foreach ($this->knownnotifications as $name) {
+        foreach ($this->knownstatements as $name) {
             $this->assertArrayHasKey($name, $actual);
-            $this->assertInstanceOf('\\activitynotif_' . $name . '\\notification', $actual[$name]);
+            $this->assertInstanceOf('\\integritystmt_' . $name . '\\statement', $actual[$name]);
         }
     }
 
     /**
-     * Test getting invalid notification.
+     * Test getting invalid statement.
      */
-    public function test_get_invalid_notification() {
-        $this->assertNull(notification_factory::get_notification('invalid'));
+    public function test_get_invalid_statement() {
+        $this->assertNull(statement_factory::get_statement('invalid'));
     }
 
     /**
-     * Test getting valid notification.
+     * Test getting valid statement.
      */
-    public function test_getting_valid_notification() {
-        foreach ($this->knownnotifications as $name) {
-            $actual = notification_factory::get_notification($name);
-            $this->assertInstanceOf('\\activitynotif_' . $name . '\\notification', $actual);
+    public function test_getting_valid_statement() {
+        foreach ($this->knownstatements as $name) {
+            $actual = statement_factory::get_statement($name);
+            $this->assertInstanceOf('\\integritystmt_' . $name . '\\statement', $actual);
         }
     }
 

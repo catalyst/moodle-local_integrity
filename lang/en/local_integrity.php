@@ -17,7 +17,7 @@
 /**
  * Plugin strings are defined here.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @category    string
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
@@ -26,9 +26,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Activity notifications';
-$string['privacy:metadata:local_activity_notifications'] = 'Details of activity notifications.';
-$string['privacy:metadata:local_activity_notifications:cmid'] = 'CMID of the activity the notification is for.';
-$string['privacy:metadata:local_activity_notifications:usermodified'] = 'ID of user who last created or modified the activity notifications.';
-$string['privacy:metadata:local_activity_notifications:timecreated'] = 'Unix time that the activity notifications was created.';
-$string['privacy:metadata:local_activity_notifications:timemodified'] = 'Unix time that the activity notifications was modified.';
+$string['pluginname'] = 'Integrity';
+$string['privacy:metadata:local_integrity_mod_settings'] = 'Details of Local integrity settings for activities.';
+$string['privacy:metadata:local_integrity_mod_settings:cmid'] = 'CMID of the activity.';
+$string['privacy:metadata:local_integrity_mod_settings:usermodified'] = 'ID of user who last created or modified the settings.';
+$string['privacy:metadata:local_integrity_mod_settings:timecreated'] = 'Unix time that the settings were created.';
+$string['privacy:metadata:local_integrity_mod_settings:timemodified'] = 'Unix time that the setting were modified.';

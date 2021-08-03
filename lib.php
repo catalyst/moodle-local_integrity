@@ -17,13 +17,13 @@
 /**
  * Callbacks.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_activity_notifications\notification_factory;
+use local_integrity\statement_factory;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param \moodleform_mod $modform Mod form instance.
  * @param \MoodleQuickForm $form Form instance.
  */
-function local_activity_notifications_coursemodule_standard_elements(moodleform_mod $modform, MoodleQuickForm $form): void {
+function local_integrity_coursemodule_standard_elements(moodleform_mod $modform, MoodleQuickForm $form): void {
     $cm = $modform->get_coursemodule();
     $modname = '';
 
@@ -45,9 +45,9 @@ function local_activity_notifications_coursemodule_standard_elements(moodleform_
     }
 
     if (!empty($modname)) {
-        $notification = notification_factory::get_notification($modname);
-        if (!empty($notification)) {
-            $notification->coursemodule_standard_elements($modform, $form);
+        $statement = statement_factory::get_statement($modname);
+        if (!empty($statement)) {
+            $statement->coursemodule_standard_elements($modform, $form);
         }
     }
 }
@@ -60,13 +60,13 @@ function local_activity_notifications_coursemodule_standard_elements(moodleform_
  *
  * @return \stdClass Mutated module info data.
  */
-function local_activity_notifications_coursemodule_edit_post_actions(stdClass $moduleinfo, stdClass $course): stdClass {
+function local_integrity_coursemodule_edit_post_actions(stdClass $moduleinfo, stdClass $course): stdClass {
     $modname = $moduleinfo->modulename;
 
     if (!empty($modname)) {
-        $notification = notification_factory::get_notification($modname);
-        if (!empty($notification)) {
-            $moduleinfo = $notification->coursemodule_edit_post_actions($moduleinfo, $course);
+        $statement = statement_factory::get_statement($modname);
+        if (!empty($statement)) {
+            $moduleinfo = $statement->coursemodule_edit_post_actions($moduleinfo, $course);
         }
     }
 
@@ -81,7 +81,7 @@ function local_activity_notifications_coursemodule_edit_post_actions(stdClass $m
  *
  * @return array
  */
-function local_activity_notifications_coursemodule_validation(moodleform_mod $modform, array $data): array {
+function local_integrity_coursemodule_validation(moodleform_mod $modform, array $data): array {
     $errors = [];
 
     $cm = $modform->get_coursemodule();
@@ -94,9 +94,9 @@ function local_activity_notifications_coursemodule_validation(moodleform_mod $mo
     }
 
     if (!empty($modname)) {
-        $notification = notification_factory::get_notification($modname);
-        if (!empty($notification)) {
-            $errors = $notification->coursemodule_validation($modform, $data);
+        $statement = statement_factory::get_statement($modname);
+        if (!empty($statement)) {
+            $errors = $statement->coursemodule_validation($modform, $data);
         }
     }
 

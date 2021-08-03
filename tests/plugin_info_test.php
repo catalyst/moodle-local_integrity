@@ -17,23 +17,23 @@
 /**
  * Tests for sub plugins system.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_activity_notifications\tests;
+namespace local_integrity\tests;
 
 use advanced_testcase;
-use local_activity_notifications\plugininfo\activitynotif;
+use local_integrity\plugininfo\integritystmt;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * Tests for sub plugins system.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -45,7 +45,7 @@ class plugin_info_test extends advanced_testcase {
      */
     public function test_get_enabled_plugins() {
         $expected = ['forum'];
-        $this->assertSame($expected, activitynotif::get_enabled_plugins());
+        $this->assertSame($expected, integritystmt::get_enabled_plugins());
     }
 
 }

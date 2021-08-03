@@ -15,38 +15,49 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Sub plugin class.
+ * Class containing settings for activities.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_activity_notifications\plugininfo;
+namespace local_integrity;
 
-use core\plugininfo\base;
-use core_plugin_manager;
+use core\persistent;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Sub plugin class.
+ * Class containing settings for activities.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class activitynotif extends base {
+class mod_settings extends persistent {
 
     /**
-     * Gets all enabled plugins.
-     *
-     * @return string[]
+     * Table name.
      */
-    public static function get_enabled_plugins(): array {
-        return array_keys(core_plugin_manager::instance()->get_installed_plugins('activitynotif'));
-    }
+    const TABLE = 'local_integrity_mod_settings';
 
+    /**
+     * Return the definition of the properties of this model.
+     *
+     * @return array
+     */
+    protected static function define_properties() {
+        return [
+            'cmid' => [
+                'type' => PARAM_INT,
+            ],
+            'enabled' => [
+                'type' => PARAM_INT,
+                'default' => 0,
+            ],
+        ];
+    }
 }

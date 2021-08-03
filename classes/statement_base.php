@@ -15,15 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Base class for notifications.
+ * Base class for statements.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_activity_notifications;
+namespace local_integrity;
 
 use stdClass;
 use moodleform_mod;
@@ -36,17 +36,17 @@ use admin_setting_heading;
 defined('MOODLE_INTERNAL') || die;
 
 /**
- * Base class for notifications.
+ * Base class for statements.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class notification_base {
+abstract class statement_base {
 
     /**
-     * Notification name.
+     * Statement name.
      * @var string
      */
     protected $name;
@@ -54,40 +54,40 @@ abstract class notification_base {
     /**
      * Constructor.
      *
-     * @param string $name Notification name.
+     * @param string $name Statement name.
      */
     final public function __construct(string $name) {
         $this->name = $name;
     }
 
     /**
-     * Force subclasses to define URL for triggering a notification.
+     * Force subclasses to define URL for triggering a statement.
      *
      * @return array
      */
     abstract protected function get_apply_urls(): array;
 
     /**
-     * Get notification message.
+     * Get statement message.
      *
      * @return string
      */
     final public function get_message(): string {
-        return get_config('activitynotif_' . $this->name, 'message');
+        return get_config('integritystmt_' . $this->name, 'message');
     }
 
     /**
-     * Check if notification can be applied.
+     * Check if statement can be applied.
      *
      * @param \context $context Context to check against.
      * @return bool
      */
     final public function can_apply(\context $context): bool {
-        return has_capability('activitynotif/' . $this->name . ':apply', $context);
+        return has_capability('integritystmt/' . $this->name . ':apply', $context);
     }
 
     /**
-     * Check if we should apply notification on the given page URL.
+     * Check if we should apply statement on the given page URL.
      * @param \moodle_url $pageurl
      * @return bool
      */
@@ -104,7 +104,7 @@ abstract class notification_base {
     }
 
     /**
-     * Get URL to redirect to after notification.
+     * Get URL to redirect to after statement.
      *
      * @return string
      */
@@ -123,13 +123,13 @@ abstract class notification_base {
      */
     public function add_settings(admin_settingpage $settings) {
         $settings->add(new admin_setting_heading(
-                "activitynotif_{$this->name}/header",
-                get_string('pluginname', "activitynotif_{$this->name}"),
+                "integritystmt_{$this->name}/header",
+                get_string('pluginname', "integritystmt_{$this->name}"),
                 '')
         );
 
         $settings->add(new admin_setting_confightmleditor(
-                "activitynotif_{$this->name}/message",
+                "integritystmt_{$this->name}/message",
                 'Message',
                 'Message Description',
                 '')
@@ -143,13 +143,13 @@ abstract class notification_base {
      * @param \MoodleQuickForm $form Form instance.
      */
     public function coursemodule_standard_elements(moodleform_mod $modform, MoodleQuickForm $form): void {
-        $form->addElement('header', 'notifications', 'Activity notification');
-        $form->addElement('selectyesno', 'notification', 'Require that student accept');
+        $form->addElement('header', 'integrityheader', 'Integrity');
+        $form->addElement('selectyesno', 'integrity', 'Display integrity statement');
 
         $cm = $modform->get_coursemodule();
         if ($cm) {
-            if ($record = activity_notifications::get_record(['cmid' => $cm->id])) {
-                $form->setDefault('notification', $record->get('enabled'));
+            if ($record = mod_settings::get_record(['cmid' => $cm->id])) {
+                $form->setDefault('integrity', $record->get('enabled'));
             }
         }
     }

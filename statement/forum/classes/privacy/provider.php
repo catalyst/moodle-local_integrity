@@ -15,49 +15,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class containing settings for activities.
+ * Privacy Subsystem implementation.
  *
- * @package     local_activity_notifications
+ * @package     integritystmt_forum
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_activity_notifications;
+namespace integritystmt_forum\privacy;
 
-use core\persistent;
+use core_privacy\local\metadata\null_provider;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Class containing settings for activities.
+ * Privacy Subsystem implementation.
  *
- * @package     local_activity_notifications
+ * @package     integritystmt_forum
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class activity_notifications extends persistent {
-
+class provider implements null_provider {
     /**
-     * Table name.
-     */
-    const TABLE = 'local_activity_notifications';
-
-    /**
-     * Return the definition of the properties of this model.
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
      *
-     * @return array
+     * @return string
      */
-    protected static function define_properties() {
-        return [
-            'cmid' => [
-                'type' => PARAM_INT,
-            ],
-            'enabled' => [
-                'type' => PARAM_INT,
-                'default' => 0,
-            ],
-        ];
+    public static function get_reason() : string {
+        return 'privacy:metadata';
     }
+
 }

@@ -17,27 +17,27 @@
 /**
  * Plugin administration pages are defined here.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @category    admin
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_activity_notifications\notification_factory;
+use local_integrity\statement_factory;
 
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig && $ADMIN->locate('localplugins')) {
 
     $ADMIN->add('localplugins',
-        new admin_category('local_activity_notifications', get_string('pluginname', 'local_activity_notifications'))
+        new admin_category('local_integrity', get_string('pluginname', 'local_integrity'))
     );
 
-    $settings = new admin_settingpage('local_activity_notifications_settings', 'Settings');
-    $ADMIN->add('local_activity_notifications', $settings);
+    $settings = new admin_settingpage('local_integrity_settings', 'Settings');
+    $ADMIN->add('local_integrity', $settings);
 
-    foreach (notification_factory::get_notifications() as $notification) {
-        $notification->add_settings($settings);
+    foreach (statement_factory::get_statements() as $statement) {
+        $statement->add_settings($settings);
     }
 }

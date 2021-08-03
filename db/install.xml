@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/activity_notifications/db" VERSION="20210723" COMMENT="XMLDB file for Moodle local/activity_notifications"
+<XMLDB PATH="local/integrity/db" VERSION="20210723" COMMENT="XMLDB file for Moodle local/integrity"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="local_activity_notifications" COMMENT="Default comment for local_activity_notifications, please edit me">
+    <TABLE NAME="local_integrity_mod_settings" COMMENT="Activity settings">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="cmid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>

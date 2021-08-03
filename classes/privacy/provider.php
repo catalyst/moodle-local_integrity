@@ -15,15 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy Subsystem implementation for local_activity_notifications.
+ * Privacy Subsystem implementation for local_integrity.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_activity_notifications\privacy;
+namespace local_integrity\privacy;
 
 use context;
 use core_privacy\local\metadata\collection;
@@ -33,14 +33,14 @@ use core_privacy\local\request\contextlist;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
-use local_activity_notifications\activity_notifications;
+use local_integrity\mod_settings;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Privacy Subsystem implementation for local_activity_notifications.
+ * Privacy Subsystem implementation for local_integrity.
  *
- * @package     local_activity_notifications
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -58,14 +58,14 @@ class provider implements
      */
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table(
-            'local_activity_notifications',
+            'local_integrity_mod_settings',
             [
-                'cmid' => 'privacy:metadata:local_activity_notifications:cmid',
-                'usermodified' => 'privacy:metadata:local_activity_notifications:usermodified',
-                'timecreated' => 'privacy:metadata:local_activity_notifications:timecreated',
-                'timemodified' => 'privacy:metadata:local_activity_notifications:timemodified',
+                'cmid' => 'privacy:metadata:local_integrity_mod_settings:cmid',
+                'usermodified' => 'privacy:metadata:local_integrity_mod_settings:usermodified',
+                'timecreated' => 'privacy:metadata:local_integrity_mod_settings:timecreated',
+                'timemodified' => 'privacy:metadata:local_integrity_mod_settings:timemodified',
             ],
-            'privacy:metadata:local_activity_notifications'
+            'privacy:metadata:local_integrity_mod_settings'
         );
 
         return $collection;
@@ -88,7 +88,7 @@ class provider implements
         $sql = "SELECT c.id
                   FROM {context} c
                   JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                  JOIN {local_activity_notifications} lan ON lan.cmid = cm.id
+                  JOIN {local_integrity_mod_settings} lan ON lan.cmid = cm.id
                  WHERE lan.usermodified = :userid
         ";
 
@@ -120,30 +120,30 @@ class provider implements
         $params['usermodified'] = $contextlist->get_user()->id;
 
         $sql = "SELECT *
-                  FROM {local_activity_notifications}
+                  FROM {local_integrity_mod_settings}
                  WHERE usermodified = :usermodified AND cmid " . $insql;
 
-        $activitynotifications = $DB->get_records_sql($sql, $params);
+        $modsettings = $DB->get_records_sql($sql, $params);
 
         $index = 0;
-        foreach ($activitynotifications as $activitynotification) {
+        foreach ($modsettings as $modsetting) {
             // Data export is organised in: {Context}/{Plugin Name}/{Table name}/{index}/data.json.
             $index++;
             $subcontext = [
-                get_string('pluginname', 'local_activity_notifications'),
-                activity_notifications::TABLE,
+                get_string('pluginname', 'local_integrity'),
+                mod_settings::TABLE,
                 $index
             ];
 
             $data = (object) [
-                'cmid' => $activitynotification->cmid,
-                'enabled' => $activitynotification->enabled,
-                'usermodified' => $activitynotification->usermodified,
-                'timecreated' => transform::datetime($activitynotification->timecreated),
-                'timemodified' => transform::datetime($activitynotification->timemodified)
+                'cmid' => $modsetting->cmid,
+                'enabled' => $modsetting->enabled,
+                'usermodified' => $modsetting->usermodified,
+                'timecreated' => transform::datetime($modsetting->timecreated),
+                'timemodified' => transform::datetime($modsetting->timemodified)
             ];
 
-            $context = \context_module::instance($activitynotification->cmid);
+            $context = \context_module::instance($modsetting->cmid);
             writer::with_context($context)->export_data($subcontext, $data);
         }
     }
@@ -165,7 +165,7 @@ class provider implements
         list($insql, $params) = $DB->get_in_or_equal($cmid, SQL_PARAMS_NAMED);
 
         // We don't want to delete records. Just anonymise the users.
-        $DB->set_field_select('local_activity_notifications', 'usermodified', 0, "cmid $insql", $params);
+        $DB->set_field_select('local_integrity_mod_settings', 'usermodified', 0, "cmid $insql", $params);
     }
 
     /**
@@ -195,7 +195,7 @@ class provider implements
         $params['usermodified'] = $contextlist->get_user()->id;
 
         // We don't want to delete records. Just anonymise the users.
-        $DB->set_field_select('local_activity_notifications', 'usermodified', 0, "cmid $insql", $params);
+        $DB->set_field_select('local_integrity_mod_settings', 'usermodified', 0, "cmid $insql", $params);
     }
 
     /**
@@ -211,7 +211,7 @@ class provider implements
         }
 
         $sql = "SELECT usermodified AS userid
-                  FROM {local_activity_notifications}
+                  FROM {local_integrity_mod_settings}
                  WHERE cmid = :cmid";
 
         $params = [
@@ -239,6 +239,6 @@ class provider implements
         list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
 
         // We don't want to delete records. Just anonymise the users.
-        $DB->set_field_select('local_activity_notifications', 'usermodified', 0, "usermodified {$insql}", $inparams);
+        $DB->set_field_select('local_integrity_mod_settings', 'usermodified', 0, "usermodified {$insql}", $inparams);
     }
 }

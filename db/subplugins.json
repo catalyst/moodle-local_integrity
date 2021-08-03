@@ -1,5 +1,5 @@
 {
     "plugintypes": {
-        "activitynotif": "local\/activity_notifications\/notification"
+        "integritystmt": "local\/integrity\/statement"
     }
 }
