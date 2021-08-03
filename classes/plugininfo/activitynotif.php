@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - https://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,32 +12,41 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin administration pages are defined here.
+ * Sub plugin class.
  *
  * @package     local_activity_notifications
- * @category    admin
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_activity_notifications\notification_factory;
+namespace local_activity_notifications\plugininfo;
+
+use core\plugininfo\base;
+use core_plugin_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
-if ($hassiteconfig && $ADMIN->locate('localplugins')) {
+/**
+ * Sub plugin class.
+ *
+ * @package     local_activity_notifications
+ * @copyright   2021 Catalyst IT
+ * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class activitynotif extends base {
 
-    $ADMIN->add('localplugins',
-        new admin_category('local_activity_notifications', get_string('pluginname', 'local_activity_notifications'))
-    );
-
-    $settings = new admin_settingpage('local_activity_notifications_settings', 'Settings');
-    $ADMIN->add('local_activity_notifications', $settings);
-
-    foreach (notification_factory::get_notifications() as $notification) {
-        $notification->add_settings($settings);
+    /**
+     * Gets all enabled plugins.
+     *
+     * @return string[]
+     */
+    public static function get_enabled_plugins(): array {
+        return array_keys(core_plugin_manager::instance()->get_installed_plugins('activitynotif'));
     }
+
 }

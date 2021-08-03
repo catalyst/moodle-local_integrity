@@ -15,29 +15,24 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin administration pages are defined here.
+ * Capabilities
  *
- * @package     local_activity_notifications
- * @category    admin
+ * @package     activitynotif_forum
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_activity_notifications\notification_factory;
-
 defined('MOODLE_INTERNAL') || die();
 
-if ($hassiteconfig && $ADMIN->locate('localplugins')) {
-
-    $ADMIN->add('localplugins',
-        new admin_category('local_activity_notifications', get_string('pluginname', 'local_activity_notifications'))
-    );
-
-    $settings = new admin_settingpage('local_activity_notifications_settings', 'Settings');
-    $ADMIN->add('local_activity_notifications', $settings);
-
-    foreach (notification_factory::get_notifications() as $notification) {
-        $notification->add_settings($settings);
-    }
-}
+$capabilities = [
+    'activitynotif/forum:apply' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => [
+            'editingteacher' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ]
+    ],
+];

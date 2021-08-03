@@ -1,0 +1,5 @@
+{
+    "plugintypes": {
+        "activitynotif": "local\/activity_notifications\/notification"
+    }
+}
