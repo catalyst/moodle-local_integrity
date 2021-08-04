@@ -24,6 +24,7 @@
  */
 
 use local_integrity\statement_factory;
+use local_integrity\mod_settings;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -99,4 +100,15 @@ function local_integrity_coursemodule_validation(moodleform_mod $modform, array 
     }
 
     return $errors;
+}
+
+/**
+ * Hook called before we delete a course module.
+ *
+ * @param \stdClass $cm The course module record.
+ */
+function local_integrity_pre_course_module_delete($cm) {
+    if ($record = mod_settings::get_record(['cmid' => $cm->id])) {
+        $record->delete();
+    }
 }

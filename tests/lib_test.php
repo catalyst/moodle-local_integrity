@@ -168,4 +168,34 @@ class lib_test extends advanced_testcase {
         }
     }
 
+    /**
+     * Check that our hook is called when an activity is deleted.
+     */
+    public function test_pre_course_module_delete_hook() {
+        $this->resetAfterTest();
+
+        $this->assertCount(0, mod_settings::get_records());
+
+        $course = $this->getDataGenerator()->create_course();
+        $module1 = $this->getDataGenerator()->create_module('forum', ['course' => $course->id]);
+        $module2 = $this->getDataGenerator()->create_module('quiz', ['course' => $course->id]);
+
+        $modsettings = new mod_settings();
+        $modsettings->set('cmid', $module1->cmid);
+        $modsettings->save();
+
+        $this->assertCount(1, mod_settings::get_records());
+
+        $modsettings = new mod_settings();
+        $modsettings->set('cmid', $module2->cmid);
+        $modsettings->save();
+        $this->assertCount(2, mod_settings::get_records());
+
+        course_delete_module($module1->cmid);
+        $this->assertCount(1, mod_settings::get_records());
+
+        course_delete_module($module2->cmid);
+        $this->assertCount(0, mod_settings::get_records());
+    }
+
 }
