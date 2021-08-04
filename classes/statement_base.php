@@ -32,6 +32,8 @@ use moodle_url;
 use admin_settingpage;
 use admin_setting_confightmleditor;
 use admin_setting_heading;
+use admin_setting_configselect;
+use context_course;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -46,10 +48,21 @@ defined('MOODLE_INTERNAL') || die;
 abstract class statement_base {
 
     /**
+     * Integrity field name in an activity form.
+     */
+    const FORM_FIELD_NAME = 'integrity_enabled';
+
+    /**
      * Statement name.
      * @var string
      */
     protected $name;
+
+    /**
+     * Plugin name.
+     * @var string
+     */
+    protected $pluginname;
 
     /**
      * Constructor.
@@ -58,6 +71,7 @@ abstract class statement_base {
      */
     final public function __construct(string $name) {
         $this->name = $name;
+        $this->pluginname = 'integritystmt_' . $this->name;
     }
 
     /**
@@ -73,7 +87,16 @@ abstract class statement_base {
      * @return string
      */
     final public function get_notice(): string {
-        return get_config('integritystmt_' . $this->name, 'notice');
+        return get_config($this->pluginname, 'notice');
+    }
+
+    /**
+     * Get statement test.
+     *
+     * @return int
+     */
+    final public function get_default_enabled(): int {
+        return (int) get_config($this->pluginname, 'default_enabled');
     }
 
     /**
@@ -82,8 +105,8 @@ abstract class statement_base {
      * @param \context $context Context to check against.
      * @return bool
      */
-    final public function can_apply(\context $context): bool {
-        return has_capability('integritystmt/' . $this->name . ':apply', $context);
+    final public function can_change_default(\context $context): bool {
+        return has_capability('integritystmt/' . $this->name . ':changedefault', $context);
     }
 
     /**
@@ -111,9 +134,14 @@ abstract class statement_base {
     public function get_decline_url(): string {
         global $COURSE;
 
-        $url = new moodle_url('/course/view.php', ['id' => $COURSE]);
+        $result = '';
 
-        return $url->out();
+        if (!empty($COURSE->id)) {
+            $url = new moodle_url('/course/view.php', ['id' => $COURSE->id]);
+            $result = $url->out();
+        }
+
+        return $result;
     }
 
     /**
@@ -123,17 +151,57 @@ abstract class statement_base {
      */
     public function add_settings(admin_settingpage $settings) {
         $settings->add(new admin_setting_heading(
-                "integritystmt_{$this->name}/header",
-                get_string('pluginname', "integritystmt_{$this->name}"),
+                "{$this->pluginname}/header",
+                get_string('pluginname', $this->pluginname),
                 '')
         );
 
+        $settings->add(new admin_setting_configselect(
+                "{$this->pluginname}/default_enabled",
+                get_string('settings:default_enabled', 'local_integrity'),
+                get_string('settings:default_enabled_description', 'local_integrity'),
+                0,
+                [
+                    0 => get_string('no'),
+                    1 => get_string('yes'),
+                ]
+            )
+        );
+
         $settings->add(new admin_setting_confightmleditor(
-                "integritystmt_{$this->name}/notice",
+                "{$this->pluginname}/notice",
                 get_string('settings:notice', 'local_integrity'),
                 get_string('settings:notice_description', 'local_integrity'),
                 '')
         );
+
+        $settings->add(new \admin_setting_description(
+                "{$this->pluginname}/lastupdatedate",
+                '',
+                get_string('settings:lastupdatedated', 'local_integrity', $this->get_setting_last_updated_date('notice'))
+            )
+        );
+    }
+
+    /**
+     * Get the last updated date for the given setting name.
+     *
+     * @param string $name Name of the setting.
+     * @return string
+     */
+    final public function get_setting_last_updated_date(string $name): string {
+        global $DB;
+
+        $timemodified = $DB->get_field_sql('SELECT max(timemodified) FROM {config_log} WHERE plugin = :plugin AND name = :name', [
+            'plugin' => $this->pluginname,
+            'name' => $name
+        ]);
+
+        if (!empty($timemodified)) {
+            return userdate($timemodified);
+        } else {
+            return '-';
+        }
     }
 
     /**
@@ -144,13 +212,18 @@ abstract class statement_base {
      */
     public function coursemodule_standard_elements(moodleform_mod $modform, MoodleQuickForm $form): void {
         $form->addElement('header', 'integrityheader', get_string('modform:header', 'local_integrity'));
-        $form->addElement('selectyesno', 'enabled', get_string('modform:enabled', 'local_integrity'));
+        $form->addElement('selectyesno', self::FORM_FIELD_NAME, get_string('modform:enabled', 'local_integrity'));
+        $form->setDefault(self::FORM_FIELD_NAME, $this->get_default_enabled());
 
         $cm = $modform->get_coursemodule();
         if ($cm) {
             if ($record = mod_settings::get_record(['cmid' => $cm->id])) {
-                $form->setDefault('enabled', $record->get('enabled'));
+                $form->setDefault(self::FORM_FIELD_NAME, $record->get('enabled'));
             }
+        }
+
+        if (!$this->can_change_default(context_course::instance($modform->get_course()->id))) {
+            $form->freeze([self::FORM_FIELD_NAME]);
         }
     }
 
@@ -163,6 +236,23 @@ abstract class statement_base {
      * @return \stdClass Mutated module info data.
      */
     public function coursemodule_edit_post_actions(stdClass $moduleinfo, stdClass $course): stdClass {
+        if (isset($moduleinfo->{self::FORM_FIELD_NAME})) {
+            $cmid = $moduleinfo->coursemodule;
+            $enabled = $moduleinfo->{self::FORM_FIELD_NAME};
+
+            if ($record = mod_settings::get_record(['cmid' => $cmid])) {
+                if ($record->get('enabled') != $enabled) {
+                    $record->set('enabled', $enabled);
+                    $record->save();
+                }
+            } else {
+                $record = new mod_settings();
+                $record->set('cmid', $cmid);
+                $record->set('enabled', $enabled);
+                $record->save();
+            }
+        }
+
         return $moduleinfo;
     }
 
