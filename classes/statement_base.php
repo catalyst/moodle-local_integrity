@@ -76,6 +76,24 @@ abstract class statement_base {
     }
 
     /**
+     * Get the name of the statement.
+     *
+     * @return string
+     */
+    final public function get_name(): string {
+        return $this->name;
+    }
+
+    /**
+     * Get the plugin name;
+     *
+     * @return string
+     */
+    final public function get_plugin_name(): string {
+        return $this->pluginname;
+    }
+
+    /**
      * Force subclasses to define URL for triggering a statement.
      *
      * @return array
@@ -88,7 +106,7 @@ abstract class statement_base {
      * @return string
      */
     final public function get_notice(): string {
-        return get_config($this->pluginname, 'notice');
+        return get_config($this->get_plugin_name(), 'notice');
     }
 
     /**
@@ -97,7 +115,7 @@ abstract class statement_base {
      * @return int
      */
     final public function get_default_enabled(): int {
-        return (int) get_config($this->pluginname, 'default_enabled');
+        return (int) get_config($this->get_plugin_name(), 'default_enabled');
     }
 
     /**
@@ -152,13 +170,13 @@ abstract class statement_base {
      */
     public function add_settings(admin_settingpage $settings) {
         $settings->add(new admin_setting_heading(
-                "{$this->pluginname}/header",
-                get_string('pluginname', $this->pluginname),
+                "{$this->get_plugin_name()}/header",
+                get_string('pluginname', $this->get_plugin_name()),
                 '')
         );
 
         $settings->add(new admin_setting_configselect(
-                "{$this->pluginname}/default_enabled",
+                "{$this->get_plugin_name()}/default_enabled",
                 get_string('settings:default_enabled', 'local_integrity'),
                 get_string('settings:default_enabled_description', 'local_integrity'),
                 0,
@@ -170,14 +188,14 @@ abstract class statement_base {
         );
 
         $settings->add(new admin_setting_confightmleditor(
-                "{$this->pluginname}/notice",
+                "{$this->get_plugin_name()}/notice",
                 get_string('settings:notice', 'local_integrity'),
                 get_string('settings:notice_description', 'local_integrity'),
                 '')
         );
 
         $settings->add(new \admin_setting_description(
-                "{$this->pluginname}/lastupdatedate",
+                "{$this->get_plugin_name()}/lastupdatedate",
                 '',
                 get_string('settings:lastupdatedated', 'local_integrity', $this->get_setting_last_updated_date('notice'))
             )
@@ -194,7 +212,7 @@ abstract class statement_base {
         global $DB;
 
         $timemodified = $DB->get_field_sql('SELECT max(timemodified) FROM {config_log} WHERE plugin = :plugin AND name = :name', [
-            'plugin' => $this->pluginname,
+            'plugin' => $this->get_plugin_name(),
             'name' => $name
         ]);
 
@@ -220,7 +238,7 @@ abstract class statement_base {
         if ($cm) {
             $context = context_module::instance($cm->id);
 
-            if ($record = settings::get_record(['contextid' => $context->id, 'plugin' => $this->pluginname])) {
+            if ($record = settings::get_record(['contextid' => $context->id, 'plugin' => $this->get_plugin_name()])) {
                 $form->setDefault(self::FORM_FIELD_NAME, $record->get('enabled'));
             }
         }
@@ -243,7 +261,7 @@ abstract class statement_base {
             $context = context_module::instance($moduleinfo->coursemodule);
             $enabled = $moduleinfo->{self::FORM_FIELD_NAME};
 
-            if ($record = settings::get_record(['contextid' => $context->id, 'plugin' => $this->pluginname])) {
+            if ($record = settings::get_record(['contextid' => $context->id, 'plugin' => $this->get_plugin_name()])) {
                 if ($record->get('enabled') != $enabled) {
                     $record->set('enabled', $enabled);
                     $record->save();
@@ -252,7 +270,7 @@ abstract class statement_base {
                 $record = new settings();
                 $record->set('contextid', $context->id);
                 $record->set('enabled', $enabled);
-                $record->set('plugin', $this->pluginname);
+                $record->set('plugin', $this->get_plugin_name());
                 $record->save();
             }
         }
