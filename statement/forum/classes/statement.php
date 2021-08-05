@@ -47,7 +47,8 @@ class statement extends statement_base {
     protected function get_display_urls(): array {
         return [
             '/mod/forum/view.php',
-            '/mod/forum/discuss.php'
+            '/mod/forum/discuss.php',
+            '/mod/forum/post.php',
         ];
     }
 

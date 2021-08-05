@@ -92,16 +92,16 @@ class statement_base_test extends advanced_testcase {
         $statement = $this->get_test_statement('test');
 
         $url = new \moodle_url('/test/edit/index.php', ['id' => 1]);
-        $this->assertFalse($statement->should_display($url));
+        $this->assertFalse($statement->should_display_for_url($url));
 
         $url = new \moodle_url('/test/index.js', ['id' => 1]);
-        $this->assertFalse($statement->should_display($url));
+        $this->assertFalse($statement->should_display_for_url($url));
 
         $url = new \moodle_url('/test/index.php', ['id' => 1]);
-        $this->assertTrue($statement->should_display($url));
+        $this->assertTrue($statement->should_display_for_url($url));
 
         $url = new \moodle_url('/test/edit.php', ['id' => 1]);
-        $this->assertTrue($statement->should_display($url));
+        $this->assertTrue($statement->should_display_for_url($url));
     }
 
     /**

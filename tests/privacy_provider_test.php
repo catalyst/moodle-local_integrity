@@ -30,7 +30,7 @@ use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use core_privacy\tests\request\approved_contextlist;
 use core_privacy\tests\provider_testcase;
-use local_integrity\mod_settings;
+use local_integrity\settings;
 use local_integrity\privacy\provider;
 use context_module;
 
@@ -62,9 +62,9 @@ class privacy_provider_test extends provider_testcase {
     private $user;
 
     /**
-     * @var \local_integrity\mod_settings Test data.
+     * @var \local_integrity\settings Test data.
      */
-    private $modsettings;
+    private $settings;
 
     /**
      * Set up tests.
@@ -87,9 +87,10 @@ class privacy_provider_test extends provider_testcase {
         $module = $this->getDataGenerator()->create_module('page', ['course' => $this->course]);
 
         // Generate data as Admin.
-        $modsettings = new mod_settings();
-        $modsettings->set('cmid', $module->cmid);
-        $modsettings->save();
+        $settings = new settings();
+        $settings->set('contextid', context_module::instance($module->cmid)->id);
+        $settings->set('plugin', 'test');
+        $settings->save();
 
         $this->module = $this->getDataGenerator()->create_module('assign', ['course' => $this->course]);
         $this->user = $this->getDataGenerator()->create_user(array('username' => 'teacher'));
@@ -98,9 +99,10 @@ class privacy_provider_test extends provider_testcase {
 
         // Generate data as a test user.
         $this->setUser($this->user);
-        $this->modsettings = new mod_settings();
-        $this->modsettings->set('cmid', $this->module->cmid);
-        $this->modsettings->save();
+        $this->settings = new settings();
+        $this->settings->set('contextid', context_module::instance($this->module->cmid)->id);
+        $this->settings->set('plugin', 'test');
+        $this->settings->save();
     }
 
     /**
@@ -143,7 +145,7 @@ class privacy_provider_test extends provider_testcase {
         $index = '1'; // Get first data returned from the section settings table.
         $data = $writer->get_data([
             get_string('pluginname', 'local_integrity'),
-            mod_settings::TABLE,
+            settings::TABLE,
             $index,
         ]);
         $this->assertNotEmpty($data);
@@ -151,7 +153,7 @@ class privacy_provider_test extends provider_testcase {
         $index = '2'; // There should not be more than one instance with data.
         $data = $writer->get_data([
             get_string('pluginname', 'local_integrity'),
-            mod_settings::TABLE,
+            settings::TABLE,
             $index,
         ]);
         $this->assertEmpty($data);
@@ -173,8 +175,8 @@ class privacy_provider_test extends provider_testcase {
      * Test that data is deleted for a list of users.
      */
     public function test_delete_data_for_users() {
-        $this->assertNotEmpty(mod_settings::get_records(['usermodified' => $this->user->id]));
-        $this->assertEmpty(mod_settings::get_records(['usermodified' => 0]));
+        $this->assertNotEmpty(settings::get_records(['usermodified' => $this->user->id]));
+        $this->assertEmpty(settings::get_records(['usermodified' => 0]));
 
         $approveduserlist = new approved_userlist(
             context_module::instance($this->module->cmid),
@@ -184,8 +186,8 @@ class privacy_provider_test extends provider_testcase {
 
         provider::delete_data_for_users($approveduserlist);
 
-        $this->assertEmpty(mod_settings::get_records(['usermodified' => $this->user->id]));
-        $this->assertNotEmpty(mod_settings::get_records(['usermodified' => 0]));
+        $this->assertEmpty(settings::get_records(['usermodified' => $this->user->id]));
+        $this->assertNotEmpty(settings::get_records(['usermodified' => 0]));
     }
 
     /**
@@ -200,13 +202,13 @@ class privacy_provider_test extends provider_testcase {
         );
 
         // Test data exists.
-        $this->assertNotEmpty(mod_settings::get_records(['usermodified' => $this->user->id]));
-        $this->assertEmpty(mod_settings::get_records(['usermodified' => 0]));
+        $this->assertNotEmpty(settings::get_records(['usermodified' => $this->user->id]));
+        $this->assertEmpty(settings::get_records(['usermodified' => 0]));
 
         // Test data is deleted.
         provider::delete_data_for_user($approvedcontextlist);
-        $this->assertEmpty(mod_settings::get_records(['usermodified' => $this->user->id]));
-        $this->assertNotEmpty(mod_settings::get_records(['usermodified' => 0]));
+        $this->assertEmpty(settings::get_records(['usermodified' => $this->user->id]));
+        $this->assertNotEmpty(settings::get_records(['usermodified' => 0]));
     }
 
     /**
@@ -216,12 +218,12 @@ class privacy_provider_test extends provider_testcase {
         $context = context_module::instance($this->module->cmid);
 
         // Test data exists.
-        $this->assertNotEmpty(mod_settings::get_records(['usermodified' => $this->user->id]));
-        $this->assertEmpty(mod_settings::get_records(['usermodified' => 0]));
+        $this->assertNotEmpty(settings::get_records(['usermodified' => $this->user->id]));
+        $this->assertEmpty(settings::get_records(['usermodified' => 0]));
 
         // Test data is deleted.
         provider::delete_data_for_all_users_in_context($context);
-        $this->assertEmpty(mod_settings::get_records(['usermodified' => $this->user->id]));
-        $this->assertNotEmpty(mod_settings::get_records(['usermodified' => 0]));
+        $this->assertEmpty(settings::get_records(['usermodified' => $this->user->id]));
+        $this->assertNotEmpty(settings::get_records(['usermodified' => 0]));
     }
 }

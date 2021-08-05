@@ -37,12 +37,12 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_settings extends persistent {
+class settings extends persistent {
 
     /**
      * Table name.
      */
-    const TABLE = 'local_integrity_mod_settings';
+    const TABLE = 'local_integrity_settings';
 
     /**
      * Return the definition of the properties of this model.
@@ -51,8 +51,11 @@ class mod_settings extends persistent {
      */
     protected static function define_properties() {
         return [
-            'cmid' => [
+            'contextid' => [
                 'type' => PARAM_INT,
+            ],
+            'plugin' => [
+                'type' => PARAM_ALPHANUMEXT,
             ],
             'enabled' => [
                 'type' => PARAM_INT,

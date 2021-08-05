@@ -34,6 +34,7 @@ use admin_setting_confightmleditor;
 use admin_setting_heading;
 use admin_setting_configselect;
 use context_course;
+use context_module;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -114,7 +115,7 @@ abstract class statement_base {
      * @param \moodle_url $pageurl
      * @return bool
      */
-    final public function should_display(moodle_url $pageurl): bool {
+    final public function should_display_for_url(moodle_url $pageurl): bool {
         foreach ($this->get_display_urls() as $url) {
             if (is_string($url)) {
                 if ($pageurl->compare(new moodle_url($url), URL_MATCH_BASE)) {
@@ -217,7 +218,9 @@ abstract class statement_base {
 
         $cm = $modform->get_coursemodule();
         if ($cm) {
-            if ($record = mod_settings::get_record(['cmid' => $cm->id])) {
+            $context = context_module::instance($cm->id);
+
+            if ($record = settings::get_record(['contextid' => $context->id, 'plugin' => $this->pluginname])) {
                 $form->setDefault(self::FORM_FIELD_NAME, $record->get('enabled'));
             }
         }
@@ -237,18 +240,19 @@ abstract class statement_base {
      */
     public function coursemodule_edit_post_actions(stdClass $moduleinfo, stdClass $course): stdClass {
         if (isset($moduleinfo->{self::FORM_FIELD_NAME})) {
-            $cmid = $moduleinfo->coursemodule;
+            $context = context_module::instance($moduleinfo->coursemodule);
             $enabled = $moduleinfo->{self::FORM_FIELD_NAME};
 
-            if ($record = mod_settings::get_record(['cmid' => $cmid])) {
+            if ($record = settings::get_record(['contextid' => $context->id, 'plugin' => $this->pluginname])) {
                 if ($record->get('enabled') != $enabled) {
                     $record->set('enabled', $enabled);
                     $record->save();
                 }
             } else {
-                $record = new mod_settings();
-                $record->set('cmid', $cmid);
+                $record = new settings();
+                $record->set('contextid', $context->id);
                 $record->set('enabled', $enabled);
+                $record->set('plugin', $this->pluginname);
                 $record->save();
             }
         }

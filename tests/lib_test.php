@@ -26,7 +26,7 @@
 namespace local_integrity\tests;
 
 use advanced_testcase;
-use local_integrity\mod_settings;
+use local_integrity\settings;
 use local_integrity\plugininfo\integritystmt;
 
 defined('MOODLE_INTERNAL') || die();
@@ -164,7 +164,7 @@ class lib_test extends advanced_testcase {
             $data->integrity_enabled = 1;
 
             local_integrity_coursemodule_edit_post_actions($data, $course);
-            $this->assertNotEmpty(mod_settings::get_record(['cmid' => $cm->id]));
+            $this->assertNotEmpty(settings::get_record(['contextid' => $context->id]));
         }
     }
 
@@ -174,28 +174,30 @@ class lib_test extends advanced_testcase {
     public function test_pre_course_module_delete_hook() {
         $this->resetAfterTest();
 
-        $this->assertCount(0, mod_settings::get_records());
+        $this->assertCount(0, settings::get_records());
 
         $course = $this->getDataGenerator()->create_course();
         $module1 = $this->getDataGenerator()->create_module('forum', ['course' => $course->id]);
         $module2 = $this->getDataGenerator()->create_module('quiz', ['course' => $course->id]);
 
-        $modsettings = new mod_settings();
-        $modsettings->set('cmid', $module1->cmid);
-        $modsettings->save();
+        $settings = new settings();
+        $settings->set('contextid', \context_module::instance($module1->cmid)->id);
+        $settings->set('plugin', 'test');
+        $settings->save();
 
-        $this->assertCount(1, mod_settings::get_records());
+        $this->assertCount(1, settings::get_records());
 
-        $modsettings = new mod_settings();
-        $modsettings->set('cmid', $module2->cmid);
-        $modsettings->save();
-        $this->assertCount(2, mod_settings::get_records());
+        $settings = new settings();
+        $settings->set('contextid', \context_module::instance($module2->cmid)->id);
+        $settings->set('plugin', 'test');
+        $settings->save();
+        $this->assertCount(2, settings::get_records());
 
         course_delete_module($module1->cmid);
-        $this->assertCount(1, mod_settings::get_records());
+        $this->assertCount(1, settings::get_records());
 
         course_delete_module($module2->cmid);
-        $this->assertCount(0, mod_settings::get_records());
+        $this->assertCount(0, settings::get_records());
     }
 
 }
