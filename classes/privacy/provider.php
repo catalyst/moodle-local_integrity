@@ -34,6 +34,7 @@ use core_privacy\local\request\transform;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use local_integrity\settings;
+use local_integrity\userdata_default;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -66,6 +67,16 @@ class provider implements
                 'timemodified' => 'privacy:metadata:local_integrity_settings:timemodified',
             ],
             'privacy:metadata:local_integrity_settings'
+        );
+
+        $collection->add_database_table(
+            'local_integrity_userdata',
+            [
+                'userid' => 'privacy:metadata:local_integrity_userdata:userid',
+                'plugin' => 'privacy:metadata:local_integrity_userdata:plugin',
+                'contextids' => 'privacy:metadata:local_integrity_userdata:contextids',
+            ],
+            'privacy:metadata:local_integrity_userdata'
         );
 
         return $collection;
@@ -184,6 +195,8 @@ class provider implements
 
         // We don't want to delete records. Just anonymise the users.
         $DB->set_field_select('local_integrity_settings', 'usermodified', 0, "contextid $insql", $params);
+        // Delete user data.
+        $DB->delete_records('local_integrity_userdata', ['userid' => $contextlist->get_user()->id]);
     }
 
     /**
@@ -218,5 +231,8 @@ class provider implements
 
         // We don't want to delete records. Just anonymise the users.
         $DB->set_field_select('local_integrity_settings', 'usermodified', 0, "usermodified {$insql}", $inparams);
+
+        // Delete user data.
+        $DB->delete_records_select('local_integrity_userdata', "userid {$insql}", $inparams);
     }
 }

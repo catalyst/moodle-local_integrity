@@ -33,6 +33,7 @@ use core_privacy\tests\provider_testcase;
 use local_integrity\settings;
 use local_integrity\privacy\provider;
 use context_module;
+use local_integrity\userdata_default;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -80,7 +81,7 @@ class privacy_provider_test extends provider_testcase {
      * Setup the section settings and editing teacher as last modifier.
      */
     public function setup_test_data() {
-        global $DB;
+        global $DB, $USER;
 
         $this->setAdminUser();
         $this->course = $this->getDataGenerator()->create_course();
@@ -91,6 +92,9 @@ class privacy_provider_test extends provider_testcase {
         $settings->set('contextid', context_module::instance($module->cmid)->id);
         $settings->set('plugin', 'test');
         $settings->save();
+
+        $userdata = new userdata_default($USER->id, 'test');
+        $userdata->add_context_id(context_module::instance($module->cmid)->id);
 
         $this->module = $this->getDataGenerator()->create_module('assign', ['course' => $this->course]);
         $this->user = $this->getDataGenerator()->create_user(array('username' => 'teacher'));
@@ -103,6 +107,9 @@ class privacy_provider_test extends provider_testcase {
         $this->settings->set('contextid', context_module::instance($this->module->cmid)->id);
         $this->settings->set('plugin', 'test');
         $this->settings->save();
+
+        $userdata = new userdata_default($USER->id, 'test');
+        $userdata->add_context_id(context_module::instance($this->module->cmid)->id);
     }
 
     /**
@@ -175,8 +182,11 @@ class privacy_provider_test extends provider_testcase {
      * Test that data is deleted for a list of users.
      */
     public function test_delete_data_for_users() {
+        global $DB;
+
         $this->assertNotEmpty(settings::get_records(['usermodified' => $this->user->id]));
         $this->assertEmpty(settings::get_records(['usermodified' => 0]));
+        $this->assertNotEmpty($DB->get_records(userdata_default::TABLE, ['userid' => $this->user->id]));
 
         $approveduserlist = new approved_userlist(
             context_module::instance($this->module->cmid),
@@ -188,12 +198,15 @@ class privacy_provider_test extends provider_testcase {
 
         $this->assertEmpty(settings::get_records(['usermodified' => $this->user->id]));
         $this->assertNotEmpty(settings::get_records(['usermodified' => 0]));
+        $this->assertEmpty($DB->get_records(userdata_default::TABLE, ['userid' => $this->user->id]));
     }
 
     /**
      * Test that data is deleted for a list of contexts.
      */
     public function test_delete_data_for_user() {
+        global $DB;
+
         $context = context_module::instance($this->module->cmid);
         $approvedcontextlist = new approved_contextlist(
             $this->user,
@@ -204,26 +217,32 @@ class privacy_provider_test extends provider_testcase {
         // Test data exists.
         $this->assertNotEmpty(settings::get_records(['usermodified' => $this->user->id]));
         $this->assertEmpty(settings::get_records(['usermodified' => 0]));
+        $this->assertNotEmpty($DB->get_records(userdata_default::TABLE, ['userid' => $this->user->id]));
 
         // Test data is deleted.
         provider::delete_data_for_user($approvedcontextlist);
         $this->assertEmpty(settings::get_records(['usermodified' => $this->user->id]));
         $this->assertNotEmpty(settings::get_records(['usermodified' => 0]));
+        $this->assertEmpty($DB->get_records(userdata_default::TABLE, ['userid' => $this->user->id]));
     }
 
     /**
      * Test that data is deleted for all users a single context.
      */
     public function test_delete_data_for_all_users_in_context() {
+        global $DB;
+
         $context = context_module::instance($this->module->cmid);
 
         // Test data exists.
         $this->assertNotEmpty(settings::get_records(['usermodified' => $this->user->id]));
         $this->assertEmpty(settings::get_records(['usermodified' => 0]));
+        $this->assertNotEmpty($DB->get_records(userdata_default::TABLE, ['userid' => $this->user->id]));
 
         // Test data is deleted.
         provider::delete_data_for_all_users_in_context($context);
         $this->assertEmpty(settings::get_records(['usermodified' => $this->user->id]));
         $this->assertNotEmpty(settings::get_records(['usermodified' => 0]));
+        $this->assertNotEmpty($DB->get_records(userdata_default::TABLE, ['userid' => $this->user->id]));
     }
 }
