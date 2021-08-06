@@ -101,26 +101,34 @@ abstract class statement_base {
     }
 
     /**
-     * Return user preference name.
+     * Check if the statement was agreed by a given user in the given context.
      *
-     * @return string
+     * @param \context $context Context to check.
+     * @param int|null $userid User ID. If null the current user will be used.
+     *
+     * @return bool
      */
-    public function get_user_preference_name(): string {
-        return $this->pluginname;
-    }
-
-    public function is_agreed_by_user(\context $context, ?int $userid = null): bool {
+    final public function is_agreed_by_user(\context $context, ?int $userid = null): bool {
         global $USER;
 
         if (empty($userid)) {
             $userid = $USER->id;
         }
-
         if (empty($userid)) {
             return false;
         }
 
-        $vlues = get_user_preferences($this->get_user_preference_name(), null, $userid);
+        return $this->get_user_data($userid)->is_context_id_exist($context->id);
+    }
+
+    /**
+     * Get user data for the plugin.
+     *
+     * @param int $userid
+     * @return \local_integrity\userdata_interface
+     */
+    protected function get_user_data(int $userid): userdata_interface {
+        return new userdata_default($userid, $this->get_plugin_name());
     }
 
     /**

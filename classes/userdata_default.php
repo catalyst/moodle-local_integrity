@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class _userdataDefault implements userdata_interface {
+class userdata_default implements userdata_interface {
 
     /**
      * Table name.

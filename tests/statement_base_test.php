@@ -28,6 +28,7 @@ namespace local_integrity\tests;
 use advanced_testcase;
 use local_integrity\statement_base;
 use local_integrity\statement_factory;
+use local_integrity\userdata_default;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -70,14 +71,6 @@ class statement_base_test extends advanced_testcase {
     public function test_get_plugin_name() {
         $statement = $this->get_test_statement('test');
         $this->assertSame('integritystmt_test', $statement->get_plugin_name());
-    }
-
-    /**
-     * Test get user preference name.
-     */
-    public function test_get_user_preference_name() {
-        $statement = $this->get_test_statement('test');
-        $this->assertSame('integritystmt_test', $statement->get_user_preference_name());
     }
 
     /**
@@ -203,6 +196,29 @@ class statement_base_test extends advanced_testcase {
             assign_capability('integritystmt/' . $name . ':changedefault', CAP_ALLOW, $role, $context);
             $this->assertTrue($statement->can_change_default($context));
         }
+    }
+
+    /**
+     * Test we can check if the statement was agreed by a user.
+     */
+    public function test_is_agreed_by_user() {
+        $this->resetAfterTest();
+
+        $context = \context_system::instance();
+        $user = $this->getDataGenerator()->create_user();
+        $this->setUser($user);
+
+        $statement = $this->get_test_statement('test');
+
+        $this->assertFalse($statement->is_agreed_by_user($context));
+        $this->assertFalse($statement->is_agreed_by_user($context, $user->id));
+
+        $userdata = new userdata_default($user->id, 'integritystmt_test');
+        $userdata->add_context_id($context->id);
+
+        $statement = $this->get_test_statement('test');
+        $this->assertTrue($statement->is_agreed_by_user($context));
+        $this->assertTrue($statement->is_agreed_by_user($context, $user->id));
     }
 
 }
