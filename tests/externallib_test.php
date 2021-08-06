@@ -57,7 +57,10 @@ class externallib_test extends advanced_testcase {
         $response = external_api::call_external_function('local_integrity_get_statement_notice', $params, true);
         $this->assertTrue($response['error']);
         $this->assertSame('invalidparameter', $response['exception']->errorcode);
-        $this->assertContains('Statement with the provided name is not available. Name: test', $response['exception']->debuginfo);
+        $this->assertStringContainsString(
+            'Statement with the provided name is not available. Name: test',
+            $response['exception']->debuginfo
+        );
     }
 
     /**
