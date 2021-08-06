@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - https://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,10 +12,10 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Web services used by local_integrity plugin.
  *
  * @package     local_integrity
  * @copyright   2021 Catalyst IT
@@ -25,8 +25,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_integrity';
-$plugin->release = '0.1.0';
-$plugin->version = 2021072302;
-$plugin->requires = 2020061500;
-$plugin->maturity = MATURITY_STABLE;
+$functions = [
+    'local_integrity_get_statement_notice' => [
+        'classname' => 'local_integrity_external',
+        'methodname' => 'get_statement_notice',
+        'classpath' => 'local/integrity/externallib.php',
+        'description' => 'Get academic integrity notice text',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+];
