@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Tests for userdata class.
+ * Tests for default_userdata class.
  *
  * @package     local_integrity
  * @copyright   2021 Catalyst IT
@@ -26,25 +26,25 @@
 namespace local_integrity\tests;
 
 use advanced_testcase;
-use local_integrity\userdata;
+use local_integrity\userdata_default;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Tests for userdata class.
+ * Tests for default_userdata class.
  *
  * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class userdata_test extends advanced_testcase {
+class userdata_default_test extends advanced_testcase {
 
     /**
      * Test empty data.
      */
     public function test_empty_data() {
-        $userdata = new userdata(1, 'test');
+        $userdata = new userdata_default(1, 'test');
         $this->assertCount(0, $userdata->get_context_ids());
         $this->assertFalse($userdata->is_context_id_exist(rand()));
         $userdata->remove_context_id(2);
@@ -57,7 +57,7 @@ class userdata_test extends advanced_testcase {
     public function test_can_add_and_delete() {
         $this->resetAfterTest();
 
-        $userdata = new userdata(1, 'test');
+        $userdata = new userdata_default(1, 'test');
         $this->assertCount(0, $userdata->get_context_ids());
         $this->assertFalse($userdata->is_context_id_exist(rand()));
 
@@ -70,7 +70,7 @@ class userdata_test extends advanced_testcase {
         $this->assertTrue($userdata->is_context_id_exist(51));
         $this->assertTrue($userdata->is_context_id_exist(55));
 
-        $userdata = new userdata(1, 'test');
+        $userdata = new userdata_default(1, 'test');
         $this->assertCount(3, $userdata->get_context_ids());
         $this->assertTrue($userdata->is_context_id_exist(50));
         $this->assertTrue($userdata->is_context_id_exist(51));
@@ -93,7 +93,7 @@ class userdata_test extends advanced_testcase {
         $this->assertFalse($userdata->is_context_id_exist(55));
         $this->assertCount(0, $userdata->get_context_ids());
 
-        $userdata = new userdata(1, 'test');
+        $userdata = new userdata_default(1, 'test');
         $this->assertCount(0, $userdata->get_context_ids());
     }
 
@@ -103,7 +103,7 @@ class userdata_test extends advanced_testcase {
     public function test_can_not_add_more_than_one_time() {
         $this->resetAfterTest();
 
-        $userdata = new userdata(1, 'test');
+        $userdata = new userdata_default(1, 'test');
         $this->assertCount(0, $userdata->get_context_ids());
         $this->assertFalse($userdata->is_context_id_exist(rand()));
 
@@ -111,7 +111,7 @@ class userdata_test extends advanced_testcase {
         $userdata->add_context_id(50);
         $this->assertCount(1, $userdata->get_context_ids());
 
-        $userdata = new userdata(1, 'test');
+        $userdata = new userdata_default(1, 'test');
         $this->assertCount(1, $userdata->get_context_ids());
     }
 

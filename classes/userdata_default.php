@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class userdata {
+class _userdataDefault implements userdata_interface {
 
     /**
      * Table name.
@@ -99,7 +99,7 @@ class userdata {
      *
      * @param int $contextid
      */
-    public function add_context_id(int $contextid) {
+    public function add_context_id(int $contextid): void {
         if (!in_array($contextid, $this->contextids)) {
             $this->contextids[] = $contextid;
             $this->save();
@@ -111,7 +111,7 @@ class userdata {
      *
      * @param int $contextid
      */
-    public function remove_context_id(int $contextid) {
+    public function remove_context_id(int $contextid): void {
         if (($key = array_search($contextid, $this->contextids)) !== false) {
             unset($this->contextids[$key]);
             $this->save();
@@ -120,8 +120,8 @@ class userdata {
 
     /**
      * Check if the provided context ID exists in  the list.
-     * @param int $contextid
      *
+     * @param int $contextid
      * @return bool
      */
     public function is_context_id_exist(int $contextid): bool {
