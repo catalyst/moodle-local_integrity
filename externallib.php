@@ -52,8 +52,9 @@ class local_integrity_external extends \external_api {
     }
 
     /**
-     * @param string $name
+     * Get statement notice.
      *
+     * @param string $name Name of the statement.
      * @return array
      */
     public static function get_statement_notice(string $name): array {
