@@ -67,9 +67,17 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test get plugin name.
      */
-    public function get_plugin_name() {
+    public function test_get_plugin_name() {
         $statement = $this->get_test_statement('test');
-        $this->assertSame('integritystmt_test', $statement->get_name());
+        $this->assertSame('integritystmt_test', $statement->get_plugin_name());
+    }
+
+    /**
+     * Test get user preference name.
+     */
+    public function test_get_user_preference_name() {
+        $statement = $this->get_test_statement('test');
+        $this->assertSame('integritystmt_test', $statement->get_user_preference_name());
     }
 
     /**

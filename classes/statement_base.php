@@ -76,6 +76,13 @@ abstract class statement_base {
     }
 
     /**
+     * Force subclasses to define URL for triggering a statement.
+     *
+     * @return array
+     */
+    abstract protected function get_display_urls(): array;
+
+    /**
      * Get the name of the statement.
      *
      * @return string
@@ -94,11 +101,27 @@ abstract class statement_base {
     }
 
     /**
-     * Force subclasses to define URL for triggering a statement.
+     * Return user preference name.
      *
-     * @return array
+     * @return string
      */
-    abstract protected function get_display_urls(): array;
+    public function get_user_preference_name(): string {
+        return $this->pluginname;
+    }
+
+    public function is_agreed_by_user(\context $context, ?int $userid = null): bool {
+        global $USER;
+
+        if (empty($userid)) {
+            $userid = $USER->id;
+        }
+
+        if (empty($userid)) {
+            return false;
+        }
+
+        $vlues = get_user_preferences($this->get_user_preference_name(), null, $userid);
+    }
 
     /**
      * Get statement test.
