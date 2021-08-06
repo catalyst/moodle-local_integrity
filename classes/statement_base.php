@@ -164,13 +164,63 @@ abstract class statement_base {
      * @param \moodle_url $pageurl
      * @return bool
      */
-    final public function should_display_for_url(moodle_url $pageurl): bool {
+    protected function should_display_for_url(moodle_url $pageurl): bool {
         foreach ($this->get_display_urls() as $url) {
             if (is_string($url)) {
                 if ($pageurl->compare(new moodle_url($url), URL_MATCH_BASE)) {
                     return true;
                 }
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the statement is enabled in the given context.
+     *
+     * @param \context $context
+     * @return bool
+     */
+    protected function is_enabled_in_context(\context $context): bool {
+        return !empty(settings::get_record([
+            'contextid' => $context->id,
+            'plugin' => $this->get_plugin_name(),
+            'enabled' => 1
+        ]));
+    }
+
+    /**
+     * Check if we should display statement for the user on the given page.
+     *
+     * @param \moodle_page $page Moodle page.
+     * @param int|null $userid Given user ID.
+     *
+     * @return bool
+     */
+    public function should_display(\moodle_page $page, ?int $userid = null): bool {
+        global $USER;
+
+        if (empty($userid) && !empty($USER->id)) {
+            $userid = $USER->id;
+        }
+
+        if (empty($userid)) {
+            return false;
+        }
+
+        if (!$page->has_set_url()) {
+            return false;
+        }
+
+        if (!$this->should_display_for_url($page->url)) {
+            return false;
+        }
+
+        if ($this->is_enabled_in_context($page->context)) {
+            // TODO:
+            // 1. Check can bypass permissions.
+            return !$this->is_agreed_by_user($page->context, $userid);
         }
 
         return false;
@@ -199,7 +249,7 @@ abstract class statement_base {
      *
      * @param \admin_settingpage $settings
      */
-    public function add_settings(admin_settingpage $settings) {
+    final public function add_settings(admin_settingpage $settings) {
         $settings->add(new admin_setting_heading(
                 "{$this->get_plugin_name()}/header",
                 get_string('pluginname', $this->get_plugin_name()),
