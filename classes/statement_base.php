@@ -182,6 +182,7 @@ abstract class statement_base {
      * @return bool
      */
     protected function is_enabled_in_context(\context $context): bool {
+        // TODO: add caching.
         return !empty(settings::get_record([
             'contextid' => $context->id,
             'plugin' => $this->get_plugin_name(),

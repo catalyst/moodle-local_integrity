@@ -46,6 +46,7 @@ class integritystmt extends base {
      * @return string[]
      */
     public static function get_enabled_plugins(): array {
+        // TODO: add caching.
         return array_keys(core_plugin_manager::instance()->get_installed_plugins('integritystmt'));
     }
 

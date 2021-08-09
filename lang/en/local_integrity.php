@@ -27,6 +27,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Academic integrity';
+$string['cachedef_userdata'] = 'Statement agreement data';
 $string['modform:header'] = 'Academic integrity';
 $string['integrity:agreestatements'] = 'Agree statements on behalf of others';
 $string['modform:header'] = 'Academic integrity';
