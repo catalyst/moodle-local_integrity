@@ -28,6 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Academic integrity';
 $string['modform:header'] = 'Academic integrity';
+$string['integrity:agreestatements'] = 'Agree statements on behalf of others';
+$string['modform:header'] = 'Academic integrity';
 $string['modform:enabled'] = 'Display academic integrity notice?';
 $string['privacy:metadata:local_integrity_settings'] = 'Details of Integrity plugin settings.';
 $string['privacy:metadata:local_integrity_settings:contextid'] = 'Context ID of the settings.';

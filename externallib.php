@@ -83,4 +83,62 @@ class local_integrity_external extends \external_api {
         ]);
     }
 
+    /**
+     * Define the parameters for agree_statement webservice.
+     *
+     * @return \external_function_parameters
+     */
+    public static function agree_statement_parameters(): external_function_parameters {
+        return new external_function_parameters([
+            'name' => new external_value(PARAM_ALPHANUMEXT, 'The name of the statement.'),
+            'contextid' => new external_value(PARAM_INT, 'Context ID the statement needs to be agreed in.'),
+            'userid' => new external_value(PARAM_INT, 'Optional user ID. Otherwise the current user us used.'),
+
+        ]);
+    }
+
+    /**
+     * Agree provided statement in the provided context.
+     *
+     * @param string $name Name of the statement.
+     * @param int $contextid Context ID to agree.
+     * @param int|null $userid Optional user ID.
+     *
+     * @return array
+     */
+    public static function agree_statement(string $name, int $contextid, int $userid = 0): array {
+        global $USER;
+
+        $params = self::validate_parameters(self::agree_statement_parameters(), [
+            'name' => $name,
+            'contextid' => $contextid,
+            'userid' => $userid
+        ]);
+
+        $statement = statement_factory::get_statement($params['name']);
+
+        if (empty($statement)) {
+            throw new invalid_parameter_exception('Statement with the provided name is not available. Name: ' . $name);
+        }
+
+        if (empty($userid)) {
+            $userid = $USER->id;
+        } else if ($userid != $USER->id) {
+            require_capability('local/integrity:agreestatements', context_system::instance());
+        }
+
+        $statement->get_user_data()->add_context_id($contextid, $userid);
+
+        return [];
+    }
+
+    /**
+     * Define the agree_statement webservice response object shape.
+     *
+     * @return \external_single_structure
+     */
+    public static function agree_statement_returns(): external_single_structure {
+        return new \external_single_structure([]);
+    }
+
 }
