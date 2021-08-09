@@ -121,4 +121,42 @@ class userdata_default_test extends advanced_testcase {
         $this->assertCount(1, $userdata->get_context_ids($user->id));
     }
 
+    /**
+     * Test that data gets cached.
+     */
+    public function test_data_cached() {
+        global $DB;
+
+        $this->resetAfterTest();
+        $cache = \cache::make('local_integrity', 'userdata');
+        $user = $this->getDataGenerator()->create_user();
+
+        $this->assertFalse($cache->get('test_' . $user->id));
+
+        $userdata = new userdata_default('test');
+        $this->assertCount(0, $userdata->get_context_ids($user->id));
+        $this->assertFalse($userdata->is_context_id_exist($user->id, rand()));
+        $this->assertNull($cache->get('test_' . $user->id));
+
+        $userdata->add_context_id(50, $user->id);
+        $expected = $DB->get_record(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $this->assertEquals($expected, $cache->get('test_' . $user->id));
+
+        $userdata->add_context_id(51, $user->id);
+        $expected = $DB->get_record(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $this->assertEquals($expected, $cache->get('test_' . $user->id));
+
+        $userdata->remove_context_id(50, $user->id);
+        $expected = $DB->get_record(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $this->assertEquals($expected, $cache->get('test_' . $user->id));
+
+        $userdata->remove_context_id(50, $user->id);
+        $expected = $DB->get_record(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $this->assertEquals($expected, $cache->get('test_' . $user->id));
+
+        $userdata->remove_context_id(51, $user->id);
+        $expected = $DB->get_record(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $this->assertEquals($expected, $cache->get('test_' . $user->id));
+    }
+
 }
