@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Capabilities
  *
  * @package     local_integrity
  * @copyright   2021 Catalyst IT
@@ -25,8 +25,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_integrity';
-$plugin->release = '0.1.0';
-$plugin->version = 2021072304;
-$plugin->requires = 2020061500;
-$plugin->maturity = MATURITY_STABLE;
+$capabilities = [
+    'local/integrity:agreestatements' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+        ]
+    ],
+];

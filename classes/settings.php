@@ -15,41 +15,52 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Forum statement class.
+ * Class containing settings for activities.
  *
- * @package     integritystmt_forum
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace integritystmt_forum;
+namespace local_integrity;
 
-use local_integrity\statement_base;
+use core\persistent;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 /**
- * Forum statement class.
+ * Class containing settings for activities.
  *
- * @package     integritystmt_forum
+ * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class statement extends statement_base {
+class settings extends persistent {
 
     /**
-     * Get a list of URL to fire off the statement on.
-     *
-     * @return string[]
+     * Table name.
      */
-    protected function get_display_urls(): array {
+    const TABLE = 'local_integrity_settings';
+
+    /**
+     * Return the definition of the properties of this model.
+     *
+     * @return array
+     */
+    protected static function define_properties() {
         return [
-            '/mod/forum/view.php',
-            '/mod/forum/discuss.php',
-            '/mod/forum/post.php',
+            'contextid' => [
+                'type' => PARAM_INT,
+            ],
+            'plugin' => [
+                'type' => PARAM_ALPHANUMEXT,
+            ],
+            'enabled' => [
+                'type' => PARAM_INT,
+                'default' => 0,
+            ],
         ];
     }
-
 }

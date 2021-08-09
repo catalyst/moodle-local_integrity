@@ -24,7 +24,7 @@
  */
 
 use local_integrity\statement_factory;
-use local_integrity\mod_settings;
+use local_integrity\settings;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -108,7 +108,24 @@ function local_integrity_coursemodule_validation(moodleform_mod $modform, array 
  * @param \stdClass $cm The course module record.
  */
 function local_integrity_pre_course_module_delete($cm) {
-    if ($record = mod_settings::get_record(['cmid' => $cm->id])) {
+    $context = context_module::instance($cm->id);
+
+    foreach (settings::get_records(['contextid' => $context->id]) as $record) {
         $record->delete();
+    }
+}
+
+/**
+ * Inject statement code.
+ *
+ * @param \global_navigation $navigation
+ */
+function local_integrity_extend_navigation(global_navigation $navigation) {
+    global $PAGE;
+
+    foreach (statement_factory::get_statements() as $statement) {
+        if ($statement->should_display($PAGE)) {
+            $statement->display_statement();
+        }
     }
 }

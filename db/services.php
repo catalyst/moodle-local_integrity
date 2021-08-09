@@ -15,49 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class containing settings for activities.
+ * Web services used by local_integrity plugin.
  *
  * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace local_integrity;
-
-use core\persistent;
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Class containing settings for activities.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class mod_settings extends persistent {
-
-    /**
-     * Table name.
-     */
-    const TABLE = 'local_integrity_mod_settings';
-
-    /**
-     * Return the definition of the properties of this model.
-     *
-     * @return array
-     */
-    protected static function define_properties() {
-        return [
-            'cmid' => [
-                'type' => PARAM_INT,
-            ],
-            'enabled' => [
-                'type' => PARAM_INT,
-                'default' => 0,
-            ],
-        ];
-    }
-}
+$functions = [
+    'local_integrity_get_statement_notice' => [
+        'classname' => 'local_integrity_external',
+        'methodname' => 'get_statement_notice',
+        'classpath' => 'local/integrity/externallib.php',
+        'description' => 'Get academic integrity notice text',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_integrity_agree_statement' => [
+        'classname' => 'local_integrity_external',
+        'methodname' => 'agree_statement',
+        'classpath' => 'local/integrity/externallib.php',
+        'description' => 'Agree integrity statement',
+        'type' => 'write',
+        'ajax' => true,
+    ],
+];

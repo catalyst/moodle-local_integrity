@@ -34,6 +34,7 @@ use admin_setting_confightmleditor;
 use admin_setting_heading;
 use admin_setting_configselect;
 use context_course;
+use context_module;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -82,12 +83,60 @@ abstract class statement_base {
     abstract protected function get_display_urls(): array;
 
     /**
+     * Get the name of the statement.
+     *
+     * @return string
+     */
+    final public function get_name(): string {
+        return $this->name;
+    }
+
+    /**
+     * Get the plugin name;
+     *
+     * @return string
+     */
+    final public function get_plugin_name(): string {
+        return $this->pluginname;
+    }
+
+    /**
+     * Check if the statement was agreed by a given user in the given context.
+     *
+     * @param \context $context Context to check.
+     * @param int|null $userid User ID. If null the current user will be used.
+     *
+     * @return bool
+     */
+    final public function is_agreed_by_user(\context $context, ?int $userid = null): bool {
+        global $USER;
+
+        if (empty($userid)) {
+            $userid = $USER->id;
+        }
+        if (empty($userid)) {
+            return false;
+        }
+
+        return $this->get_user_data()->is_context_id_exist($context->id, $userid);
+    }
+
+    /**
+     * Get user data for the plugin.
+     *
+     * @return \local_integrity\userdata_interface
+     */
+    public function get_user_data(): userdata_interface {
+        return new userdata_default($this->get_plugin_name());
+    }
+
+    /**
      * Get statement test.
      *
      * @return string
      */
     final public function get_notice(): string {
-        return get_config($this->pluginname, 'notice');
+        return get_config($this->get_plugin_name(), 'notice');
     }
 
     /**
@@ -96,7 +145,7 @@ abstract class statement_base {
      * @return int
      */
     final public function get_default_enabled(): int {
-        return (int) get_config($this->pluginname, 'default_enabled');
+        return (int) get_config($this->get_plugin_name(), 'default_enabled');
     }
 
     /**
@@ -114,7 +163,7 @@ abstract class statement_base {
      * @param \moodle_url $pageurl
      * @return bool
      */
-    final public function should_display(moodle_url $pageurl): bool {
+    protected function should_display_for_url(moodle_url $pageurl): bool {
         foreach ($this->get_display_urls() as $url) {
             if (is_string($url)) {
                 if ($pageurl->compare(new moodle_url($url), URL_MATCH_BASE)) {
@@ -124,6 +173,71 @@ abstract class statement_base {
         }
 
         return false;
+    }
+
+    /**
+     * Check if the statement is enabled in the given context.
+     *
+     * @param \context $context
+     * @return bool
+     */
+    protected function is_enabled_in_context(\context $context): bool {
+        return !empty(settings::get_record([
+            'contextid' => $context->id,
+            'plugin' => $this->get_plugin_name(),
+            'enabled' => 1
+        ]));
+    }
+
+    /**
+     * Check if we should display statement for the user on the given page.
+     *
+     * @param \moodle_page $page Moodle page.
+     * @param int|null $userid Given user ID.
+     *
+     * @return bool
+     */
+    public function should_display(\moodle_page $page, ?int $userid = null): bool {
+        global $USER;
+
+        if (empty($userid) && !empty($USER->id)) {
+            $userid = $USER->id;
+        }
+
+        if (empty($userid)) {
+            return false;
+        }
+
+        if (!$page->has_set_url()) {
+            return false;
+        }
+
+        if (!$this->should_display_for_url($page->url)) {
+            return false;
+        }
+
+        if ($this->is_enabled_in_context($page->context)) {
+            // TODO:
+            // 1. Check can bypass permissions.
+            return !$this->is_agreed_by_user($page->context, $userid);
+        }
+
+        return false;
+    }
+
+    /**
+     * Display statement on given page.
+     */
+    public function display_statement() {
+        global $PAGE;
+
+        if ($PAGE->context->contextlevel == CONTEXT_MODULE && !empty($PAGE->cm->modname)) {
+            $PAGE->requires->js_call_amd('local_integrity/statement', 'init', [
+                $PAGE->context->id,
+                $this->get_name(),
+                $this->get_decline_url()
+            ]);
+        }
     }
 
     /**
@@ -149,15 +263,15 @@ abstract class statement_base {
      *
      * @param \admin_settingpage $settings
      */
-    public function add_settings(admin_settingpage $settings) {
+    final public function add_settings(admin_settingpage $settings) {
         $settings->add(new admin_setting_heading(
-                "{$this->pluginname}/header",
-                get_string('pluginname', $this->pluginname),
+                "{$this->get_plugin_name()}/header",
+                get_string('pluginname', $this->get_plugin_name()),
                 '')
         );
 
         $settings->add(new admin_setting_configselect(
-                "{$this->pluginname}/default_enabled",
+                "{$this->get_plugin_name()}/default_enabled",
                 get_string('settings:default_enabled', 'local_integrity'),
                 get_string('settings:default_enabled_description', 'local_integrity'),
                 0,
@@ -169,14 +283,14 @@ abstract class statement_base {
         );
 
         $settings->add(new admin_setting_confightmleditor(
-                "{$this->pluginname}/notice",
+                "{$this->get_plugin_name()}/notice",
                 get_string('settings:notice', 'local_integrity'),
                 get_string('settings:notice_description', 'local_integrity'),
                 '')
         );
 
         $settings->add(new \admin_setting_description(
-                "{$this->pluginname}/lastupdatedate",
+                "{$this->get_plugin_name()}/lastupdatedate",
                 '',
                 get_string('settings:lastupdatedated', 'local_integrity', $this->get_setting_last_updated_date('notice'))
             )
@@ -193,7 +307,7 @@ abstract class statement_base {
         global $DB;
 
         $timemodified = $DB->get_field_sql('SELECT max(timemodified) FROM {config_log} WHERE plugin = :plugin AND name = :name', [
-            'plugin' => $this->pluginname,
+            'plugin' => $this->get_plugin_name(),
             'name' => $name
         ]);
 
@@ -217,7 +331,9 @@ abstract class statement_base {
 
         $cm = $modform->get_coursemodule();
         if ($cm) {
-            if ($record = mod_settings::get_record(['cmid' => $cm->id])) {
+            $context = context_module::instance($cm->id);
+
+            if ($record = settings::get_record(['contextid' => $context->id, 'plugin' => $this->get_plugin_name()])) {
                 $form->setDefault(self::FORM_FIELD_NAME, $record->get('enabled'));
             }
         }
@@ -237,18 +353,19 @@ abstract class statement_base {
      */
     public function coursemodule_edit_post_actions(stdClass $moduleinfo, stdClass $course): stdClass {
         if (isset($moduleinfo->{self::FORM_FIELD_NAME})) {
-            $cmid = $moduleinfo->coursemodule;
+            $context = context_module::instance($moduleinfo->coursemodule);
             $enabled = $moduleinfo->{self::FORM_FIELD_NAME};
 
-            if ($record = mod_settings::get_record(['cmid' => $cmid])) {
+            if ($record = settings::get_record(['contextid' => $context->id, 'plugin' => $this->get_plugin_name()])) {
                 if ($record->get('enabled') != $enabled) {
                     $record->set('enabled', $enabled);
                     $record->save();
                 }
             } else {
-                $record = new mod_settings();
-                $record->set('cmid', $cmid);
+                $record = new settings();
+                $record->set('contextid', $context->id);
                 $record->set('enabled', $enabled);
+                $record->set('plugin', $this->get_plugin_name());
                 $record->save();
             }
         }
