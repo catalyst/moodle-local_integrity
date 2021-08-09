@@ -182,11 +182,14 @@ abstract class statement_base {
      * @return bool
      */
     protected function is_enabled_in_context(\context $context): bool {
-        return !empty(settings::get_record([
-            'contextid' => $context->id,
-            'plugin' => $this->get_plugin_name(),
-            'enabled' => 1
-        ]));
+        $enabled = false;
+        $settings = settings::get_settings($this->get_plugin_name(), $context->id);
+
+        if (empty(!$settings)) {
+            $enabled = !empty($settings->get('enabled'));
+        }
+
+        return $enabled;
     }
 
     /**
@@ -356,7 +359,7 @@ abstract class statement_base {
             $context = context_module::instance($moduleinfo->coursemodule);
             $enabled = $moduleinfo->{self::FORM_FIELD_NAME};
 
-            if ($record = settings::get_record(['contextid' => $context->id, 'plugin' => $this->get_plugin_name()])) {
+            if ($record = settings::get_settings($this->get_plugin_name(), $context->id)) {
                 if ($record->get('enabled') != $enabled) {
                     $record->set('enabled', $enabled);
                     $record->save();

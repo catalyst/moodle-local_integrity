@@ -63,4 +63,92 @@ class settings extends persistent {
             ],
         ];
     }
+
+    /**
+     * Get cache instance.
+     *
+     * @return \cache
+     */
+    private static function get_cache(): \cache {
+        return \cache::make('local_integrity', 'settings');
+    }
+
+    /**
+     * Build cache key from provided plugin name and context id.
+     *
+     * @param string $pluginname Name of the plugin.
+     * @param int $contextid Context ID.
+     *
+     * @return string
+     */
+    private static function build_cache_key(string $pluginname, int $contextid): string {
+        return $pluginname . '_' . $contextid;
+    }
+
+    /**
+     * Get cache key.
+     *
+     * @return string
+     */
+    private function get_cache_key(): string {
+        return self::build_cache_key($this->get('plugin'), $this->get('contextid'));
+    }
+
+    /**
+     * Run after update.
+     *
+     * @param bool $result Result of update.
+     */
+    protected function after_update($result) {
+        if ($result) {
+            self::get_cache()->set($this->get_cache_key(), $this->to_record());
+        }
+    }
+
+    /**
+     * Run after created.
+     */
+    protected function after_create() {
+        self::get_cache()->set($this->get_cache_key(), $this->to_record());
+    }
+
+    /**
+     * Run after deleted.
+     *
+     * @param bool $result Result of delete.
+     */
+    protected function after_delete($result) {
+        if ($result) {
+            self::get_cache()->delete($this->get_cache_key());
+        }
+    }
+
+    /**
+     * Get settings object.
+     *
+     * @param string $pluginname Name of the plugin.
+     * @param int $contextid Context ID.
+     *
+     * @return \local_integrity\settings|null
+     */
+    public static function get_settings(string $pluginname, int $contextid): ?settings {
+        $cachekey = self::build_cache_key($pluginname, $contextid);
+        $settings = self::get_cache()->get($cachekey);
+
+        if ($settings !== false) {
+            return new static(0, $settings);
+        }
+
+        $settings = self::get_record(['plugin' => $pluginname, 'contextid' => $contextid]);
+
+        if (!empty($settings)) {
+            self::get_cache()->set($cachekey, $settings->to_record());
+        } else {
+            $settings = null;
+            self::get_cache()->set($cachekey, $settings);
+        }
+
+        return $settings;
+    }
+
 }

@@ -49,12 +49,19 @@ class userdata_default implements userdata_interface {
     private $plugin;
 
     /**
+     * Cache instance.
+     * @var \cache
+     */
+    private $cache;
+
+    /**
      * Constructor.
      *
      * @param string $plugin Plugin name.
      */
     public function __construct(string $plugin) {
         $this->plugin = $plugin;
+        $this->cache = \cache::make('local_integrity', 'userdata');
     }
 
     /**
@@ -135,7 +142,19 @@ class userdata_default implements userdata_interface {
     }
 
     /**
+     * Build cache key based on provided user.
+     *
+     * @param int $userid User ID.
+     * @return string
+     */
+    private function build_cache_key(int $userid): string {
+        return $this->plugin . '_' . $userid;
+    }
+
+    /**
      * Get user data for provided user.
+     *
+     * This will always return decoded contextids.
      *
      * @param int $userid User ID.
      * @return \stdClass|null
@@ -143,13 +162,23 @@ class userdata_default implements userdata_interface {
     private function get_user_data(int $userid): ?\stdClass {
         global $DB;
 
-        if ($userdata = $DB->get_record(self::TABLE, ['userid' => $userid, 'plugin' => $this->plugin])) {
-            $userdata->contextids = json_decode($userdata->contextids);
+        $userdata = $this->cache->get($this->build_cache_key($userid));
 
-            return $userdata;
+        if ($userdata === false) {
+            $result = $DB->get_record(self::TABLE, ['userid' => $userid, 'plugin' => $this->plugin]);
+            if (empty($result)) {
+                $result = null;
+            }
+            $this->cache->set($this->build_cache_key($userid), $result);
+        } else {
+            $result = $userdata;
         }
 
-        return null;
+        if (!empty($result)) {
+            $result->contextids = json_decode($result->contextids);
+        }
+
+        return $result;
     }
 
     /**
@@ -165,8 +194,10 @@ class userdata_default implements userdata_interface {
         if (!empty($userdata->id)) {
             $DB->update_record(self::TABLE, $userdata);
         } else {
-            $DB->insert_record(self::TABLE, $userdata);
+            $userdata->id = $DB->insert_record(self::TABLE, $userdata);
         }
+
+        $this->cache->set($this->build_cache_key($userdata->userid), $userdata);
     }
 
 }
