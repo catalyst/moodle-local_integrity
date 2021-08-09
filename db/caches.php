@@ -29,5 +29,9 @@ $definitions = [
     'userdata' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
+    ],
+    'settings' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
     ]
 ];

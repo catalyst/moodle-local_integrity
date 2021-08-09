@@ -49,8 +49,8 @@ class userdata_default implements userdata_interface {
     private $plugin;
 
     /**
-     * Cache store.
-     * @var \cache_store
+     * Cache instance.
+     * @var \cache
      */
     private $cache;
 
