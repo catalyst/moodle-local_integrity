@@ -114,3 +114,18 @@ function local_integrity_pre_course_module_delete($cm) {
         $record->delete();
     }
 }
+
+/**
+ * Inject statement code.
+ *
+ * @param \global_navigation $navigation
+ */
+function local_integrity_extend_navigation(global_navigation $navigation) {
+    global $PAGE;
+
+    foreach (statement_factory::get_statements() as $statement) {
+        if ($statement->should_display($PAGE)) {
+            $statement->display_statement();
+        }
+    }
+}

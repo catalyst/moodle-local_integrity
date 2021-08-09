@@ -226,6 +226,21 @@ abstract class statement_base {
     }
 
     /**
+     * Display statement on given page.
+     */
+    public function display_statement() {
+        global $PAGE;
+
+        if ($PAGE->context->contextlevel == CONTEXT_MODULE && !empty($PAGE->cm->modname)) {
+            $PAGE->requires->js_call_amd('local_integrity/statement', 'init', [
+                $PAGE->context->id,
+                $this->get_name(),
+                $this->get_decline_url()
+            ]);
+        }
+    }
+
+    /**
      * Get URL to redirect to after statement.
      *
      * @return string
