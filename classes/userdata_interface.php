@@ -38,31 +38,37 @@ defined('MOODLE_INTERNAL') || die();
 interface userdata_interface {
 
     /**
-     * Return a list of context ids for the user for the plugin,
+     * Return a list of context ids for the user for the plugin.
+     *
+     * @param int $userid User ID.
      * @return array
      */
-    public function get_context_ids(): array;
+    public function get_context_ids(int $userid): array;
 
     /**
-     * Add context ID to the list.
+     * Add context ID to the list for the user.
      *
-     * @param int $contextid
+     * @param int $contextid Context ID.
+     * @param int $userid User ID.
      */
-    public function add_context_id(int $contextid): void;
+    public function add_context_id(int $contextid, int $userid): void;
 
     /**
-     * Remove context ID from the list.
+     * Remove context ID from the list for the user.
      *
-     * @param int $contextid
+     * @param int $contextid Context ID.
+     * @param int $userid User ID.
      */
-    public function remove_context_id(int $contextid): void;
+    public function remove_context_id(int $contextid, int $userid): void;
 
     /**
-     * Check if the provided context ID exists in  the list.
+     * Check if the provided context ID exists in the list for the user.
      *
-     * @param int $contextid
+     * @param int $contextid Context ID.
+     * @param int $userid User ID.
+     *
      * @return bool
      */
-    public function is_context_id_exist(int $contextid): bool;
+    public function is_context_id_exist(int $contextid, int $userid): bool;
 
 }

@@ -43,107 +43,129 @@ class userdata_default implements userdata_interface {
     const TABLE = 'local_integrity_userdata';
 
     /**
-     * @var
-     */
-    private $id = null;
-
-    /**
-     * User id.
-     * @var int
-     */
-    private $userid;
-
-    /**
      * Plugin name.
      * @var string
      */
     private $plugin;
 
     /**
-     * A list of context id for that user.
-     * @var array
-     */
-    private $contextids = [];
-
-    /**
      * Constructor.
      *
-     * @param int $userid User ID.
      * @param string $plugin Plugin name.
-     *
-     * @throws \dml_exception
      */
-    public function __construct(int $userid, string $plugin) {
-        global $DB;
-
-        $this->userid = $userid;
+    public function __construct(string $plugin) {
         $this->plugin = $plugin;
-
-        $record = $DB->get_record(self::TABLE, ['userid' => $this->userid, 'plugin' => $this->plugin]);
-        if (!empty($record)) {
-            $this->id = $record->id;
-            $this->contextids = json_decode($record->contextids);
-        }
     }
 
     /**
-     * Return a list of context ids for the user for the plugin,
+     * Return a list of context ids for the user for the plugin.
+     * @param int $userid User ID.
+     *
      * @return array
      */
-    public function get_context_ids(): array {
-        return $this->contextids;
+    public function get_context_ids(int $userid): array {
+        $contextids = [];
+        $userdata = $this->get_user_data($userid);
+
+        if (!empty($userdata)) {
+            $contextids = $userdata->contextids;
+        }
+
+        return $contextids;
     }
 
     /**
      * Add context ID to the list.
      *
-     * @param int $contextid
+     * @param int $contextid Context ID.
+     * @param int $userid User ID.
      */
-    public function add_context_id(int $contextid): void {
-        if (!in_array($contextid, $this->contextids)) {
-            $this->contextids[] = $contextid;
-            $this->save();
+    public function add_context_id(int $contextid, int $userid): void {
+        $userdata = $this->get_user_data($userid);
+
+        if (!empty($userdata)) {
+            if (!in_array($contextid, $userdata->contextids)) {
+                $userdata->contextids[] = $contextid;
+                $this->save_user_data($userdata);
+            }
+        } else {
+            $userdata = new \stdClass();
+            $userdata->userid = $userid;
+            $userdata->plugin = $this->plugin;
+            $userdata->contextids = [$contextid];
+            $this->save_user_data($userdata);
         }
     }
 
     /**
      * Remove context ID from the list.
      *
-     * @param int $contextid
+     * @param int $contextid Context ID.
+     * @param int $userid User ID.
      */
-    public function remove_context_id(int $contextid): void {
-        if (($key = array_search($contextid, $this->contextids)) !== false) {
-            unset($this->contextids[$key]);
-            $this->save();
+    public function remove_context_id(int $contextid, int $userid): void {
+        $userdata = $this->get_user_data($userid);
+
+        if (!empty($userdata)) {
+            if (($key = array_search($contextid, $userdata->contextids)) !== false) {
+                unset($userdata->contextids[$key]);
+                $userdata->contextids = array_values($userdata->contextids);
+                $this->save_user_data($userdata);
+            }
         }
     }
 
     /**
      * Check if the provided context ID exists in  the list.
      *
-     * @param int $contextid
+     * @param int $contextid Context ID.
+     * @param int $userid User ID.
+     *
      * @return bool
      */
-    public function is_context_id_exist(int $contextid): bool {
-        return in_array($contextid, $this->contextids);
+    public function is_context_id_exist(int $contextid, int $userid): bool {
+        $result = false;
+        $userdata = $this->get_user_data($userid);
+
+        if ($userdata) {
+            $result = in_array($contextid, $userdata->contextids);
+        }
+
+        return $result;
     }
 
     /**
-     * Save data to DB.
+     * Get user data for provided user.
+     *
+     * @param int $userid User ID.
+     * @return \stdClass|null
      */
-    protected function save() {
+    private function get_user_data(int $userid): ?\stdClass {
         global $DB;
 
-        $data = new \stdClass();
-        $data->userid = $this->userid;
-        $data->plugin = $this->plugin;
-        $data->contextids = json_encode($this->contextids);
+        if ($userdata = $DB->get_record(self::TABLE, ['userid' => $userid, 'plugin' => $this->plugin])) {
+            $userdata->contextids = json_decode($userdata->contextids);
 
-        if (empty($this->id)) {
-            $this->id = $DB->insert_record(self::TABLE, $data);
+            return $userdata;
+        }
+
+        return null;
+    }
+
+    /**
+     * Save provided user data.
+     *
+     * @param \stdClass $userdata User data object.
+     */
+    private function save_user_data(\stdClass $userdata) {
+        global $DB;
+
+        $userdata->contextids = json_encode($userdata->contextids);
+
+        if (!empty($userdata->id)) {
+            $DB->update_record(self::TABLE, $userdata);
         } else {
-            $data->id = $this->id;
-            $DB->update_record(self::TABLE, $data);
+            $DB->insert_record(self::TABLE, $userdata);
         }
     }
 

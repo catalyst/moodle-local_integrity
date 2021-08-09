@@ -118,17 +118,16 @@ abstract class statement_base {
             return false;
         }
 
-        return $this->get_user_data($userid)->is_context_id_exist($context->id);
+        return $this->get_user_data()->is_context_id_exist($context->id, $userid);
     }
 
     /**
      * Get user data for the plugin.
      *
-     * @param int $userid
      * @return \local_integrity\userdata_interface
      */
-    protected function get_user_data(int $userid): userdata_interface {
-        return new userdata_default($userid, $this->get_plugin_name());
+    public function get_user_data(): userdata_interface {
+        return new userdata_default($this->get_plugin_name());
     }
 
     /**

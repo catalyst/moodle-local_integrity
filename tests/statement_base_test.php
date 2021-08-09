@@ -26,7 +26,6 @@
 namespace local_integrity\tests;
 
 use advanced_testcase;
-use core\persistent;
 use local_integrity\settings;
 use local_integrity\statement_base;
 use local_integrity\statement_factory;
@@ -196,8 +195,8 @@ class statement_base_test extends advanced_testcase {
         $this->assertFalse($statement->is_agreed_by_user($context));
         $this->assertFalse($statement->is_agreed_by_user($context, $user->id));
 
-        $userdata = new userdata_default($user->id, 'integritystmt_test');
-        $userdata->add_context_id($context->id);
+        $userdata = new userdata_default('integritystmt_test');
+        $userdata->add_context_id($context->id, $user->id);
 
         $statement = $this->get_test_statement('test');
         $this->assertTrue($statement->is_agreed_by_user($context));
@@ -308,8 +307,8 @@ class statement_base_test extends advanced_testcase {
         $this->assertTrue($statement->should_display($PAGE));
 
         $context = \context_system::instance();
-        $userdata = new userdata_default($user->id, $statement->get_plugin_name());
-        $userdata->add_context_id($context->id);
+        $userdata = new userdata_default($statement->get_plugin_name());
+        $userdata->add_context_id($context->id, $user->id);
 
         $this->assertFalse($statement->should_display($PAGE));
     }

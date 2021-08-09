@@ -44,11 +44,15 @@ class userdata_default_test extends advanced_testcase {
      * Test empty data.
      */
     public function test_empty_data() {
-        $userdata = new userdata_default(1, 'test');
-        $this->assertCount(0, $userdata->get_context_ids());
-        $this->assertFalse($userdata->is_context_id_exist(rand()));
-        $userdata->remove_context_id(2);
-        $this->assertCount(0, $userdata->get_context_ids());
+        $this->resetAfterTest();
+
+        $user = $this->getDataGenerator()->create_user();
+
+        $userdata = new userdata_default('test');
+        $this->assertCount(0, $userdata->get_context_ids($user->id));
+        $this->assertFalse($userdata->is_context_id_exist(rand(), $user->id));
+        $userdata->remove_context_id(2, $user->id);
+        $this->assertCount(0, $userdata->get_context_ids($user->id));
     }
 
     /**
@@ -56,45 +60,46 @@ class userdata_default_test extends advanced_testcase {
      */
     public function test_can_add_and_delete() {
         $this->resetAfterTest();
+        $user = $this->getDataGenerator()->create_user();
 
-        $userdata = new userdata_default(1, 'test');
-        $this->assertCount(0, $userdata->get_context_ids());
-        $this->assertFalse($userdata->is_context_id_exist(rand()));
+        $userdata = new userdata_default('test');
+        $this->assertCount(0, $userdata->get_context_ids($user->id));
+        $this->assertFalse($userdata->is_context_id_exist($user->id, rand()));
 
-        $userdata->add_context_id(50);
-        $userdata->add_context_id(51);
-        $userdata->add_context_id(55);
+        $userdata->add_context_id(50, $user->id);
+        $userdata->add_context_id(51, $user->id);
+        $userdata->add_context_id(55, $user->id);
 
-        $this->assertCount(3, $userdata->get_context_ids());
-        $this->assertTrue($userdata->is_context_id_exist(50));
-        $this->assertTrue($userdata->is_context_id_exist(51));
-        $this->assertTrue($userdata->is_context_id_exist(55));
+        $this->assertCount(3, $userdata->get_context_ids($user->id));
+        $this->assertTrue($userdata->is_context_id_exist(50, $user->id));
+        $this->assertTrue($userdata->is_context_id_exist(51, $user->id));
+        $this->assertTrue($userdata->is_context_id_exist(55, $user->id));
 
-        $userdata = new userdata_default(1, 'test');
-        $this->assertCount(3, $userdata->get_context_ids());
-        $this->assertTrue($userdata->is_context_id_exist(50));
-        $this->assertTrue($userdata->is_context_id_exist(51));
-        $this->assertTrue($userdata->is_context_id_exist(55));
+        $userdata = new userdata_default('test');
+        $this->assertCount(3, $userdata->get_context_ids($user->id));
+        $this->assertTrue($userdata->is_context_id_exist(50, $user->id));
+        $this->assertTrue($userdata->is_context_id_exist(51, $user->id));
+        $this->assertTrue($userdata->is_context_id_exist(55, $user->id));
 
-        $userdata->remove_context_id(50);
-        $this->assertCount(2, $userdata->get_context_ids());
-        $this->assertFalse($userdata->is_context_id_exist(50));
-        $this->assertTrue($userdata->is_context_id_exist(51));
-        $this->assertTrue($userdata->is_context_id_exist(55));
+        $userdata->remove_context_id(50, $user->id);
+        $this->assertCount(2, $userdata->get_context_ids($user->id));
+        $this->assertFalse($userdata->is_context_id_exist(50, $user->id));
+        $this->assertTrue($userdata->is_context_id_exist(51, $user->id));
+        $this->assertTrue($userdata->is_context_id_exist(55, $user->id));
 
-        $userdata->remove_context_id(51);
-        $this->assertFalse($userdata->is_context_id_exist(50));
-        $this->assertFalse($userdata->is_context_id_exist(51));
-        $this->assertTrue($userdata->is_context_id_exist(55));
+        $userdata->remove_context_id(51, $user->id);
+        $this->assertFalse($userdata->is_context_id_exist(50, $user->id));
+        $this->assertFalse($userdata->is_context_id_exist(51, $user->id));
+        $this->assertTrue($userdata->is_context_id_exist(55, $user->id));
 
-        $userdata->remove_context_id(55);
-        $this->assertFalse($userdata->is_context_id_exist(50));
-        $this->assertFalse($userdata->is_context_id_exist(51));
-        $this->assertFalse($userdata->is_context_id_exist(55));
-        $this->assertCount(0, $userdata->get_context_ids());
+        $userdata->remove_context_id(55, $user->id);
+        $this->assertFalse($userdata->is_context_id_exist(50, $user->id));
+        $this->assertFalse($userdata->is_context_id_exist(51, $user->id));
+        $this->assertFalse($userdata->is_context_id_exist(55, $user->id));
+        $this->assertCount(0, $userdata->get_context_ids($user->id));
 
-        $userdata = new userdata_default(1, 'test');
-        $this->assertCount(0, $userdata->get_context_ids());
+        $userdata = new userdata_default('test');
+        $this->assertCount(0, $userdata->get_context_ids($user->id));
     }
 
     /**
@@ -102,17 +107,18 @@ class userdata_default_test extends advanced_testcase {
      */
     public function test_can_not_add_more_than_one_time() {
         $this->resetAfterTest();
+        $user = $this->getDataGenerator()->create_user();
 
-        $userdata = new userdata_default(1, 'test');
-        $this->assertCount(0, $userdata->get_context_ids());
-        $this->assertFalse($userdata->is_context_id_exist(rand()));
+        $userdata = new userdata_default('test');
+        $this->assertCount(0, $userdata->get_context_ids($user->id));
+        $this->assertFalse($userdata->is_context_id_exist($user->id, rand()));
 
-        $userdata->add_context_id(50);
-        $userdata->add_context_id(50);
-        $this->assertCount(1, $userdata->get_context_ids());
+        $userdata->add_context_id(50, $user->id);
+        $userdata->add_context_id(50, $user->id);
+        $this->assertCount(1, $userdata->get_context_ids($user->id));
 
-        $userdata = new userdata_default(1, 'test');
-        $this->assertCount(1, $userdata->get_context_ids());
+        $userdata = new userdata_default('test');
+        $this->assertCount(1, $userdata->get_context_ids($user->id));
     }
 
 }

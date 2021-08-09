@@ -93,8 +93,8 @@ class privacy_provider_test extends provider_testcase {
         $settings->set('plugin', 'test');
         $settings->save();
 
-        $userdata = new userdata_default($USER->id, 'test');
-        $userdata->add_context_id(context_module::instance($module->cmid)->id);
+        $userdata = new userdata_default('test');
+        $userdata->add_context_id(context_module::instance($module->cmid)->id, $USER->id);
 
         $this->module = $this->getDataGenerator()->create_module('assign', ['course' => $this->course]);
         $this->user = $this->getDataGenerator()->create_user(array('username' => 'teacher'));
@@ -108,8 +108,8 @@ class privacy_provider_test extends provider_testcase {
         $this->settings->set('plugin', 'test');
         $this->settings->save();
 
-        $userdata = new userdata_default($USER->id, 'test');
-        $userdata->add_context_id(context_module::instance($this->module->cmid)->id);
+        $userdata = new userdata_default('test');
+        $userdata->add_context_id(context_module::instance($this->module->cmid)->id, $USER->id);
     }
 
     /**
