@@ -244,6 +244,17 @@ abstract class statement_base {
     }
 
     /**
+     * Return a link for previewing statement.
+     *
+     * @return string
+     */
+    public function get_preview_statement_link(): string {
+        global $OUTPUT;
+
+        return $OUTPUT->render_from_template('local_integrity/preview_link', ['name' => $this->get_name()]);
+    }
+
+    /**
      * Get URL to redirect to after statement.
      *
      * @return string
@@ -331,6 +342,7 @@ abstract class statement_base {
         $form->addElement('header', 'integrityheader', get_string('modform:header', 'local_integrity'));
         $form->addElement('selectyesno', self::FORM_FIELD_NAME, get_string('modform:enabled', 'local_integrity'));
         $form->setDefault(self::FORM_FIELD_NAME, $this->get_default_enabled());
+        $form->addElement('static', 'integritypreview', $this->get_preview_statement_link());
 
         $cm = $modform->get_coursemodule();
         if ($cm) {
