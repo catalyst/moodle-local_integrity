@@ -114,11 +114,24 @@ abstract class statement_base {
         if (empty($userid)) {
             $userid = $USER->id;
         }
+
         if (empty($userid)) {
             return false;
         }
 
         return $this->get_user_data()->is_context_id_exist($context->id, $userid);
+    }
+
+    /**
+     * Check if the statement can be bypassed in the given context.
+     *
+     * @param \context $context Context to check.
+     * @param int $userid User ID. If null the current user will be used.
+     *
+     * @return bool
+     */
+    final public function can_bypass(\context $context, int $userid): bool {
+        return has_capability('local/integrity:bypassnotice', $context, $userid);
     }
 
     /**
@@ -203,7 +216,7 @@ abstract class statement_base {
     public function should_display(\moodle_page $page, ?int $userid = null): bool {
         global $USER;
 
-        if (empty($userid) && !empty($USER->id)) {
+        if (is_null($userid)) {
             $userid = $USER->id;
         }
 
@@ -220,8 +233,10 @@ abstract class statement_base {
         }
 
         if ($this->is_enabled_in_context($page->context)) {
-            // TODO:
-            // 1. Check can bypass permissions.
+            if ($this->can_bypass($page->context, $userid)) {
+                return false;
+            }
+
             return !$this->is_agreed_by_user($page->context, $userid);
         }
 

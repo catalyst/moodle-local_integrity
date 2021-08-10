@@ -31,6 +31,7 @@ $string['cachedef_settings'] = 'Statement settings';
 $string['cachedef_userdata'] = 'Statement agreement data';
 $string['modform:header'] = 'Academic integrity';
 $string['integrity:agreestatements'] = 'Agree statements on behalf of others';
+$string['integrity:bypassnotice'] = 'Bypass statement notice';
 $string['modform:header'] = 'Academic integrity';
 $string['modform:enabled'] = 'Display academic integrity notice?';
 $string['preview'] = 'Preview';
