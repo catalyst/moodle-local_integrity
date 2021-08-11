@@ -194,7 +194,7 @@ abstract class statement_base {
      * @param \context $context
      * @return bool
      */
-    protected function is_enabled_in_context(\context $context): bool {
+    final protected function is_enabled_in_context(\context $context): bool {
         $enabled = false;
         $settings = settings::get_settings($this->get_plugin_name(), $context->id);
 
@@ -324,6 +324,17 @@ abstract class statement_base {
                 get_string('settings:lastupdatedated', 'local_integrity', $this->get_setting_last_updated_date('notice'))
             )
         );
+
+        $this->add_extra_settings($settings);
+    }
+
+    /**
+     * Add extra settings if required.
+     *
+     * @param \admin_settingpage $settings
+     */
+    protected function add_extra_settings(admin_settingpage $settings) {
+
     }
 
     /**
