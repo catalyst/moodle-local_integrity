@@ -80,7 +80,7 @@ abstract class statement_base {
      *
      * @return array
      */
-    abstract protected function get_display_urls(): array;
+    abstract public function get_display_urls(): array;
 
     /**
      * Get the name of the statement.

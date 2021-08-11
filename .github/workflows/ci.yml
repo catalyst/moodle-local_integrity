@@ -121,5 +121,6 @@ jobs:
         run: |
           moodle-plugin-ci phpunit
           cd moodle
+          vendor/bin/phpunit --fail-on-risky --disallow-test-output --group local_integrity
           vendor/bin/phpunit --fail-on-risky --disallow-test-output --filter tool_dataprivacy_metadata_registry_testcase
           vendor/bin/phpunit --fail-on-risky --disallow-test-output --testsuite core_privacy_testsuite --filter provider_testcase

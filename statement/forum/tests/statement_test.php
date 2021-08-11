@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Forum statement class.
+ * Tests for statement class.
  *
  * @package     integritystmt_forum
  * @copyright   2021 Catalyst IT
@@ -23,33 +23,36 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace integritystmt_forum;
+namespace integritystmt_forum\tests;
 
-use local_integrity\statement_base;
+use advanced_testcase;
+use local_integrity\statement_factory;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 /**
- * Forum statement class.
- *
- * @package     integritystmt_forum
+ * Tests for statement base class.
+
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @group local_integrity
  */
-class statement extends statement_base {
+class statement_test extends advanced_testcase {
 
     /**
-     * Get a list of URL to fire off the statement on.
-     *
-     * @return string[]
+     * Test a list of urls to display the statement at.
      */
-    public function get_display_urls(): array {
-        return [
+    public function test_get_display_urls() {
+        $statement = statement_factory::get_statement('forum');
+        $expected = [
             '/mod/forum/view.php',
             '/mod/forum/discuss.php',
             '/mod/forum/post.php',
         ];
+
+        $this->assertSame($expected, $statement->get_display_urls());
     }
 
 }
