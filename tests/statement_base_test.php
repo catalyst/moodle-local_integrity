@@ -204,6 +204,27 @@ class statement_base_test extends advanced_testcase {
     }
 
     /**
+     * Test we can check if the statement can be bypassed.
+     */
+    public function test_can_bypass() {
+        $this->resetAfterTest();
+
+        $context = \context_system::instance();
+        $user = $this->getDataGenerator()->create_user();
+        $this->setUser($user);
+
+        $statement = $this->get_test_statement('test');
+        $this->assertFalse($statement->can_bypass($context, $user->id));
+
+        $role = $this->getDataGenerator()->create_role();
+        role_assign($role, $user->id, $context);
+        assign_capability('local/integrity:bypassnotice', CAP_ALLOW, $role, $context);
+
+        $statement = $this->get_test_statement('test');
+        $this->assertTrue($statement->can_bypass($context, $user->id));
+    }
+
+    /**
      * Helper method to set up data for texting should display logic.
      */
     protected function set_up_data_for_should_display() {
@@ -229,7 +250,7 @@ class statement_base_test extends advanced_testcase {
      * Test on empty user.
      */
     public function test_should_display_empty_user() {
-        global $PAGE, $USER;
+        global $PAGE;
 
         $this->set_up_data_for_should_display();
         $statement = $this->get_test_statement('test');
@@ -238,9 +259,7 @@ class statement_base_test extends advanced_testcase {
         $this->setUser($user);
 
         $this->assertTrue($statement->should_display($PAGE));
-
-        unset($USER->id);
-        $this->assertFalse($statement->should_display($PAGE));
+        $this->assertFalse($statement->should_display($PAGE, 0));
         $this->assertTrue($statement->should_display($PAGE, $user->id));
     }
 
@@ -311,6 +330,29 @@ class statement_base_test extends advanced_testcase {
         $userdata->add_context_id($context->id, $user->id);
 
         $this->assertFalse($statement->should_display($PAGE));
+    }
+
+    /**
+     * Test when user can bypass.
+     */
+    public function test_should_display_user_that_can_bypass() {
+        global $PAGE;
+
+        $this->set_up_data_for_should_display();
+        $statement = $this->get_test_statement('test');
+        $user = $this->getDataGenerator()->create_user();
+        $context = \context_system::instance();
+        $role = $this->getDataGenerator()->create_role();
+        assign_capability('local/integrity:bypassnotice', CAP_ALLOW, $role, $context);
+
+        $this->setUser($user);
+
+        $this->assertTrue($statement->should_display($PAGE));
+        $this->assertFalse($statement->can_bypass($context, $user->id));
+
+        role_assign($role, $user->id, $context);
+        $this->assertFalse($statement->should_display($PAGE));
+        $this->assertTrue($statement->can_bypass($context, $user->id));
     }
 
 }

@@ -32,4 +32,10 @@ $capabilities = [
         'archetypes' => [
         ]
     ],
+    'local/integrity:bypassnotice' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+        ]
+    ],
 ];
