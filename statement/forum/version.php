@@ -27,6 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'integritystmt_forum';
 $plugin->release = '0.1.0';
-$plugin->version = 2021072301;
+$plugin->version = 2021072308;
 $plugin->requires = 2020061500;
 $plugin->maturity = MATURITY_STABLE;
