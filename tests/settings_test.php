@@ -41,6 +41,38 @@ defined('MOODLE_INTERNAL') || die();
 class settings_test extends advanced_testcase {
 
     /**
+     * Test get settings functionality.
+     */
+    public function test_get_settings() {
+        $this->resetAfterTest();
+
+        $contextid = 1;
+        $plugin = 'test';
+
+        $this->assertNull(settings::get_settings($plugin, $contextid));
+        $this->assertNull(settings::get_settings($plugin, $contextid));
+
+        $settings = new settings();
+        $settings->set('contextid', $contextid);
+        $settings->set('plugin', $plugin);
+        $settings->set('enabled', 0);
+        $settings->create();
+
+        $actual = settings::get_settings($plugin, $contextid);
+        $this->assertSame($settings->get('contextid'), $actual->get('contextid'));
+        $this->assertSame($settings->get('plugin'), $actual->get('plugin'));
+        $this->assertSame($settings->get('enabled'), $actual->get('enabled'));
+
+        $settings->set('enabled', 1);
+        $settings->save();
+
+        $actual = settings::get_settings($plugin, $contextid);
+        $this->assertSame($settings->get('contextid'), $actual->get('contextid'));
+        $this->assertSame($settings->get('plugin'), $actual->get('plugin'));
+        $this->assertSame($settings->get('enabled'), $actual->get('enabled'));
+    }
+
+    /**
      * Test that data gets cached.
      */
     public function test_data_cached() {

@@ -136,7 +136,11 @@ class settings extends persistent {
         $settings = self::get_cache()->get($cachekey);
 
         if ($settings !== false) {
-            return new static(0, $settings);
+            if (!is_null($settings)) {
+                return new static(0, $settings);
+            } else {
+                return null;
+            }
         }
 
         $settings = self::get_record(['plugin' => $pluginname, 'contextid' => $contextid]);
