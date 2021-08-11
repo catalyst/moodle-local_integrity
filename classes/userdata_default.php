@@ -88,19 +88,18 @@ class userdata_default implements userdata_interface {
      * @param int $userid User ID.
      */
     public function add_context_id(int $contextid, int $userid): void {
+        global $DB;
+
         $userdata = $this->get_user_data($userid);
 
-        if (!empty($userdata)) {
-            if (!in_array($contextid, $userdata->contextids)) {
-                $userdata->contextids[] = $contextid;
-                $this->save_user_data($userdata);
-            }
-        } else {
-            $userdata = new \stdClass();
-            $userdata->userid = $userid;
-            $userdata->plugin = $this->plugin;
-            $userdata->contextids = [$contextid];
-            $this->save_user_data($userdata);
+        if (empty($userdata) || !in_array($contextid, $userdata->contextids)) {
+            $record = new \stdClass();
+            $record->userid = $userid;
+            $record->plugin = $this->plugin;
+            $record->contextid = $contextid;
+
+            $DB->insert_record(self::TABLE, $record);
+            $this->refresh_cache($userid);
         }
     }
 
@@ -111,14 +110,13 @@ class userdata_default implements userdata_interface {
      * @param int $userid User ID.
      */
     public function remove_context_id(int $contextid, int $userid): void {
+        global $DB;
+
         $userdata = $this->get_user_data($userid);
 
-        if (!empty($userdata)) {
-            if (($key = array_search($contextid, $userdata->contextids)) !== false) {
-                unset($userdata->contextids[$key]);
-                $userdata->contextids = array_values($userdata->contextids);
-                $this->save_user_data($userdata);
-            }
+        if (!empty($userdata) && in_array($contextid, $userdata->contextids)) {
+            $DB->delete_records(self::TABLE, ['userid' => $userid, 'plugin' => $this->plugin, 'contextid' => $contextid]);
+            $this->refresh_cache($userid);
         }
     }
 
@@ -134,7 +132,7 @@ class userdata_default implements userdata_interface {
         $result = false;
         $userdata = $this->get_user_data($userid);
 
-        if ($userdata) {
+        if (!empty($userdata)) {
             $result = in_array($contextid, $userdata->contextids);
         }
 
@@ -154,8 +152,6 @@ class userdata_default implements userdata_interface {
     /**
      * Get user data for provided user.
      *
-     * This will always return decoded contextids.
-     *
      * @param int $userid User ID.
      * @return \stdClass|null
      */
@@ -165,39 +161,34 @@ class userdata_default implements userdata_interface {
         $userdata = $this->cache->get($this->build_cache_key($userid));
 
         if ($userdata === false) {
-            $result = $DB->get_record(self::TABLE, ['userid' => $userid, 'plugin' => $this->plugin]);
-            if (empty($result)) {
-                $result = null;
+            $records = $DB->get_records(self::TABLE, ['userid' => $userid, 'plugin' => $this->plugin]);
+
+            if (empty($records)) {
+                $userdata = null;
+            } else {
+                $userdata = new \stdClass();
+                $userdata->userid = $userid;
+                $userdata->plugin = $this->plugin;
+                $userdata->contextids = [];
+                foreach ($records as $record) {
+                    $userdata->contextids[] = $record->contextid;
+                }
             }
-            $this->cache->set($this->build_cache_key($userid), $result);
-        } else {
-            $result = $userdata;
+
+            $this->cache->set($this->build_cache_key($userid), $userdata);
         }
 
-        if (!empty($result)) {
-            $result->contextids = json_decode($result->contextids);
-        }
-
-        return $result;
+        return $userdata;
     }
 
     /**
-     * Save provided user data.
+     * Refresh cache for the user.
      *
-     * @param \stdClass $userdata User data object.
+     * @param int $userid User ID.
      */
-    private function save_user_data(\stdClass $userdata) {
-        global $DB;
-
-        $userdata->contextids = json_encode($userdata->contextids);
-
-        if (!empty($userdata->id)) {
-            $DB->update_record(self::TABLE, $userdata);
-        } else {
-            $userdata->id = $DB->insert_record(self::TABLE, $userdata);
-        }
-
-        $this->cache->set($this->build_cache_key($userdata->userid), $userdata);
+    private function refresh_cache(int $userid) {
+        $this->cache->delete($this->build_cache_key($userid));
+        $this->cache->set($this->build_cache_key($userid), $this->get_user_data($userid));
     }
 
 }

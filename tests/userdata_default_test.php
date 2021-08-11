@@ -138,25 +138,44 @@ class userdata_default_test extends advanced_testcase {
         $this->assertFalse($userdata->is_context_id_exist($user->id, rand()));
         $this->assertNull($cache->get('test_' . $user->id));
 
+        $expected = new \stdClass();
+        $expected->userid = $user->id;
+        $expected->plugin = 'test';
+
         $userdata->add_context_id(50, $user->id);
-        $expected = $DB->get_record(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $records = $DB->get_records(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $expected->contextids = [];
+        foreach ($records as $record) {
+            $expected->contextids[] = $record->contextid;
+        }
         $this->assertEquals($expected, $cache->get('test_' . $user->id));
 
         $userdata->add_context_id(51, $user->id);
-        $expected = $DB->get_record(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $records = $DB->get_records(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $expected->contextids = [];
+        foreach ($records as $record) {
+            $expected->contextids[] = $record->contextid;
+        }
         $this->assertEquals($expected, $cache->get('test_' . $user->id));
 
         $userdata->remove_context_id(50, $user->id);
-        $expected = $DB->get_record(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $records = $DB->get_records(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $expected->contextids = [];
+        foreach ($records as $record) {
+            $expected->contextids[] = $record->contextid;
+        }
         $this->assertEquals($expected, $cache->get('test_' . $user->id));
 
         $userdata->remove_context_id(50, $user->id);
-        $expected = $DB->get_record(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $records = $DB->get_records(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
+        $expected->contextids = [];
+        foreach ($records as $record) {
+            $expected->contextids[] = $record->contextid;
+        }
         $this->assertEquals($expected, $cache->get('test_' . $user->id));
 
         $userdata->remove_context_id(51, $user->id);
-        $expected = $DB->get_record(userdata_default::TABLE, ['userid' => $user->id, 'plugin' => 'test']);
-        $this->assertEquals($expected, $cache->get('test_' . $user->id));
+        $this->assertEquals(null, $cache->get('test_' . $user->id));
     }
 
 }
