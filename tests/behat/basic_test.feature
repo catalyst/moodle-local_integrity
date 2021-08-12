@@ -53,7 +53,7 @@ Feature: Test basic feature of Integrity plugin
 
     # Continuing without ticking is blocked.
     And I click on "Agree" "button" in the "Academic integrity notice" "dialogue"
-    Then I should see "You  must agree to continue."
+    Then I should see "You must agree to continue."
 
     # Continuing with ticking is OK.
     When I set the field "I have read and agree to the above statement" to "1"
