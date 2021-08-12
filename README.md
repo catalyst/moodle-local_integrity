@@ -2,9 +2,19 @@
 
 # Academic integrity #
 
-TODO Describe the plugin shortly here.
+This plugin allows enabling academic integrity statement upon commencing moodle URLs. A notice appears in a modal pop up window. Users must agree to the statement, otherwise they will be redirected to a related course page.
 
-TODO Provide more detailed description here.
+## Features ##
+                                                      
+* supports various Moodle activities;
+* configurable notice message for each statement;
+* configurable default status for each of the statement (enabled or disabled by default);                           
+* capabilities to change a default state for each of the statements (integritystmt/<statement type>:changedefault);
+* capability to bypass statement (local/integrity:bypassnotice);
+
+## Supported activities ##
+ * Forum
+ * Quiz
 
 ## Installing via uploaded ZIP file ##
 
@@ -28,6 +38,11 @@ Alternatively, you can run
     $ php admin/cli/upgrade.php
 
 to complete the installation from the command line.
+
+## Dev notes ##
+
+Statements are implemented as subplugins. See one of the existing statements to figure out how to implement one that you require. 
+
 
 # Crafted by Catalyst IT
 
