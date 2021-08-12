@@ -15,37 +15,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Tests for sub plugins system.
+ * Privacy Subsystem implementation.
  *
- * @package     local_integrity
+ * @package     integritystmt_data
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_integrity\tests;
+namespace integritystmt_data\privacy;
 
-use advanced_testcase;
-use local_integrity\plugininfo\integritystmt;
+use core_privacy\local\metadata\null_provider;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Tests for sub plugins system.
+ * Privacy Subsystem implementation.
  *
- * @package     local_integrity
+ * @package     integritystmt_data
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class plugin_info_test extends advanced_testcase {
-
+class provider implements null_provider {
     /**
-     * Test a list of enabled plugins.
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return string
      */
-    public function test_get_enabled_plugins() {
-        $expected = ['data', 'forum', 'hsuforum', 'lesson', 'quiz'];
-        $this->assertSame($expected, integritystmt::get_enabled_plugins());
+    public static function get_reason() : string {
+        return 'privacy:metadata';
     }
 
 }
