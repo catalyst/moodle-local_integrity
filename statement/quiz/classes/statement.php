@@ -46,6 +46,7 @@ class statement extends statement_base {
      */
     public function get_display_urls(): array {
         return [
+            '/mod/quiz/index.php',
             '/mod/quiz/view.php',
             '/mod/quiz/attempt.php',
             '/mod/quiz/startattempt.php',

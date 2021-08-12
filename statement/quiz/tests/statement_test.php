@@ -47,6 +47,7 @@ class statement_test extends advanced_testcase {
     public function test_get_display_urls() {
         $statement = statement_factory::get_statement('quiz');
         $expected = [
+            '/mod/quiz/index.php',
             '/mod/quiz/view.php',
             '/mod/quiz/attempt.php',
             '/mod/quiz/startattempt.php',
