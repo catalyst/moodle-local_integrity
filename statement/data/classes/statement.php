@@ -15,37 +15,41 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Tests for sub plugins system.
+ * Database statement class.
  *
- * @package     local_integrity
+ * @package     integritystmt_data
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_integrity\tests;
+namespace integritystmt_data;
 
-use advanced_testcase;
-use local_integrity\plugininfo\integritystmt;
+use local_integrity\statement_base;
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
 /**
- * Tests for sub plugins system.
+ * Database statement class.
  *
- * @package     local_integrity
+ * @package     integritystmt_data
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class plugin_info_test extends advanced_testcase {
+class statement extends statement_base {
 
     /**
-     * Test a list of enabled plugins.
+     * Get a list of URL to fire off the statement on.
+     *
+     * @return string[]
      */
-    public function test_get_enabled_plugins() {
-        $expected = ['data', 'forum', 'hsuforum', 'lesson', 'quiz'];
-        $this->assertSame($expected, integritystmt::get_enabled_plugins());
+    public function get_display_urls(): array {
+        return [
+            '/mod/data/index.php',
+            '/mod/data/view.php',
+            '/mod/data/edit.php',
+        ];
     }
 
 }

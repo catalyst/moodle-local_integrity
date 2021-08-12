@@ -19,6 +19,7 @@ This plugin allows enabling academic integrity statement upon commencing moodle 
 * capability to bypass statement notice (local/integrity:bypassnotice);
 
 ## Supported activities ##
+ * Database
  * Forum
  * Open Forum
  * Quiz
