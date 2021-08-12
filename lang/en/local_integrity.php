@@ -53,4 +53,4 @@ $string['statement:header'] = 'Academic integrity notice';
 $string['statement:save'] = 'Agree';
 $string['statement:cancel'] = 'Cancel';
 $string['statement:agree'] = 'I have read and agree to the above statement.';
-$string['statement:agreementrequired'] = 'You  must agree to continue.';
+$string['statement:agreementrequired'] = 'You must agree to continue.';
