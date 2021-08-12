@@ -21,6 +21,7 @@ This plugin allows enabling academic integrity statement upon commencing moodle 
 ## Supported activities ##
  * Forum
  * Quiz
+ * Lesson
 
 ## Installing via uploaded ZIP file ##
 
