@@ -1,4 +1,4 @@
-@local_integrity
+@local @local_integrity
 Feature: Test basic feature of Integrity plugin
 
   Background:
