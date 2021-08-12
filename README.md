@@ -15,8 +15,8 @@ This plugin allows enabling academic integrity statement upon commencing moodle 
 * supports various Moodle activities;
 * configurable notice message for each statement;
 * configurable default status for each of the statement (enabled or disabled by default);                           
-* capabilities to change a default state for each of the statements (integritystmt/<statement type>:changedefault);
-* capability to bypass statement (local/integrity:bypassnotice);
+* capabilities to change a default state for each of the statements (integritystmt/PLUGIN_NAME:changedefault);
+* capability to bypass statement notice (local/integrity:bypassnotice);
 
 ## Supported activities ##
  * Forum
