@@ -15,42 +15,44 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Quiz statement class.
+ * Tests for statement class.
  *
- * @package     integritystmt_quiz
+ * @package     integritystmt_lesson
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace integritystmt_quiz;
+namespace integritystmt_lesson\tests;
 
-use local_integrity\statement_base;
+use advanced_testcase;
+use local_integrity\statement_factory;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 /**
- * Quiz statement class.
+ * Tests for statement class.
  *
- * @package     integritystmt_quiz
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @group local_integrity
  */
-class statement extends statement_base {
+class statement_test extends advanced_testcase {
 
     /**
-     * Get a list of URL to fire off the statement on.
-     *
-     * @return string[]
+     * Test a list of urls to display the statement at.
      */
-    public function get_display_urls(): array {
-        return [
-            '/mod/quiz/index.php',
-            '/mod/quiz/view.php',
-            '/mod/quiz/attempt.php',
-            '/mod/quiz/startattempt.php',
+    public function test_get_display_urls() {
+        $statement = statement_factory::get_statement('lesson');
+        $expected = [
+            '/mod/lesson/index.php',
+            '/mod/lesson/view.php',
+            '/mod/lesson/continue.php',
         ];
+
+        $this->assertSame($expected, $statement->get_display_urls());
     }
 
 }

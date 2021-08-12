@@ -47,6 +47,7 @@ class statement_test extends advanced_testcase {
     public function test_get_display_urls() {
         $statement = statement_factory::get_statement('forum');
         $expected = [
+            '/mod/forum/index.php',
             '/mod/forum/view.php',
             '/mod/forum/discuss.php',
             '/mod/forum/post.php',

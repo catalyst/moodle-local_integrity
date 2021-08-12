@@ -15,24 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Quiz statement class.
+ * Lesson statement class.
  *
- * @package     integritystmt_quiz
+ * @package     integritystmt_lesson
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace integritystmt_quiz;
+namespace integritystmt_lesson;
 
 use local_integrity\statement_base;
 
 defined('MOODLE_INTERNAL') || die;
 
 /**
- * Quiz statement class.
+ * Lesson statement class.
  *
- * @package     integritystmt_quiz
+ * @package     integritystmt_lesson
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -46,10 +46,9 @@ class statement extends statement_base {
      */
     public function get_display_urls(): array {
         return [
-            '/mod/quiz/index.php',
-            '/mod/quiz/view.php',
-            '/mod/quiz/attempt.php',
-            '/mod/quiz/startattempt.php',
+            '/mod/lesson/index.php',
+            '/mod/lesson/view.php',
+            '/mod/lesson/continue.php',
         ];
     }
 

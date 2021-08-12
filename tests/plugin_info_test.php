@@ -44,7 +44,7 @@ class plugin_info_test extends advanced_testcase {
      * Test a list of enabled plugins.
      */
     public function test_get_enabled_plugins() {
-        $expected = ['forum', 'quiz'];
+        $expected = ['forum', 'lesson', 'quiz'];
         $this->assertSame($expected, integritystmt::get_enabled_plugins());
     }
 
