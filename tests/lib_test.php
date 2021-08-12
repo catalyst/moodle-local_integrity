@@ -51,6 +51,7 @@ class lib_test extends advanced_testcase {
         $this->setAdminUser();
 
         $course = $this->getDataGenerator()->create_course();
+        $PAGE->set_course($course);
 
         foreach (integritystmt::get_enabled_plugins() as $name) {
             $modmoodleform = "$CFG->dirroot/mod/$name/mod_form.php";
@@ -66,7 +67,6 @@ class lib_test extends advanced_testcase {
             $module = $this->getDataGenerator()->create_module($name, ['course' => $course->id]);
 
             [$course, $cm] = get_course_and_cm_from_cmid($module->cmid);
-            $PAGE->set_course($course);
 
             list($cm, $context, $module, $data, $cw) = get_moduleinfo_data($cm, $course);
             // Remove availability conditions to prevent issues with getting form data.
@@ -96,6 +96,7 @@ class lib_test extends advanced_testcase {
         $this->setAdminUser();
 
         $course = $this->getDataGenerator()->create_course();
+        $PAGE->set_course($course);
 
         foreach (integritystmt::get_enabled_plugins() as $name) {
             $modmoodleform = "$CFG->dirroot/mod/$name/mod_form.php";
@@ -111,7 +112,6 @@ class lib_test extends advanced_testcase {
             $module = $this->getDataGenerator()->create_module($name, ['course' => $course->id]);
 
             [$course, $cm] = get_course_and_cm_from_cmid($module->cmid);
-            $PAGE->set_course($course);
 
             // Mock data for new course module being created.
             $data = new \stdClass();
