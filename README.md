@@ -4,6 +4,12 @@
 
 This plugin allows enabling academic integrity statement upon commencing moodle URLs. A notice appears in a modal pop up window. Users must agree to the statement, otherwise they will be redirected to a related course page.
 
+## Versions and branches ##
+
+| Moodle Version    |  Branch      | 
+|-------------------|--------------|
+| Moodle 3.9+       | master       | 
+
 ## Features ##
                                                       
 * supports various Moodle activities;
