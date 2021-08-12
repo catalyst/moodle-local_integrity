@@ -2,7 +2,9 @@
 
 # Academic integrity #
 
-This plugin allows enabling academic integrity statement upon commencing moodle URLs. A notice appears in a modal pop up window. Users must agree to the statement, otherwise they will be redirected to a related course page.
+This plugin allows enabling academic integrity statement upon commencing moodle URLs. A notice appears in a modal pop up window.
+Users must agree to the statement, otherwise they will be redirected to a related course page. 
+Once agreed in a context, the statement won't be displayed again, unless reset manually by administrators.
 
 ## Versions and branches ##
 
@@ -17,6 +19,8 @@ This plugin allows enabling academic integrity statement upon commencing moodle 
 * configurable default status for each of the statement (enabled or disabled by default);                           
 * capabilities to change a default state for each of the statements (integritystmt/PLUGIN_NAME:changedefault);
 * capability to bypass statement notice (local/integrity:bypassnotice);
+* a CLI script to reset user data for a course, an activity, a statement plugin, a user or all data in a system;
+
 
 ## Supported activities ##
  * Database
