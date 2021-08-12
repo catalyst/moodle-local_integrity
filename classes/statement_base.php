@@ -216,6 +216,10 @@ abstract class statement_base {
     public function should_display(\moodle_page $page, ?int $userid = null): bool {
         global $USER;
 
+        if (defined('AJAX_SCRIPT') && AJAX_SCRIPT) {
+            return false;
+        }
+
         if (is_null($userid)) {
             $userid = $USER->id;
         }
