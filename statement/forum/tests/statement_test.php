@@ -31,8 +31,8 @@ use local_integrity\statement_factory;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Tests for statement base class.
-
+ * Tests for statement class.
+ *
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
