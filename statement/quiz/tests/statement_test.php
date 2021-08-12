@@ -15,37 +15,44 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Tests for sub plugins system.
+ * Tests for statement class.
  *
- * @package     local_integrity
+ * @package     integritystmt_quiz
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_integrity\tests;
+namespace integritystmt_quiz\tests;
 
 use advanced_testcase;
-use local_integrity\plugininfo\integritystmt;
+use local_integrity\statement_factory;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Tests for sub plugins system.
+ * Tests for statement class.
  *
- * @package     local_integrity
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @group local_integrity
  */
-class plugin_info_test extends advanced_testcase {
+class statement_test extends advanced_testcase {
 
     /**
-     * Test a list of enabled plugins.
+     * Test a list of urls to display the statement at.
      */
-    public function test_get_enabled_plugins() {
-        $expected = ['forum', 'quiz'];
-        $this->assertSame($expected, integritystmt::get_enabled_plugins());
+    public function test_get_display_urls() {
+        $statement = statement_factory::get_statement('quiz');
+        $expected = [
+            '/mod/quiz/view.php',
+            '/mod/quiz/attempt.php',
+            '/mod/quiz/startattempt.php',
+        ];
+
+        $this->assertSame($expected, $statement->get_display_urls());
     }
 
 }
