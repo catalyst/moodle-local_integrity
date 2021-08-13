@@ -26,7 +26,7 @@
 namespace integritystmt_lesson\tests;
 
 use advanced_testcase;
-use local_integrity\statement_factory;
+use integritystmt_lesson\statement;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -45,7 +45,7 @@ class statement_test extends advanced_testcase {
      * Test a list of urls to display the statement at.
      */
     public function test_get_display_urls() {
-        $statement = statement_factory::get_statement('lesson');
+        $statement = new statement('lesson');
         $expected = [
             '/mod/lesson/index.php',
             '/mod/lesson/view.php',

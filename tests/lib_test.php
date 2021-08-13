@@ -42,12 +42,19 @@ defined('MOODLE_INTERNAL') || die();
 class lib_test extends advanced_testcase {
 
     /**
+     * Set up tests.
+     */
+    public function setUp(): void {
+        $this->resetAfterTest();
+        parent::setUp();
+    }
+
+    /**
      * Test modifying an activity form standard elements.
      */
     public function test_coursemodule_standard_elements() {
         global $PAGE, $CFG;
 
-        $this->resetAfterTest();
         $this->setAdminUser();
 
         $course = $this->getDataGenerator()->create_course();
@@ -92,7 +99,6 @@ class lib_test extends advanced_testcase {
     public function test_coursemodule_standard_elements_no_modname() {
         global $PAGE, $CFG;
 
-        $this->resetAfterTest();
         $this->setAdminUser();
 
         $course = $this->getDataGenerator()->create_course();
@@ -142,7 +148,6 @@ class lib_test extends advanced_testcase {
     public function test_coursemodule_edit_post_actions() {
         global $PAGE, $CFG;
 
-        $this->resetAfterTest();
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
 
@@ -172,8 +177,6 @@ class lib_test extends advanced_testcase {
      * Check that our hook is called when an activity is deleted.
      */
     public function test_pre_course_module_delete_hook() {
-        $this->resetAfterTest();
-
         $this->assertCount(0, settings::get_records());
 
         $course = $this->getDataGenerator()->create_course();

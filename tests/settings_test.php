@@ -39,13 +39,18 @@ defined('MOODLE_INTERNAL') || die();
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class settings_test extends advanced_testcase {
+    /**
+     * Set up tests.
+     */
+    public function setUp(): void {
+        $this->resetAfterTest();
+        parent::setUp();
+    }
 
     /**
      * Test get settings functionality.
      */
     public function test_get_settings() {
-        $this->resetAfterTest();
-
         $contextid = 1;
         $plugin = 'test';
 
@@ -78,7 +83,6 @@ class settings_test extends advanced_testcase {
     public function test_data_cached() {
         global $DB;
 
-        $this->resetAfterTest();
         $cache = \cache::make('local_integrity', 'settings');
         $contextid = 1;
         $plugin = 'test';

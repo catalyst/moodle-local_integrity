@@ -53,6 +53,14 @@ class statement_factory_test extends advanced_testcase {
     ];
 
     /**
+     * Set up tests.
+     */
+    public function setUp(): void {
+        $this->resetAfterTest();
+        parent::setUp();
+    }
+
+    /**
      * Test get statements.
      */
     public function test_get_statements() {

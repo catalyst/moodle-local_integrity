@@ -27,6 +27,7 @@ namespace local_integrity\tests;
 
 use advanced_testcase;
 use local_integrity\plugininfo\integritystmt;
+use core_plugin_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -41,11 +42,38 @@ defined('MOODLE_INTERNAL') || die();
 class plugin_info_test extends advanced_testcase {
 
     /**
+     * Set up tests.
+     */
+    public function setUp(): void {
+        $this->resetAfterTest();
+        parent::setUp();
+    }
+
+    /**
      * Test a list of enabled plugins.
      */
     public function test_get_enabled_plugins() {
         $expected = ['data', 'forum', 'hsuforum', 'lesson', 'quiz'];
         $this->assertSame($expected, integritystmt::get_enabled_plugins());
+    }
+
+    /**
+     * Test that a list of enabled plugins is cached.
+     */
+    public function test_get_enabled_plugins_cached() {
+        global $CFG;
+
+        $expected = array_keys(core_plugin_manager::instance()->get_installed_plugins('integritystmt'));
+        $this->assertSame($expected, integritystmt::get_enabled_plugins());
+
+        $this->assertTrue(!empty($CFG->local_integrity_hash));
+        $this->assertTrue(!empty($CFG->integritystmt_plugins));
+
+        $this->assertSame($CFG->allversionshash,  $CFG->local_integrity_hash);
+        $this->assertSame(
+            json_encode(array_keys(core_plugin_manager::instance()->get_installed_plugins('integritystmt'))),
+            $CFG->integritystmt_plugins
+        );
     }
 
 }
