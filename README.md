@@ -28,6 +28,8 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
  * Open Forum
  * Quiz
  * Lesson
+ * Workshop
+
 
 ## Installing via uploaded ZIP file ##
 
