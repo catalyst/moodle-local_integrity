@@ -41,11 +41,17 @@ defined('MOODLE_INTERNAL') || die();
 class userdata_default_test extends advanced_testcase {
 
     /**
+     * Set up tests.
+     */
+    public function setUp(): void {
+        $this->resetAfterTest();
+        parent::setUp();
+    }
+
+    /**
      * Test empty data.
      */
     public function test_empty_data() {
-        $this->resetAfterTest();
-
         $user = $this->getDataGenerator()->create_user();
 
         $userdata = new userdata_default('test');
@@ -59,7 +65,6 @@ class userdata_default_test extends advanced_testcase {
      * Test can add and delete.
      */
     public function test_can_add_and_delete() {
-        $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
 
         $userdata = new userdata_default('test');
@@ -106,7 +111,6 @@ class userdata_default_test extends advanced_testcase {
      * Test can't add more than once.
      */
     public function test_can_not_add_more_than_one_time() {
-        $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
 
         $userdata = new userdata_default('test');
@@ -127,7 +131,6 @@ class userdata_default_test extends advanced_testcase {
     public function test_data_cached() {
         global $DB;
 
-        $this->resetAfterTest();
         $cache = \cache::make('local_integrity', 'userdata');
         $user = $this->getDataGenerator()->create_user();
 

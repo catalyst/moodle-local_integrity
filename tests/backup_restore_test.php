@@ -49,6 +49,14 @@ class backup_restore_test extends advanced_testcase {
     protected $course;
 
     /**
+     * Set up tests.
+     */
+    public function setUp(): void {
+        $this->resetAfterTest();
+        parent::setUp();
+    }
+
+    /**
      * A helper method to backup a course.
      *
      * @return string A backup ID ready to be restored.
@@ -102,7 +110,6 @@ class backup_restore_test extends advanced_testcase {
      * Test duplicating an activity.
      */
     public function test_duplicate_activity() {
-        $this->resetAfterTest();
         $this->setAdminUser();
 
         $plugin = 'test';
@@ -133,7 +140,6 @@ class backup_restore_test extends advanced_testcase {
     }
 
     public function test_backup_restore_course() {
-        $this->resetAfterTest();
         $this->setAdminUser();
 
         $this->course = $this->getDataGenerator()->create_course();

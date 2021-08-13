@@ -45,10 +45,17 @@ require_once(__DIR__ . '/../externallib.php');
 class externallib_test extends advanced_testcase {
 
     /**
+     * Set up tests.
+     */
+    public function setUp(): void {
+        $this->resetAfterTest();
+        parent::setUp();
+    }
+
+    /**
      * Test requesting statement's notice with incorrect name.
      */
     public function test_requesting_notice_for_incorrect_statement_name() {
-        $this->resetAfterTest();
         $this->setAdminUser();
 
         $_POST['sesskey'] = sesskey();
@@ -67,7 +74,6 @@ class externallib_test extends advanced_testcase {
      * Test requesting statement's notice with incorrect name.
      */
     public function test_requesting_notice_for_correct_statements() {
-        $this->resetAfterTest();
         $this->setAdminUser();
         $_POST['sesskey'] = sesskey();
 
@@ -94,7 +100,6 @@ class externallib_test extends advanced_testcase {
      * Test agreeing statement with incorrect name.
      */
     public function test_agree_statement_for_incorrect_statement_name() {
-        $this->resetAfterTest();
         $context = \context_system::instance();
 
         $this->setAdminUser();
@@ -117,7 +122,6 @@ class externallib_test extends advanced_testcase {
     public function test_agree_statement_for_correct_statement_name() {
         global $USER;
 
-        $this->resetAfterTest();
         $context = \context_system::instance();
 
         $this->setAdminUser();
@@ -137,7 +141,6 @@ class externallib_test extends advanced_testcase {
      * Test agreeing statement on behalf of others.
      */
     public function test_agree_statement_on_behalf_of_others() {
-        $this->resetAfterTest();
         $context = \context_system::instance();
 
         $wsuser = $this->getDataGenerator()->create_user();
