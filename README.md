@@ -29,6 +29,7 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
  * Quiz
  * Lesson
  * Workshop
+ * Interactive Content (mod_hvp)
 
 
 ## Installing via uploaded ZIP file ##
