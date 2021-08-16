@@ -56,6 +56,7 @@ class statement_factory_test extends advanced_testcase {
         'glossary',
         'lti',
         'scorm',
+        'wiki',
     ];
 
     /**
@@ -72,8 +73,8 @@ class statement_factory_test extends advanced_testcase {
     public function test_get_statements() {
         $actual = statement_factory::get_statements();
 
-        $this->assertCount(11, statement_factory::get_statements());
-        $this->assertCount(11, $this->knownstatements);
+        $this->assertCount(12, statement_factory::get_statements());
+        $this->assertCount(12, $this->knownstatements);
 
         foreach ($this->knownstatements as $name) {
             $this->assertArrayHasKey($name, $actual);
