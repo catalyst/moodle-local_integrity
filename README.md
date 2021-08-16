@@ -30,7 +30,7 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
  * Lesson
  * Workshop
  * Interactive Content (mod_hvp)
-
+ * H5P (mod_h5pactivity)
 
 ## Installing via uploaded ZIP file ##
 
