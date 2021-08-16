@@ -54,6 +54,7 @@ class statement_factory_test extends advanced_testcase {
         'hvp',
         'h5pactivity',
         'glossary',
+        'lti',
     ];
 
     /**
@@ -70,7 +71,7 @@ class statement_factory_test extends advanced_testcase {
     public function test_get_statements() {
         $actual = statement_factory::get_statements();
 
-        $this->assertCount(9, statement_factory::get_statements());
+        $this->assertCount(10, statement_factory::get_statements());
 
         foreach ($this->knownstatements as $name) {
             $this->assertArrayHasKey($name, $actual);
