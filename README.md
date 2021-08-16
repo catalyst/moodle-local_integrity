@@ -34,6 +34,8 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
  * Glossary
  * External tool (mod_lti)
  * SCORM package (mod_scorm)
+ * Wiki
+
 
 ## Installing via uploaded ZIP file ##
 
