@@ -54,7 +54,7 @@ class plugin_info_test extends advanced_testcase {
      */
     public function test_get_enabled_plugins() {
         $expected = ['data', 'forum', 'glossary', 'h5pactivity', 'hsuforum', 'hvp', 'lesson', 'lti', 'quiz',
-            'scorm', 'wiki', 'workshop'];
+            'scorm', 'turnitintooltwo', 'wiki', 'workshop'];
         $this->assertSame($expected, integritystmt::get_enabled_plugins());
     }
 

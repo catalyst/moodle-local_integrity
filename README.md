@@ -35,6 +35,7 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
  * External tool (mod_lti)
  * SCORM package (mod_scorm)
  * Wiki
+ * Turnitin Assignment 2
 
 
 ## Installing via uploaded ZIP file ##
