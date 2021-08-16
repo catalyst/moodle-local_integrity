@@ -33,6 +33,7 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
  * H5P (mod_h5pactivity)
  * Glossary
  * External tool (mod_lti)
+ * SCORM package (mod_scorm)
 
 ## Installing via uploaded ZIP file ##
 
