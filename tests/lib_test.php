@@ -26,6 +26,7 @@
 namespace local_integrity\tests;
 
 use advanced_testcase;
+use core_component;
 use local_integrity\settings;
 use local_integrity\plugininfo\integritystmt;
 
@@ -50,10 +51,50 @@ class lib_test extends advanced_testcase {
     }
 
     /**
+     * A helper method to check if the module have generator.
+     *
+     * @param string $name Name of the statement.
+     *
+     * @return bool
+     */
+    protected function has_data_generator(string $name): bool {
+        $dir = core_component::get_component_directory('mod_'. $name);
+        $lib = $dir . '/tests/generator/lib.php';
+
+        if (!$dir || !is_readable($lib)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * A helper method to find out the class of the mod form.
+     *
+     * @param string $name Name of the statement.
+     *
+     * @return string|null
+     */
+    protected function get_form_class_name(string $name): ?string {
+        global $CFG;
+
+        $modmoodleform = "$CFG->dirroot/mod/$name/mod_form.php";
+
+        // Skip this test as the plugins changing a mod form should match an activity name.
+        if (!file_exists($modmoodleform)) {
+            return null;
+        }
+
+        require_once($modmoodleform);
+
+        return "\mod_{$name}_mod_form";
+    }
+
+    /**
      * Test modifying an activity form standard elements.
      */
     public function test_coursemodule_standard_elements() {
-        global $PAGE, $CFG;
+        global $PAGE;
 
         $this->setAdminUser();
 
@@ -61,35 +102,25 @@ class lib_test extends advanced_testcase {
         $PAGE->set_course($course);
 
         foreach (integritystmt::get_enabled_plugins() as $name) {
-            $modmoodleform = "$CFG->dirroot/mod/$name/mod_form.php";
-
-            // Skip this test as the plugins changing a mod form should match an activity name.
-            if (!file_exists($modmoodleform)) {
-                $this->markTestSkipped();
+            if (!$this->has_data_generator($name)) {
+                continue;
             }
 
-            require_once($modmoodleform);
-            $formclass = "\mod_{$name}_mod_form";
+            if (!$formclass = $this->get_form_class_name($name)) {
+                continue;
+            }
 
             $module = $this->getDataGenerator()->create_module($name, ['course' => $course->id]);
-
             [$course, $cm] = get_course_and_cm_from_cmid($module->cmid);
-
             list($cm, $context, $module, $data, $cw) = get_moduleinfo_data($cm, $course);
-            // Remove availability conditions to prevent issues with getting form data.
-            $data->availabilityconditionsjson = '';
 
-            $submitdata = clone $data;
-            $submitdata->id = $cm->id;
+            $form = new \MoodleQuickForm('test', 'post', '');
+            $modform = new $formclass($data, $cw->section, $cm, $course);
 
-            // Mock submitting the form so we can check it's data.
-            $mform = new $formclass($data, $cw->section, $cm, $course);
-            $mform::mock_submit((array) $submitdata, []);
+            $this->assertFalse($form->elementExists('integrity_enabled'));
 
-            $mform = new $formclass($data, $cw->section, $cm, $course);
-
-            $actual = $mform->get_data();
-            $this->assertObjectHasAttribute('integrity_enabled', $actual);
+            local_integrity_coursemodule_standard_elements($modform, $form);
+            $this->assertTrue($form->elementExists('integrity_enabled'));
         }
     }
 
@@ -97,7 +128,7 @@ class lib_test extends advanced_testcase {
      * Test modifying an activity form standard elements if no mod name provided.
      */
     public function test_coursemodule_standard_elements_no_modname() {
-        global $PAGE, $CFG;
+        global $PAGE;
 
         $this->setAdminUser();
 
@@ -105,19 +136,13 @@ class lib_test extends advanced_testcase {
         $PAGE->set_course($course);
 
         foreach (integritystmt::get_enabled_plugins() as $name) {
-            $modmoodleform = "$CFG->dirroot/mod/$name/mod_form.php";
-
-            // Skip this test as the plugins changing a mod form should match an activity name.
-            if (!file_exists($modmoodleform)) {
-                $this->markTestSkipped();
+            if (!$this->has_data_generator($name)) {
+                continue;
             }
 
-            require_once($modmoodleform);
-            $formclass = "\mod_{$name}_mod_form";
-
-            $module = $this->getDataGenerator()->create_module($name, ['course' => $course->id]);
-
-            [$course, $cm] = get_course_and_cm_from_cmid($module->cmid);
+            if (!$formclass = $this->get_form_class_name($name)) {
+                continue;
+            }
 
             // Mock data for new course module being created.
             $data = new \stdClass();
@@ -128,17 +153,14 @@ class lib_test extends advanced_testcase {
             $data->instance = '';
             $data->coursemodule = null;
             $data->cmidnumber = '';
-            // Remove availability conditions to prevent issues with getting form data.
-            $data->availabilityconditionsjson = '';
 
-            // Mock submitting the form so we can check it's data.
-            $mform = new $formclass($data, $data->section, $data->coursemodule, $course);
-            $mform::mock_submit((array) $data, []);
+            $form = new \MoodleQuickForm('test', 'post', '');
+            $modform = new $formclass($data, $data->section, $data->coursemodule, $course);
 
-            $mform = new $formclass($data, $data->section, $data->coursemodule, $course);
+            $this->assertFalse($form->elementExists('integrity_enabled'));
 
-            $actual = $mform->get_data();
-            $this->assertObjectNotHasAttribute('integrity_enabled', $actual);
+            local_integrity_coursemodule_standard_elements($modform, $form);
+            $this->assertFalse($form->elementExists('integrity_enabled'));
         }
     }
 
@@ -146,30 +168,35 @@ class lib_test extends advanced_testcase {
      * Test submission of an activity form.
      */
     public function test_coursemodule_edit_post_actions() {
-        global $PAGE, $CFG;
+        global $PAGE;
 
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
 
         foreach (integritystmt::get_enabled_plugins() as $name) {
-            $modmoodleform = "$CFG->dirroot/mod/$name/mod_form.php";
+            if (!$this->has_data_generator($name)) {
+                continue;
+            }
 
-            // Skip this test as the plugins changing a mod form should match an activity name.
-            if (!file_exists($modmoodleform)) {
-                $this->markTestSkipped();
+            if (!$formclass = $this->get_form_class_name($name)) {
+                continue;
             }
 
             $module = $this->getDataGenerator()->create_module($name, ['course' => $course->id]);
 
             [$course, $cm] = get_course_and_cm_from_cmid($module->cmid);
             $PAGE->set_course($course);
-
             list($cm, $context, $module, $data, $cw) = get_moduleinfo_data($cm, $course);
-            $data->availabilityconditionsjson = '';
-            $data->integrity_enabled = 1;
 
+            $data->integrity_enabled = 0;
             local_integrity_coursemodule_edit_post_actions($data, $course);
-            $this->assertNotEmpty(settings::get_record(['contextid' => $context->id]));
+            $this->assertFalse(settings::get_record(['contextid' => $context->id, 'enabled' => 1]));
+            $this->assertNotEmpty(settings::get_record(['contextid' => $context->id, 'enabled' => 0]));
+
+            $data->integrity_enabled = 1;
+            local_integrity_coursemodule_edit_post_actions($data, $course);
+            $this->assertNotEmpty(settings::get_record(['contextid' => $context->id, 'enabled' => 1]));
+            $this->assertFalse(settings::get_record(['contextid' => $context->id, 'enabled' => 0]));
         }
     }
 
