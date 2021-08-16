@@ -32,6 +32,7 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
  * Interactive Content (mod_hvp)
  * H5P (mod_h5pactivity)
  * Glossary
+ * External tool (mod_lti)
 
 ## Installing via uploaded ZIP file ##
 
