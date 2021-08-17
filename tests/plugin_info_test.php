@@ -42,39 +42,16 @@ defined('MOODLE_INTERNAL') || die();
 class plugin_info_test extends advanced_testcase {
 
     /**
-     * Set up tests.
-     */
-    public function setUp(): void {
-        $this->resetAfterTest();
-        parent::setUp();
-    }
-
-    /**
      * Test a list of enabled plugins.
      */
     public function test_get_enabled_plugins() {
-        $expected = ['assign', 'data', 'forum', 'glossary', 'h5pactivity', 'hsuforum', 'hvp', 'lesson', 'lti', 'quiz',
-            'scorm', 'turnitintooltwo', 'wiki', 'workshop'];
+        $expected = [];
+
+        foreach (core_plugin_manager::instance()->get_installed_plugins('integritystmt') as $name => $version) {
+            $expected[$name] = $name;
+        }
+
         $this->assertSame($expected, integritystmt::get_enabled_plugins());
-    }
-
-    /**
-     * Test that a list of enabled plugins is cached.
-     */
-    public function test_get_enabled_plugins_cached() {
-        global $CFG;
-
-        $expected = array_keys(core_plugin_manager::instance()->get_installed_plugins('integritystmt'));
-        $this->assertSame($expected, integritystmt::get_enabled_plugins());
-
-        $this->assertTrue(!empty($CFG->local_integrity_hash));
-        $this->assertTrue(!empty($CFG->integritystmt_plugins));
-
-        $this->assertSame($CFG->allversionshash,  $CFG->local_integrity_hash);
-        $this->assertSame(
-            json_encode(array_keys(core_plugin_manager::instance()->get_installed_plugins('integritystmt'))),
-            $CFG->integritystmt_plugins
-        );
     }
 
 }
