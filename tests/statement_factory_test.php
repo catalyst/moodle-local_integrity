@@ -101,4 +101,19 @@ class statement_factory_test extends advanced_testcase {
         }
     }
 
+    /**
+     * Test that a list of enabled plugins is cached.
+     */
+    public function test_get_enabled_plugins_cached() {
+        global $CFG;
+
+        $expected = [];
+        foreach (statement_factory::get_statements() as $name => $statement) {
+            $expected[] = $name;
+        }
+
+        $this->assertSame($CFG->allversionshash,  $CFG->local_integrity_hash);
+        $this->assertSame(json_encode($expected), $CFG->integritystmt_plugins);
+    }
+
 }

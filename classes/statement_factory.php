@@ -45,9 +45,20 @@ class statement_factory {
      * @return statement_base[]
      */
     public static function get_statements(): array {
+        global $CFG;
+
         $statements = [];
 
-        foreach (integritystmt::get_enabled_plugins() as $name) {
+        if (self::needs_update_list_of_plugins()) {
+            $plugins = array_keys(integritystmt::get_enabled_plugins());
+            $plugins = json_encode($plugins);
+            set_config('local_integrity_hash', $CFG->allversionshash);
+            set_config('integritystmt_plugins', $plugins);
+        }
+
+        $plugins = array_values(json_decode($CFG->integritystmt_plugins));
+
+        foreach ($plugins as $name) {
             $statements[$name] = self::build_statement($name);
         }
 
@@ -78,7 +89,7 @@ class statement_factory {
      *
      * @return \local_integrity\statement_base
      */
-    protected static function build_statement(string $name): statement_base {
+    private static function build_statement(string $name): statement_base {
         $class = '\\integritystmt_' . $name . '\\statement';
 
         if (!class_exists($class)) {
@@ -86,6 +97,19 @@ class statement_factory {
         }
 
         return new $class($name);
+    }
+
+    /**
+     * Check if list of plugins needs to be updated.
+     *
+     * @return bool
+     */
+    private static function needs_update_list_of_plugins(): bool {
+        global $CFG;
+
+        return empty($CFG->local_integrity_hash)
+            || $CFG->allversionshash != $CFG->local_integrity_hash
+            || empty($CFG->integritystmt_plugins);
     }
 
 }

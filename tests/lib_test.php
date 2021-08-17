@@ -28,7 +28,7 @@ namespace local_integrity\tests;
 use advanced_testcase;
 use core_component;
 use local_integrity\settings;
-use local_integrity\plugininfo\integritystmt;
+use local_integrity\statement_factory;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -101,7 +101,7 @@ class lib_test extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $PAGE->set_course($course);
 
-        foreach (integritystmt::get_enabled_plugins() as $name) {
+        foreach (statement_factory::get_statements() as $name => $statement) {
             if (!$this->has_data_generator($name)) {
                 continue;
             }
@@ -135,7 +135,7 @@ class lib_test extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $PAGE->set_course($course);
 
-        foreach (integritystmt::get_enabled_plugins() as $name) {
+        foreach (statement_factory::get_statements() as $name => $statement) {
             if (!$this->has_data_generator($name)) {
                 continue;
             }
@@ -173,7 +173,7 @@ class lib_test extends advanced_testcase {
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
 
-        foreach (integritystmt::get_enabled_plugins() as $name) {
+        foreach (statement_factory::get_statements() as $name => $statement) {
             if (!$this->has_data_generator($name)) {
                 continue;
             }

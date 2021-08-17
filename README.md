@@ -23,20 +23,20 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
 
 
 ## Supported activities ##
- * Database
- * Forum
- * Open Forum
- * Quiz
- * Lesson
- * Workshop
- * Interactive Content (mod_hvp)
- * H5P (mod_h5pactivity)
- * Glossary
- * External tool (mod_lti)
- * SCORM package (mod_scorm)
- * Wiki
- * Turnitin Assignment 2
- * Assignment
+* Assignment
+* Database
+* External tool (mod_lti)
+* Forum
+* Glossary
+* H5P (mod_h5pactivity)
+* Interactive Content (mod_hvp)
+* Lesson
+* Open Forum
+* Quiz
+* SCORM package (mod_scorm)
+* Turnitin Assignment 2
+* Wiki
+* Workshop
 
 
 ## Installing via uploaded ZIP file ##

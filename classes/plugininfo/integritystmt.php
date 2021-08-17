@@ -46,29 +46,13 @@ class integritystmt extends base {
      * @return string[]
      */
     public static function get_enabled_plugins(): array {
-        global $CFG;
+        $plugins = [];
 
-        if (self::needs_update_list_of_plugins()) {
-            $plugins = array_keys(core_plugin_manager::instance()->get_installed_plugins('integritystmt'));
-            $plugins = json_encode($plugins);
-            set_config('local_integrity_hash', $CFG->allversionshash);
-            set_config('integritystmt_plugins', $plugins);
+        foreach (core_plugin_manager::instance()->get_installed_plugins('integritystmt') as $name => $version) {
+            $plugins[$name] = $name;
         }
 
-        return array_values(json_decode($CFG->integritystmt_plugins));
-    }
-
-    /**
-     * Check if list of plugins needs to be updated.
-     *
-     * @return bool
-     */
-    protected static function needs_update_list_of_plugins(): bool {
-        global $CFG;
-
-        return empty($CFG->local_integrity_hash)
-            || $CFG->allversionshash != $CFG->local_integrity_hash
-            || empty($CFG->integritystmt_plugins);
+        return $plugins;
     }
 
 }
