@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'Academic integrity';
 $string['cachedef_settings'] = 'Statement settings';
 $string['cachedef_userdata'] = 'Statement agreement data';
+$string['cachedef_plugins'] = 'A list of installed plugins';
 $string['modform:header'] = 'Academic integrity';
 $string['integrity:agreestatements'] = 'Agree statements on behalf of others';
 $string['integrity:bypassnotice'] = 'Bypass statement notice';

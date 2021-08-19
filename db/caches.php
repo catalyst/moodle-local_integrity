@@ -26,6 +26,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 $definitions = [
+    'plugins' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'canuselocalstore' => true,
+    ],
     'userdata' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,

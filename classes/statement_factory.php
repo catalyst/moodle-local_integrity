@@ -49,14 +49,17 @@ class statement_factory {
 
         $statements = [];
 
-        if (self::needs_update_list_of_plugins()) {
-            $plugins = array_keys(integritystmt::get_enabled_plugins());
-            $plugins = json_encode($plugins);
-            set_config('local_integrity_hash', $CFG->allversionshash);
-            set_config('integritystmt_plugins', $plugins);
-        }
+        $cache = \cache::make('local_integrity', 'plugins');
+        $plugins = $cache->get($CFG->allversionshash);
 
-        $plugins = array_values(json_decode($CFG->integritystmt_plugins));
+        if ($plugins === false) {
+            $plugins = [];
+            foreach (integritystmt::get_enabled_plugins() as $name => $version) {
+                $plugins[] = $name;
+            }
+
+            $cache->set($CFG->allversionshash, $plugins);
+        }
 
         foreach ($plugins as $name) {
             $statements[$name] = self::build_statement($name);
@@ -97,19 +100,6 @@ class statement_factory {
         }
 
         return new $class($name);
-    }
-
-    /**
-     * Check if list of plugins needs to be updated.
-     *
-     * @return bool
-     */
-    private static function needs_update_list_of_plugins(): bool {
-        global $CFG;
-
-        return empty($CFG->local_integrity_hash)
-            || $CFG->allversionshash != $CFG->local_integrity_hash
-            || empty($CFG->integritystmt_plugins);
     }
 
 }

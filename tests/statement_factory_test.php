@@ -107,13 +107,15 @@ class statement_factory_test extends advanced_testcase {
     public function test_get_enabled_plugins_cached() {
         global $CFG;
 
+        $cache = \cache::make('local_integrity', 'plugins');
+        $this->assertFalse($cache->get($CFG->allversionshash));
+
         $expected = [];
         foreach (statement_factory::get_statements() as $name => $statement) {
             $expected[] = $name;
         }
 
-        $this->assertSame($CFG->allversionshash,  $CFG->local_integrity_hash);
-        $this->assertSame(json_encode($expected), $CFG->integritystmt_plugins);
+        $this->assertSame($expected,  $cache->get($CFG->allversionshash));
     }
 
 }
