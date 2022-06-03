@@ -1,4 +1,4 @@
-![Build Status](https://github.com/catalyst/moodle-local_integrity/actions/workflows/ci.yml/badge.svg?branch=master)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/catalyst/moodle-local_integrity/ci/master)
 
 # Academic integrity #
 
