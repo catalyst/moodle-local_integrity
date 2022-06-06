@@ -79,7 +79,7 @@ Feature: Test basic feature of Integrity plugin
     And I follow "Forum agree is required"
     When I set the field "I have read and agree to the above statement" to "1"
     And I click on "Agree" "button" in the "Academic integrity notice" "dialogue"
-    Then I should see "Add a new discussion topic"
+    Then I should see "There are no discussion topics yet in this forum"
 
     # Test that statement is not displayed after agreement.
     When I log out
@@ -88,7 +88,7 @@ Feature: Test basic feature of Integrity plugin
     And I follow "Forum agree is required"
     Then I should not see "Academic integrity notice"
     And I should not see "Statement text!"
-    And I should see "Add a new discussion topic"
+    And I should see "There are no discussion topics yet in this forum"
 
     # Test that admins can bypass statement.
     When I log out
@@ -97,4 +97,4 @@ Feature: Test basic feature of Integrity plugin
     And I follow "Forum agree is required"
     Then I should not see "Academic integrity notice"
     And I should not see "Statement text!"
-    And I should see "Add a new discussion topic"
+    And I should see "There are no discussion topics yet in this forum"
