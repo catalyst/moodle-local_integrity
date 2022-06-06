@@ -17,7 +17,6 @@
  * Preview of a integrity statement notice.
  *
  * @module     local_integrity/preview
- * @package    local_integrity
  * @copyright  2021 Catalyst IT
  * @author     Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
