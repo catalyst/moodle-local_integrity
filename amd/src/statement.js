@@ -17,7 +17,6 @@
  * Bulk actions for lists of participants.
  *
  * @module     local_integrity/statement
- * @package    local_integrity
  * @copyright  2021 Catalyst IT
  * @author     Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -89,7 +88,7 @@ function init(contextid, statementname, cancelurl) {
 
 /**
  * Listen to escape button pushed.
- * @param e
+ * @param {Event} e
  */
 function escCloseListener(e) {
     if (e.keyCode === KeyCodes.escape) {
@@ -109,8 +108,8 @@ function handleRedirect() {
 /**
  * Submit statement agreement.
  *
- * @param e
- * @param modal
+ * @param {Event} e
+ * @param {Modal} modal
  */
 function agreeStatement(e, modal) {
     const agreed = modal.getRoot().find('form input').prop('checked');
