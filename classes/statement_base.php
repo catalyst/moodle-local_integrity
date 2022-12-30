@@ -194,7 +194,7 @@ abstract class statement_base {
      * @param \context $context
      * @return bool
      */
-    final protected function is_enabled_in_context(\context $context): bool {
+    final public function is_enabled_in_context(\context $context): bool {
         $enabled = false;
         $settings = settings::get_settings($this->get_plugin_name(), $context->id);
 
@@ -257,7 +257,8 @@ abstract class statement_base {
             $PAGE->requires->js_call_amd('local_integrity/statement', 'init', [
                 $PAGE->context->id,
                 $this->get_name(),
-                $this->get_decline_url()
+                $this->get_decline_url(),
+                $this->get_agree_url()
             ]);
         }
     }
@@ -289,6 +290,15 @@ abstract class statement_base {
         }
 
         return $result;
+    }
+
+    /**
+     * Get URL to redirect to after statement.
+     *
+     * @return string
+     */
+    public function get_agree_url(): string {
+        return '';
     }
 
     /**

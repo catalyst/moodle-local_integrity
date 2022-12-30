@@ -36,13 +36,14 @@ import KeyCodes from 'core/key_codes';
  * @param {Integer} contextid Context ID,
  * @param {String} statementname
  * @param {String} cancelurl URL to redirect if cancelled.
+ * @param {String} agreeurl URL to redirect if agrred.
  */
-function init(contextid, statementname, cancelurl) {
-
+function init(contextid, statementname, cancelurl, agreeurl = '') {
     self.contextid = contextid;
     self.statementname = statementname;
     self.cancelurl = cancelurl;
     self.submitted = false;
+    self.agreeurl = agreeurl;
 
     document.addEventListener('keyup', escCloseListener);
 
@@ -77,9 +78,9 @@ function init(contextid, statementname, cancelurl) {
             });
         }).then(function(modal) {
             modal.getRoot().on(ModalEvents.save, (e) => agreeStatement(e, modal));
-            modal.getRoot().on(ModalEvents.destroyed, () => handleRedirect());
-            modal.getRoot().on(ModalEvents.hidden, () => handleRedirect());
-            modal.getRoot().on(ModalEvents.cancel, () => handleRedirect());
+            modal.getRoot().on(ModalEvents.destroyed, () => handleCancelRedirect());
+            modal.getRoot().on(ModalEvents.hidden, () => handleCancelRedirect());
+            modal.getRoot().on(ModalEvents.cancel, () => handleCancelRedirect());
 
             modal.show();
         }).catch(Notification.exception);
@@ -92,16 +93,25 @@ function init(contextid, statementname, cancelurl) {
  */
 function escCloseListener(e) {
     if (e.keyCode === KeyCodes.escape) {
-        handleRedirect();
+        handleCancelRedirect();
     }
 }
 
 /**
- * Handle redirect action.
+ * Handle redirect if canceled.
  */
-function handleRedirect() {
+function handleCancelRedirect() {
     if (self.submitted === false) {
         window.location.replace(self.cancelurl);
+    }
+}
+
+/**
+ * Handle redirect if agreed.
+ */
+function handleAgreeRedirect() {
+    if (self.agreeurl !== '') {
+        window.location.replace(self.agreeurl);
     }
 }
 
@@ -134,6 +144,7 @@ function agreeStatement(e, modal) {
             self.submitted = true;
             document.removeEventListener('keyup', escCloseListener);
             modal.destroy();
+            handleAgreeRedirect();
         },
         fail: function (response) {
             Notification.exception(response);

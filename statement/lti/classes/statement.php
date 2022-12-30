@@ -26,6 +26,7 @@
 namespace integritystmt_lti;
 
 use local_integrity\statement_base;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -48,7 +49,30 @@ class statement extends statement_base {
         return [
             '/mod/lti/index.php',
             '/mod/lti/view.php',
+            '/local/integrity/statement/lti/launch.php',
         ];
     }
 
+    /**
+     * Get URL to redirect to after statement.
+     *
+     * @return string
+     */
+    public function get_agree_url(): string {
+        global $PAGE;
+
+        $url = '';
+
+        $id = required_param('id', PARAM_INT);
+        $triggerview = optional_param('triggerview', 1, PARAM_BOOL);
+
+        $customlaunchurl = new moodle_url('/local/integrity/statement/lti/launch.php');
+
+        if ($PAGE->has_set_url() && $PAGE->url->compare($customlaunchurl, URL_MATCH_BASE)) {
+            $redirecturl = new moodle_url('/mod/lti/launch.php', ['id' => $id, 'triggerview' => $triggerview]);
+            $url = $redirecturl->out(false);
+        }
+
+        return $url;
+    }
 }

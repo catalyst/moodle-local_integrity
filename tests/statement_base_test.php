@@ -355,4 +355,33 @@ class statement_base_test extends advanced_testcase {
         $this->assertTrue($statement->can_bypass($context, $user->id));
     }
 
+    /**
+     * Test checking if enabled in a context.
+     */
+    public function is_enabled_in_context() {
+        $this->resetAfterTest();
+
+        $context = \context_system::instance();
+        $statement = $this->get_test_statement('test');
+
+        $this->assertFalse($statement->is_enabled_in_context($context));
+
+        $settings = settings::get_record(['contextid' => $context->id, 'plugin' => $statement->get_plugin_name()]);
+        $settings->set('enabled', 0);
+        $settings->save();
+        $this->assertFalse($statement->is_enabled_in_context($context));
+
+        $settings->set('enabled', 1);
+        $settings->save();
+
+        $this->assertTrue($statement->is_enabled_in_context($context));
+    }
+
+    /**
+     * Test get agree url.
+     */
+    public function test_get_agree_url() {
+        $this->assertSame('', $this->get_test_statement('test')->get_agree_url());
+    }
+
 }
