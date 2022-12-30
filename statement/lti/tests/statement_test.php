@@ -28,8 +28,6 @@ namespace integritystmt_lti\tests;
 use advanced_testcase;
 use integritystmt_lti\statement;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Tests for statement class.
  *
@@ -49,9 +47,89 @@ class statement_test extends advanced_testcase {
         $expected = [
             '/mod/lti/index.php',
             '/mod/lti/view.php',
+            '/local/integrity/statement/lti/launch.php',
         ];
 
         $this->assertSame($expected, $statement->get_display_urls());
+    }
+
+    /**
+     * Test getting agree url without set id parameter.
+     */
+    public function test_get_agree_url_without_id() {
+        $statement = new statement('lti');
+
+        $this->expectException(\moodle_exception::class);
+        $this->expectExceptionMessage('A required parameter (id) was missing');
+
+        $this->assertSame('', $statement->get_agree_url());
+    }
+
+    /**
+     * Test getting agree url without set page having url set.
+     */
+    public function test_get_agree_url_without_page_having_url_set() {
+        $_GET['id'] = 1;
+        $statement = new statement('lti');
+
+        $this->assertSame('', $statement->get_agree_url());
+    }
+
+    /**
+     * Test getting agree url with set page having incorrect url set.
+     */
+    public function test_get_agree_url_with_page_url_not_matching_launch_url() {
+        global $PAGE;
+
+        $_GET['id'] = 1;
+        $PAGE->set_url('/login/index.php');
+        $statement = new statement('lti');
+
+        $this->assertSame('', $statement->get_agree_url());
+    }
+
+    /**
+     * Test getting agree url with triggerview set to 1.
+     */
+    public function test_get_agree_url_with_triggerview_set_to_one() {
+        global $PAGE;
+
+        $_GET['id'] = 11;
+        $_GET['triggerview'] = 1;
+
+        $PAGE->set_url('/local/integrity/statement/lti/launch.php');
+        $statement = new statement('lti');
+
+        $this->assertSame('https://www.example.com/moodle/mod/lti/launch.php?id=11&triggerview=1', $statement->get_agree_url());
+    }
+
+    /**
+     * Test getting agree url with triggerview set to 0.
+     */
+    public function test_get_agree_url_with_triggerview_set_to_nil() {
+        global $PAGE;
+
+        $_GET['id'] = 55;
+        $_GET['triggerview'] = 0;
+
+        $PAGE->set_url('/local/integrity/statement/lti/launch.php');
+        $statement = new statement('lti');
+
+        $this->assertSame('https://www.example.com/moodle/mod/lti/launch.php?id=55&triggerview=0', $statement->get_agree_url());
+    }
+
+    /**
+     * Test getting agree url without triggerview set.
+     */
+    public function test_get_agree_url_without_triggerview_set() {
+        global $PAGE;
+
+        $_GET['id'] = 777;
+
+        $PAGE->set_url('/local/integrity/statement/lti/launch.php');
+        $statement = new statement('lti');
+
+        $this->assertSame('https://www.example.com/moodle/mod/lti/launch.php?id=777&triggerview=1', $statement->get_agree_url());
     }
 
 }

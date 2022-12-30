@@ -29,3 +29,4 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'Academic Integrity - External tool (mod_lti)';
 $string['privacy:metadata'] = 'Academic Integrity - External tool (mod_lti) does not store any personal data.';
 $string['lti:changedefault'] = 'Change activity setting for Academic integrity - External tool (mod_lti)';
+$string['lti:redirecting'] = 'You are being redirected...';
