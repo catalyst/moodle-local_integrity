@@ -26,9 +26,9 @@
 use local_integrity\statement_factory;
 
 /**
- * Call back executed after require login.
+ * Call back executed after config loaded.
  */
-function integritystmt_lti_after_require_login() {
+function integritystmt_lti_after_config() {
     global $SCRIPT, $USER;
 
     if ($SCRIPT == '/mod/lti/launch.php') {
