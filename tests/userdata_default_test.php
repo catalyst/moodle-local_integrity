@@ -14,21 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Tests for default_userdata class.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-namespace local_integrity\tests;
+namespace local_integrity;
 
 use advanced_testcase;
-use local_integrity\userdata_default;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Tests for default_userdata class.
@@ -37,6 +25,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @covers \local_integrity\userdata_default
  */
 class userdata_default_test extends advanced_testcase {
 

@@ -14,19 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Tests for backup and restore functions.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-namespace local_integrity\tests;
+namespace local_integrity;
 
 use advanced_testcase;
-use local_integrity\settings;
 use backup;
 use restore_dbops;
 use backup_controller;
@@ -40,6 +30,9 @@ use context_module;
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @covers \backup_local_integrity_plugin
+ * @covers \restore_local_integrity_plugin
  */
 class backup_restore_test extends advanced_testcase {
     /**

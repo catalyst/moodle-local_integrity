@@ -14,23 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Tests for sub plugins system.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-namespace local_integrity\tests;
+namespace local_integrity;
 
 use advanced_testcase;
 use local_integrity\plugininfo\integritystmt;
 use core_plugin_manager;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Tests for sub plugins system.
  *
@@ -38,6 +27,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @covers \local_integrity\plugininfo\integritystmt
  */
 class plugin_info_test extends advanced_testcase {
 

@@ -26,8 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_integrity';
-$plugin->release = '0.1.0';
-$plugin->version = 2023010400;
-$plugin->requires = 2020061500;
-$plugin->supported = [39, 401];  // Available as of Moodle 3.9.0 or later.
+$plugin->release = 2024112201;
+$plugin->version = 2024112201;
+$plugin->requires = 2024100700;
+$plugin->supported = [405, 405];
 $plugin->maturity = MATURITY_STABLE;

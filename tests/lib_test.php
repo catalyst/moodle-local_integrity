@@ -14,23 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Tests for lib functions.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-namespace local_integrity\tests;
+namespace local_integrity;
 
 use advanced_testcase;
 use core_component;
-use local_integrity\settings;
-use local_integrity\statement_factory;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Tests for lib functions.
@@ -92,6 +79,7 @@ class lib_test extends advanced_testcase {
 
     /**
      * Test modifying an activity form standard elements.
+     * @covers \local_integrity_coursemodule_standard_elements
      */
     public function test_coursemodule_standard_elements() {
         global $PAGE;
@@ -126,6 +114,7 @@ class lib_test extends advanced_testcase {
 
     /**
      * Test modifying an activity form standard elements if no mod name provided.
+     * @covers \local_integrity_coursemodule_standard_elements
      */
     public function test_coursemodule_standard_elements_no_modname() {
         global $PAGE;
@@ -166,6 +155,7 @@ class lib_test extends advanced_testcase {
 
     /**
      * Test submission of an activity form.
+     * @covers \local_integrity_coursemodule_edit_post_actions
      */
     public function test_coursemodule_edit_post_actions() {
         global $PAGE;
@@ -202,6 +192,7 @@ class lib_test extends advanced_testcase {
 
     /**
      * Check that our hook is called when an activity is deleted.
+     * @covers \local_integrity_pre_course_module_delete
      */
     public function test_pre_course_module_delete_hook() {
         $this->assertCount(0, settings::get_records());

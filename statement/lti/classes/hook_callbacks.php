@@ -14,19 +14,34 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+namespace integritystmt_lti;
+
+defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot . '/local/integrity/statement/lti/lib.php');
+
 /**
- * Plugin version and other meta-data are defined here.
+ * Hook callbacks.
  *
- * @package     integritystmt_scorm
+ * @package     integritystmt_lti
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class hook_callbacks {
 
-defined('MOODLE_INTERNAL') || die();
+    /**
+     * Listener for the after_config hook.
+     *
+     * @param \core\hook\after_config $hook
+     */
+    public static function after_config(\core\hook\after_config $hook): void {
+        global $CFG;
+        if (during_initial_install() || isset($CFG->upgraderunning)) {
+            // Do nothing during installation or upgrade.
+            return;
+        }
 
-$plugin->component = 'integritystmt_scorm';
-$plugin->release = 2024112200;
-$plugin->version = 2024112200;
-$plugin->requires = 2024042200;
-$plugin->maturity = MATURITY_STABLE;
+        integritystmt_lti_after_config();
+    }
+
+}

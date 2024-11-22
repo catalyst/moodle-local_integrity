@@ -14,28 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Tests for privacy provider.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-namespace local_integrity\tests;
+namespace local_integrity;
 
 use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use core_privacy\tests\request\approved_contextlist;
 use core_privacy\tests\provider_testcase;
-use local_integrity\settings;
 use local_integrity\privacy\provider;
 use context_module;
-use local_integrity\userdata_default;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Tests for privacy provider.
@@ -44,6 +31,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @covers \local_integrity\privacy\provider;
  */
 class privacy_provider_test extends provider_testcase {
 

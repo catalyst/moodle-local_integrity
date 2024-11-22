@@ -1,4 +1,4 @@
-![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/catalyst/moodle-local_integrity/ci.yml?branch=master)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/catalyst/moodle-local_integrity/ci.yml?branch=MOODLE_405_STABLE)
 
 # Academic integrity #
 
@@ -8,9 +8,10 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
 
 ## Versions and branches ##
 
-| Moodle Version    |  Branch      | 
-|-------------------|--------------|
-| Moodle 3.9+       | master       | 
+| Moodle Version   | Branch            | 
+|------------------|-------------------|
+| Moodle 4.5+      | MOODLE_405_STABLE | 
+| Moodle 3.9 - 4.1 | master            | 
 
 ## Features ##
                                                       
@@ -66,6 +67,9 @@ to complete the installation from the command line.
 
 Statements are implemented as subplugins. See one of the existing statements to figure out how to implement one that you require. 
 
+# Warm thanks #
+
+Thanks to Monash University (https://www.monash.edu) for funding the development of this plugin.
 
 # Crafted by Catalyst IT
 
