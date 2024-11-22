@@ -25,7 +25,7 @@
 import * as Str from 'core/str';
 import Ajax from 'core/ajax';
 import ModalEvents from 'core/modal_events';
-import ModalFactory from 'core/modal_factory';
+import ModalSaveCancel from 'core/modal_save_cancel';
 import Notification from 'core/notification';
 import Templates from 'core/templates';
 import KeyCodes from 'core/key_codes';
@@ -65,8 +65,7 @@ function init(contextid, statementname, cancelurl, agreeurl = '') {
                 notice: data.notice,
             };
 
-            return ModalFactory.create({
-                type: ModalFactory.types.SAVE_CANCEL,
+            return ModalSaveCancel.create({
                 body: Templates.render('local_integrity/statement_form', templateContext),
                 title: langStrings[0],
                 buttons: {
