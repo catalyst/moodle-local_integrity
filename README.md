@@ -1,4 +1,4 @@
-![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/catalyst/moodle-local_integrity/ci.yml?branch=MOODLE_404_STABLE)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/catalyst/moodle-local_integrity/ci.yml?branch=MOODLE_405_STABLE)
 
 # Academic integrity #
 
@@ -10,7 +10,7 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
 
 | Moodle Version   | Branch            | 
 |------------------|-------------------|
-| Moodle 4.4+      | MOODLE_404_STABLE | 
+| Moodle 4.5+      | MOODLE_405_STABLE | 
 | Moodle 3.9 - 4.1 | master            | 
 
 ## Features ##
