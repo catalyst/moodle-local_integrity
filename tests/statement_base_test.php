@@ -14,24 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Tests for statement base class.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-namespace local_integrity\tests;
+namespace local_integrity;
 
 use advanced_testcase;
-use local_integrity\settings;
-use local_integrity\statement_base;
-use local_integrity\statement_factory;
-use local_integrity\userdata_default;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Tests for statement base class.
@@ -40,6 +25,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @covers \local_integrity\statement_base
  */
 class statement_base_test extends advanced_testcase {
 
