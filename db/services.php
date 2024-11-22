@@ -27,17 +27,15 @@ defined('MOODLE_INTERNAL') || die();
 
 $functions = [
     'local_integrity_get_statement_notice' => [
-        'classname' => 'local_integrity_external',
-        'methodname' => 'get_statement_notice',
-        'classpath' => 'local/integrity/externallib.php',
+        'classname' => 'local_integrity\external\get_statement_notice',
+        'methodname' => 'execute',
         'description' => 'Get academic integrity notice text',
         'type' => 'read',
         'ajax' => true,
     ],
     'local_integrity_agree_statement' => [
-        'classname' => 'local_integrity_external',
-        'methodname' => 'agree_statement',
-        'classpath' => 'local/integrity/externallib.php',
+        'classname' => 'local_integrity\external\agree_statement',
+        'methodname' => 'execute',
         'description' => 'Agree integrity statement',
         'type' => 'write',
         'ajax' => true,
