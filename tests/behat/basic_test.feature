@@ -22,7 +22,7 @@ Feature: Test basic feature of Integrity plugin
     # Add a forum to a course without the condition, and verify that they use it as normal.
     Given I log in as "teacher"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Forum" to section "1" and I fill the form with:
+    And I add a "forum" activity to course "Course 1" section "1" and I fill the form with:
       | Forum name | Forum no agree required |
       | Forum type | Standard forum for general use |
       | Description | This forum does not require students to agree to anything |
@@ -38,7 +38,7 @@ Feature: Test basic feature of Integrity plugin
     When I log out
     And I log in as "teacher"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Forum" to section "1" and I fill the form with:
+    And I add a "forum" activity to course "Course 1" section "1" and I fill the form with:
       | Forum name | Forum agree is required  |
       | Forum type | Standard forum for general use |
       | Description | This forum requires students to agree not to cheat |
