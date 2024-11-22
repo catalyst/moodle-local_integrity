@@ -22,7 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import $ from 'jquery';
 import * as Str from 'core/str';
 import Ajax from 'core/ajax';
 import ModalSaveCancel from 'core/modal_save_cancel';
@@ -39,36 +38,41 @@ function init(statementname, idselector) {
 
     let trigger = document.getElementById(idselector);
 
-    if  (typeof trigger !== 'undefined' ) {
+    if (trigger) {
+        trigger.addEventListener('click', e => {
+            e.preventDefault();
 
-        let noticeRequest = {
-            methodname: 'local_integrity_get_statement_notice',
-            args: {'name': statementname}
-        };
+            let noticeRequest = {
+                methodname: 'local_integrity_get_statement_notice',
+                args: {'name': statementname}
+            };
 
-        Ajax.call([noticeRequest])[0].done(function(data) {
-            let strings = [
-                {key: 'statement:header', component: 'local_integrity'},
-                {key: 'statement:save', component: 'local_integrity'},
-                {key: 'statement:cancel', component: 'local_integrity'}
-            ];
+            Ajax.call([noticeRequest])[0].done(function(data) {
+                let strings = [
+                    {key: 'statement:header', component: 'local_integrity'},
+                    {key: 'statement:save', component: 'local_integrity'},
+                    {key: 'statement:cancel', component: 'local_integrity'}
+                ];
 
-            Str.get_strings(strings).then(function(langStrings) {
-                let templateContext = {
-                    notice: data.notice,
-                };
+                Str.get_strings(strings).then(function(langStrings) {
+                    let templateContext = {
+                        notice: data.notice,
+                    };
 
-                return ModalSaveCancel.create({
-                    body: Templates.render('local_integrity/statement_form', templateContext),
-                    title: langStrings[0],
-                    buttons: {
-                        save: langStrings[1],
-                        cancel: langStrings[2]
-                    },
-                    isLarge: true,
-                }, $(trigger));
-            }).catch(Notification.exception);
-        }).fail(Notification.exception);
+                    return ModalSaveCancel.create({
+                        body: Templates.render('local_integrity/statement_form', templateContext),
+                        title: langStrings[0],
+                        buttons: {
+                            save: langStrings[1],
+                            cancel: langStrings[2]
+                        },
+                        isLarge: true,
+                    }).then(function(modal) {
+                        modal.show();
+                    }).catch(Notification.exception);
+                }).catch(Notification.exception);
+            }).fail(Notification.exception);
+        });
     }
 }
 
