@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Hooks.
  *
  * @package     integritystmt_lti
  * @copyright   2021 Catalyst IT
@@ -25,8 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'integritystmt_lti';
-$plugin->release = '0.1.0';
-$plugin->version = 2024112200;
-$plugin->requires = 2024042200;
-$plugin->maturity = MATURITY_STABLE;
+$callbacks = [
+    [
+        'hook' => \core\hook\after_config::class,
+        'callback' => [\integritystmt_lti\hook_callbacks::class, 'after_config'],
+    ],
+];

@@ -27,6 +27,7 @@ use local_integrity\statement_factory;
 
 /**
  * Call back executed after config loaded.
+ * This is a legacy callback that is used for compatibility with older Moodle versions.
  */
 function integritystmt_lti_after_config() {
     global $SCRIPT, $USER;
