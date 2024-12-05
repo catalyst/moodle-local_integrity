@@ -55,4 +55,5 @@ $string['statement:save'] = 'Agree';
 $string['statement:cancel'] = 'Cancel';
 $string['statement:agree'] = 'I have read and agree to the above statement.';
 $string['statement:agreementrequired'] = 'You must agree to continue.';
-$string['subplugintype_integritystmt'] = 'Integrity statements';
+$string['subplugintype_integritystmt'] = 'Integrity statement';
+$string['subplugintype_integritystmt_plural'] = 'Integrity statements';
