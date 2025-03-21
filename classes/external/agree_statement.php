@@ -17,6 +17,7 @@
 namespace local_integrity\external;
 
 use context_system;
+use core\context;
 use core\exception\invalid_parameter_exception;
 use core_external\external_api;
 use core_external\external_function_parameters;
@@ -65,6 +66,9 @@ class agree_statement extends external_api {
             'userid' => $userid
         ]);
 
+        $context = context::instance_by_id($contextid);
+        self::validate_context($context);
+
         $statement = statement_factory::get_statement($params['name']);
 
         if (empty($statement)) {
@@ -72,9 +76,11 @@ class agree_statement extends external_api {
         }
 
         if (empty($userid)) {
+            // If submitting agreement for himself, don't need any capability checks.
             $userid = $USER->id;
         } else if ($userid != $USER->id) {
-            require_capability('local/integrity:agreestatements', context_system::instance());
+            // Otherwise require permission to agree on behalf of others.
+            require_capability('local/integrity:agreestatements', $context);
         }
 
         $statement->get_user_data()->add_context_id($contextid, $userid);

@@ -16,6 +16,7 @@
 
 namespace local_integrity\external;
 
+use context_user;
 use core\exception\invalid_parameter_exception;
 use core_external\external_api;
 use core_external\external_function_parameters;
@@ -49,9 +50,22 @@ class get_statement_notice extends external_api {
      * @return array
      */
     public static function execute(string $name): array {
-        $result = [];
+        global $USER;
+
+        // TODO: why not bring a context this all is happening? Maybe a new capabilities?
+        // Seems like it's all hardcoded for now to course module context, but do we really supposed to do it?
+        // See display_statement method for more details.
+        // We either need to pass context from JS or use $PAGE->context.
+
+        // Context validation.
+        $context = context_user::instance($USER->id);
+        self::validate_context($context);
+
         $params = self::validate_parameters(self::execute_parameters(), ['name' => $name]);
 
+        $result = [];
+
+        // Users don't require any extra capabilities to get statement text.
         $statement = statement_factory::get_statement($params['name']);
 
         if (empty($statement)) {
