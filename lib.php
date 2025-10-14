@@ -33,6 +33,10 @@ use local_integrity\settings;
  * @param \MoodleQuickForm $form Form instance.
  */
 function local_integrity_coursemodule_standard_elements(moodleform_mod $modform, MoodleQuickForm $form): void {
+    if (!local_integrity_is_enabled()) {
+        return;
+    }
+
     $cm = $modform->get_coursemodule();
     $modname = '';
 
@@ -60,6 +64,10 @@ function local_integrity_coursemodule_standard_elements(moodleform_mod $modform,
  * @return \stdClass Mutated module info data.
  */
 function local_integrity_coursemodule_edit_post_actions(stdClass $moduleinfo, stdClass $course): stdClass {
+    if (!local_integrity_is_enabled()) {
+        return $moduleinfo;
+    }
+
     if (!empty($moduleinfo->modulename)) {
         $statement = statement_factory::get_statement($moduleinfo->modulename);
         if (!empty($statement)) {
@@ -80,6 +88,10 @@ function local_integrity_coursemodule_edit_post_actions(stdClass $moduleinfo, st
  */
 function local_integrity_coursemodule_validation(moodleform_mod $modform, array $data): array {
     $errors = [];
+
+    if (!local_integrity_is_enabled()) {
+        return $errors;
+    }
 
     $cm = $modform->get_coursemodule();
     $modname = '';
@@ -121,9 +133,22 @@ function local_integrity_pre_course_module_delete($cm) {
 function local_integrity_extend_navigation(global_navigation $navigation) {
     global $PAGE;
 
+    if (!local_integrity_is_enabled()) {
+        return;
+    }
+
     foreach (statement_factory::get_statements() as $statement) {
         if ($statement->should_display($PAGE)) {
             $statement->display_statement();
         }
     }
+}
+
+/**
+ * Check if plugin functionality is enabled.
+ *
+ * @return bool
+ */
+function local_integrity_is_enabled(): bool {
+    return !empty(get_config('local_integrity', 'enabled'));
 }

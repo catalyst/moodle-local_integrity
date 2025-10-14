@@ -89,6 +89,9 @@ final class lib_test extends advanced_testcase {
         $PAGE->set_course($course);
 
         foreach (statement_factory::get_statements() as $name => $statement) {
+            // Make sure the plugin is enabled.
+            set_config('enabled', 1, 'local_integrity');
+
             if (!$this->has_data_generator($name)) {
                 continue;
             }
@@ -108,6 +111,13 @@ final class lib_test extends advanced_testcase {
 
             local_integrity_coursemodule_standard_elements($modform, $form);
             $this->assertTrue($form->elementExists('integrity_enabled'));
+
+            // Check when the plugin is disabled.
+            set_config('enabled', 0, 'local_integrity');
+            $form = new \MoodleQuickForm('test', 'post', '');
+            $modform = new $formclass($data, $cw->section, $cm, $course);
+            local_integrity_coursemodule_standard_elements($modform, $form);
+            $this->assertFalse($form->elementExists('integrity_enabled'));
         }
     }
 
@@ -149,6 +159,10 @@ final class lib_test extends advanced_testcase {
 
             local_integrity_coursemodule_standard_elements($modform, $form);
             $this->assertFalse($form->elementExists('integrity_enabled'));
+
+            set_config('enabled', 0, 'local_integrity');
+            local_integrity_coursemodule_standard_elements($modform, $form);
+            $this->assertFalse($form->elementExists('integrity_enabled'));
         }
     }
 
@@ -176,6 +190,17 @@ final class lib_test extends advanced_testcase {
             [$course, $cm] = get_course_and_cm_from_cmid($module->cmid);
             $PAGE->set_course($course);
             [$cm, $context, $module, $data, $cw] = get_moduleinfo_data($cm, $course);
+
+            // Make sure data is not saved when the plugin is disabled.
+            set_config('enabled', 0, 'local_integrity');
+
+            $data->integrity_enabled = 0;
+            local_integrity_coursemodule_edit_post_actions($data, $course);
+            $this->assertFalse(settings::get_record(['contextid' => $context->id, 'enabled' => 1]));
+            $this->assertFalse(settings::get_record(['contextid' => $context->id, 'enabled' => 0]));
+
+            // Make sure data is saved correctly when the plugin is enabled.
+            set_config('enabled', 1, 'local_integrity');
 
             $data->integrity_enabled = 0;
             local_integrity_coursemodule_edit_post_actions($data, $course);
@@ -216,7 +241,24 @@ final class lib_test extends advanced_testcase {
         course_delete_module($module1->cmid);
         $this->assertCount(1, settings::get_records());
 
+        // Data should be cleaned when the plugin is disabled.
+        set_config('enabled', 0, 'local_integrity');
         course_delete_module($module2->cmid);
         $this->assertCount(0, settings::get_records());
+    }
+
+    /**
+     * Test checking if plugin functionality is enabled.
+     * @covers \local_integrity_is_enabled
+     */
+    public function test_local_integrity_is_enabled(): void {
+        // Should be enabled by default.
+        $this->assertTrue(local_integrity_is_enabled());
+
+        set_config('enabled', 0, 'local_integrity');
+        $this->assertFalse(local_integrity_is_enabled());
+
+        set_config('enabled', 1, 'local_integrity');
+        $this->assertTrue(local_integrity_is_enabled());
     }
 }
