@@ -16,6 +16,7 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
 ## Features ##
                                                       
 * supports various Moodle activities;
+* can be enabled or disabled globally;
 * configurable notice message for each statement;
 * configurable default status for each of the statement (enabled or disabled by default);                           
 * capabilities to change a default state for each of the statements (integritystmt/PLUGIN_NAME:changedefault);

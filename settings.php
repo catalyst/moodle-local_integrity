@@ -37,6 +37,17 @@ if ($hassiteconfig && $ADMIN->locate('localplugins')) {
     $settings = new admin_settingpage('local_integrity_settings', get_string('settings'));
     $ADMIN->add('local_integrity', $settings);
 
+    $settings->add(new admin_setting_configselect(
+        'local_integrity/enabled',
+        get_string('settings:enabled', 'local_integrity'),
+        get_string('settings:enabled_description', 'local_integrity'),
+        1,
+        [
+            0 => get_string('no'),
+            1 => get_string('yes'),
+        ]
+    ));
+
     foreach (statement_factory::get_statements() as $statement) {
         $statement->add_settings($settings);
     }
