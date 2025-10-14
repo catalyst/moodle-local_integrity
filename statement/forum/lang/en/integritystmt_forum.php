@@ -26,6 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['forum:changedefault'] = 'Change activity setting for Academic integrity - Forum';
 $string['pluginname'] = 'Academic Integrity - Forum';
 $string['privacy:metadata'] = 'Academic Integrity - Forum does not store any personal data.';
-$string['forum:changedefault'] = 'Change activity setting for Academic integrity - Forum';

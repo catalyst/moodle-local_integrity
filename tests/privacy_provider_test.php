@@ -34,8 +34,7 @@ use context_module;
  *
  * @covers \local_integrity\privacy\provider;
  */
-class privacy_provider_test extends provider_testcase {
-
+final class privacy_provider_test extends provider_testcase {
     /**
      * @var object Moodle course object.
      */
@@ -86,7 +85,7 @@ class privacy_provider_test extends provider_testcase {
         $userdata->add_context_id(context_module::instance($module->cmid)->id, $USER->id);
 
         $this->module = $this->getDataGenerator()->create_module('assign', ['course' => $this->course]);
-        $this->user = $this->getDataGenerator()->create_user(array('username' => 'teacher'));
+        $this->user = $this->getDataGenerator()->create_user(['username' => 'teacher']);
         $role = $DB->get_record('role', ['shortname' => 'editingteacher'], '*', MUST_EXIST);
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, $role->id);
 
@@ -104,7 +103,7 @@ class privacy_provider_test extends provider_testcase {
     /**
      * Test that the module context for a user who last modified the module is retrieved.
      */
-    public function test_get_contexts_for_userid() {
+    public function test_get_contexts_for_userid(): void {
         $contexts = provider::get_contexts_for_userid($this->user->id);
         $contextids = $contexts->get_contextids();
         $this->assertEquals(context_module::instance($this->module->cmid)->id, reset($contextids));
@@ -113,7 +112,7 @@ class privacy_provider_test extends provider_testcase {
     /**
      * That that no module context is found for a user who has not modified any section settings.
      */
-    public function test_get_no_contexts_for_userid() {
+    public function test_get_no_contexts_for_userid(): void {
         $user = $this->getDataGenerator()->create_user();
         $contexts = provider::get_contexts_for_userid($user->id);
         $contextids = $contexts->get_contextids();
@@ -123,7 +122,7 @@ class privacy_provider_test extends provider_testcase {
     /**
      * Test that user data is exported in format expected.
      */
-    public function test_export_user_data() {
+    public function test_export_user_data(): void {
         $context = context_module::instance($this->module->cmid);
         $contextlist = provider::get_contexts_for_userid($this->user->id);
 
@@ -158,7 +157,7 @@ class privacy_provider_test extends provider_testcase {
     /**
      * Test that a userlist with course context is populated by usermodified user.
      */
-    public function test_get_users_in_context() {
+    public function test_get_users_in_context(): void {
         // Create empty userlist with course context.
         $userlist = new userlist(context_module::instance($this->module->cmid), 'local_integrity');
 
@@ -170,7 +169,7 @@ class privacy_provider_test extends provider_testcase {
     /**
      * Test that data is deleted for a list of users.
      */
-    public function test_delete_data_for_users() {
+    public function test_delete_data_for_users(): void {
         global $DB;
 
         $this->assertNotEmpty(settings::get_records(['usermodified' => $this->user->id]));
@@ -193,7 +192,7 @@ class privacy_provider_test extends provider_testcase {
     /**
      * Test that data is deleted for a list of contexts.
      */
-    public function test_delete_data_for_user() {
+    public function test_delete_data_for_user(): void {
         global $DB;
 
         $context = context_module::instance($this->module->cmid);
@@ -218,7 +217,7 @@ class privacy_provider_test extends provider_testcase {
     /**
      * Test that data is deleted for all users a single context.
      */
-    public function test_delete_data_for_all_users_in_context() {
+    public function test_delete_data_for_all_users_in_context(): void {
         global $DB;
 
         $context = context_module::instance($this->module->cmid);

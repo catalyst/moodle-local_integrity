@@ -14,15 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Base class for statements.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_integrity;
 
 use stdClass;
@@ -36,8 +27,6 @@ use admin_setting_configselect;
 use context_course;
 use context_module;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Base class for statements.
  *
@@ -47,7 +36,6 @@ defined('MOODLE_INTERNAL') || die;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class statement_base {
-
     /**
      * Integrity field name in an activity form.
      */
@@ -258,7 +246,7 @@ abstract class statement_base {
                 $PAGE->context->id,
                 $this->get_name(),
                 $this->get_decline_url(),
-                $this->get_agree_url()
+                $this->get_agree_url(),
             ]);
         }
     }
@@ -308,36 +296,34 @@ abstract class statement_base {
      */
     final public function add_settings(admin_settingpage $settings) {
         $settings->add(new admin_setting_heading(
-                "{$this->get_plugin_name()}/header",
-                get_string('pluginname', $this->get_plugin_name()),
-                '')
-        );
+            "{$this->get_plugin_name()}/header",
+            get_string('pluginname', $this->get_plugin_name()),
+            ''
+        ));
 
         $settings->add(new admin_setting_configselect(
-                "{$this->get_plugin_name()}/default_enabled",
-                get_string('settings:default_enabled', 'local_integrity'),
-                get_string('settings:default_enabled_description', 'local_integrity'),
-                0,
-                [
+            "{$this->get_plugin_name()}/default_enabled",
+            get_string('settings:default_enabled', 'local_integrity'),
+            get_string('settings:default_enabled_description', 'local_integrity'),
+            0,
+            [
                     0 => get_string('no'),
                     1 => get_string('yes'),
                 ]
-            )
-        );
+        ));
 
         $settings->add(new admin_setting_confightmleditor(
-                "{$this->get_plugin_name()}/notice",
-                get_string('settings:notice', 'local_integrity'),
-                get_string('settings:notice_description', 'local_integrity'),
-                '')
-        );
+            "{$this->get_plugin_name()}/notice",
+            get_string('settings:notice', 'local_integrity'),
+            get_string('settings:notice_description', 'local_integrity'),
+            ''
+        ));
 
         $settings->add(new \admin_setting_description(
-                "{$this->get_plugin_name()}/lastupdatedate",
-                '',
-                get_string('settings:lastupdatedated', 'local_integrity', $this->get_setting_last_updated_date('notice'))
-            )
-        );
+            "{$this->get_plugin_name()}/lastupdatedate",
+            '',
+            get_string('settings:lastupdatedated', 'local_integrity', $this->get_setting_last_updated_date('notice'))
+        ));
 
         $this->add_extra_settings($settings);
     }
@@ -348,7 +334,6 @@ abstract class statement_base {
      * @param \admin_settingpage $settings
      */
     protected function add_extra_settings(admin_settingpage $settings) {
-
     }
 
     /**
@@ -362,7 +347,7 @@ abstract class statement_base {
 
         $timemodified = $DB->get_field_sql('SELECT max(timemodified) FROM {config_log} WHERE plugin = :plugin AND name = :name', [
             'plugin' => $this->get_plugin_name(),
-            'name' => $name
+            'name' => $name,
         ]);
 
         if (!empty($timemodified)) {
@@ -439,5 +424,4 @@ abstract class statement_base {
     public function coursemodule_validation(moodleform_mod $modform, array $data): array {
         return [];
     }
-
 }

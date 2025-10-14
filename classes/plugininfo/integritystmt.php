@@ -14,21 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Sub plugin class.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_integrity\plugininfo;
 
 use core\plugininfo\base;
 use core_plugin_manager;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Sub plugin class for.
@@ -39,7 +28,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class integritystmt extends base {
-
     /**
      * Gets all enabled plugins.
      *
@@ -54,5 +42,4 @@ class integritystmt extends base {
 
         return $plugins;
     }
-
 }

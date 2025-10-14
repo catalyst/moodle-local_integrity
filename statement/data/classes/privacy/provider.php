@@ -14,20 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Privacy Subsystem implementation.
- *
- * @package     integritystmt_data
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace integritystmt_data\privacy;
 
 use core_privacy\local\metadata\null_provider;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Privacy Subsystem implementation.
@@ -44,8 +33,7 @@ class provider implements null_provider {
      *
      * @return string
      */
-    public static function get_reason() : string {
+    public static function get_reason(): string {
         return 'privacy:metadata';
     }
-
 }

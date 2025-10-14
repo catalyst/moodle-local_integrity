@@ -28,7 +28,7 @@ use advanced_testcase;
  *
  * @covers \local_integrity\settings;
  */
-class settings_test extends advanced_testcase {
+final class settings_test extends advanced_testcase {
     /**
      * Set up tests.
      */
@@ -40,7 +40,7 @@ class settings_test extends advanced_testcase {
     /**
      * Test get settings functionality.
      */
-    public function test_get_settings() {
+    public function test_get_settings(): void {
         $contextid = 1;
         $plugin = 'test';
 
@@ -70,7 +70,7 @@ class settings_test extends advanced_testcase {
     /**
      * Test that data gets cached.
      */
-    public function test_data_cached() {
+    public function test_data_cached(): void {
         global $DB;
 
         $cache = \cache::make('local_integrity', 'settings');
@@ -98,5 +98,4 @@ class settings_test extends advanced_testcase {
         $settings->delete();
         $this->assertFalse($cache->get($cachekey));
     }
-
 }

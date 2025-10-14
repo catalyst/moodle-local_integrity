@@ -26,6 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['data:changedefault'] = 'Change activity setting for Academic integrity - Database';
 $string['pluginname'] = 'Academic Integrity - Database';
 $string['privacy:metadata'] = 'Academic Integrity - Database does not store any personal data.';
-$string['data:changedefault'] = 'Change activity setting for Academic integrity - Database';

@@ -14,18 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Restore implementation.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-defined('MOODLE_INTERNAL') || die();
-
-use \local_integrity\settings;
+use local_integrity\settings;
 
 /**
  * Restore implementation.
@@ -36,7 +25,6 @@ use \local_integrity\settings;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_local_integrity_plugin extends restore_local_plugin {
-
     /**
      * Returns the paths to be handled by the plugin at activity level.
      */
@@ -64,5 +52,4 @@ class restore_local_integrity_plugin extends restore_local_plugin {
         $data->usermodified = $this->get_mappingid('user', $data->usermodified);
         $DB->insert_record(settings::TABLE, $data);
     }
-
 }

@@ -26,8 +26,6 @@
 use local_integrity\statement_factory;
 use local_integrity\settings;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Extend course module form.
  *

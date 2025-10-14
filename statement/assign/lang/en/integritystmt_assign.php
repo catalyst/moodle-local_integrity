@@ -26,6 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['assign:changedefault'] = 'Change activity setting for Academic integrity - Assignment';
 $string['pluginname'] = 'Academic Integrity - Assignment';
 $string['privacy:metadata'] = 'Academic Integrity - Assignment does not store any personal data.';
-$string['assign:changedefault'] = 'Change activity setting for Academic integrity - Assignment';

@@ -28,8 +28,7 @@ use advanced_testcase;
  *
  * @covers \local_integrity\statement_base
  */
-class statement_base_test extends advanced_testcase {
-
+final class statement_base_test extends advanced_testcase {
     /**
      * Returns a test instance of the statement class.
      *
@@ -48,7 +47,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test get name.
      */
-    public function test_get_name() {
+    public function test_get_name(): void {
         $statement = $this->get_test_statement('test');
         $this->assertSame('test', $statement->get_name());
     }
@@ -56,7 +55,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test get plugin name.
      */
-    public function test_get_plugin_name() {
+    public function test_get_plugin_name(): void {
         $statement = $this->get_test_statement('test');
         $this->assertSame('integritystmt_test', $statement->get_plugin_name());
     }
@@ -64,7 +63,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test get notice.
      */
-    public function test_get_notice() {
+    public function test_get_notice(): void {
         $this->resetAfterTest();
         $statement = $this->get_test_statement('test');
 
@@ -77,7 +76,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test get get_default_enabled.
      */
-    public function test_get_default_enabled() {
+    public function test_get_default_enabled(): void {
         $this->resetAfterTest();
         $statement = $this->get_test_statement('test');
 
@@ -93,7 +92,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test decline URL.
      */
-    public function test_get_decline_url() {
+    public function test_get_decline_url(): void {
         global $COURSE;
         $this->resetAfterTest();
 
@@ -117,7 +116,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test get getting last updated date for settings.
      */
-    public function test_get_setting_last_updated_date() {
+    public function test_get_setting_last_updated_date(): void {
         global $DB;
 
         $this->resetAfterTest();
@@ -145,7 +144,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test checking for changing default value.
      */
-    public function test_can_change_default() {
+    public function test_can_change_default(): void {
         $this->resetAfterTest();
 
         $course = $this->getDataGenerator()->create_course();
@@ -170,7 +169,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test we can check if the statement was agreed by a user.
      */
-    public function test_is_agreed_by_user() {
+    public function test_is_agreed_by_user(): void {
         $this->resetAfterTest();
 
         $context = \context_system::instance();
@@ -193,7 +192,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test we can check if the statement can be bypassed.
      */
-    public function test_can_bypass() {
+    public function test_can_bypass(): void {
         $this->resetAfterTest();
 
         $context = \context_system::instance();
@@ -230,13 +229,12 @@ class statement_base_test extends advanced_testcase {
         $settings->set('plugin', 'integritystmt_test');
         $settings->set('enabled', 1);
         $settings->save();
-
     }
 
     /**
      * Test on empty user.
      */
-    public function test_should_display_empty_user() {
+    public function test_should_display_empty_user(): void {
         global $PAGE;
 
         $this->set_up_data_for_should_display();
@@ -253,7 +251,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test on page without URL set.
      */
-    public function test_should_display_page_without_url() {
+    public function test_should_display_page_without_url(): void {
         global $PAGE;
 
         $this->set_up_data_for_should_display();
@@ -268,7 +266,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test if URL doesn't match.
      */
-    public function test_should_display_page_not_matching_url() {
+    public function test_should_display_page_not_matching_url(): void {
         global $PAGE;
 
         $this->set_up_data_for_should_display();
@@ -283,7 +281,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test if the statement is disabled for the context.
      */
-    public function test_should_display_disabled_in_context() {
+    public function test_should_display_disabled_in_context(): void {
         global $PAGE;
 
         $this->set_up_data_for_should_display();
@@ -302,7 +300,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test when user already agreed.
      */
-    public function test_should_display_user_already_agreed() {
+    public function test_should_display_user_already_agreed(): void {
         global $PAGE;
 
         $this->set_up_data_for_should_display();
@@ -322,7 +320,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test when user can bypass.
      */
-    public function test_should_display_user_that_can_bypass() {
+    public function test_should_display_user_that_can_bypass(): void {
         global $PAGE;
 
         $this->set_up_data_for_should_display();
@@ -367,8 +365,7 @@ class statement_base_test extends advanced_testcase {
     /**
      * Test get agree url.
      */
-    public function test_get_agree_url() {
+    public function test_get_agree_url(): void {
         $this->assertSame('', $this->get_test_statement('test')->get_agree_url());
     }
-
 }

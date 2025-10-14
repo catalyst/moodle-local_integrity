@@ -14,6 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace integritystmt_lti;
+
+use advanced_testcase;
+
 /**
  * Tests for statement class.
  *
@@ -21,28 +25,15 @@
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-namespace integritystmt_lti\tests;
-
-use advanced_testcase;
-use integritystmt_lti\statement;
-
-/**
- * Tests for statement class.
- *
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * @group local_integrity
+ * @covers \integritystmt_lti\statement;
  */
-class statement_test extends advanced_testcase {
-
+final class statement_test extends advanced_testcase {
     /**
      * Test a list of urls to display the statement at.
      */
-    public function test_get_display_urls() {
+    public function test_get_display_urls(): void {
         $statement = new statement('lti');
         $expected = [
             '/mod/lti/index.php',
@@ -56,7 +47,7 @@ class statement_test extends advanced_testcase {
     /**
      * Test getting agree url without set id parameter.
      */
-    public function test_get_agree_url_without_id() {
+    public function test_get_agree_url_without_id(): void {
         $statement = new statement('lti');
 
         $this->expectException(\moodle_exception::class);
@@ -68,7 +59,7 @@ class statement_test extends advanced_testcase {
     /**
      * Test getting agree url without set page having url set.
      */
-    public function test_get_agree_url_without_page_having_url_set() {
+    public function test_get_agree_url_without_page_having_url_set(): void {
         $_GET['id'] = 1;
         $statement = new statement('lti');
 
@@ -78,7 +69,7 @@ class statement_test extends advanced_testcase {
     /**
      * Test getting agree url with set page having incorrect url set.
      */
-    public function test_get_agree_url_with_page_url_not_matching_launch_url() {
+    public function test_get_agree_url_with_page_url_not_matching_launch_url(): void {
         global $PAGE;
 
         $_GET['id'] = 1;
@@ -91,7 +82,7 @@ class statement_test extends advanced_testcase {
     /**
      * Test getting agree url with triggerview set to 1.
      */
-    public function test_get_agree_url_with_triggerview_set_to_one() {
+    public function test_get_agree_url_with_triggerview_set_to_one(): void {
         global $PAGE;
 
         $_GET['id'] = 11;
@@ -106,7 +97,7 @@ class statement_test extends advanced_testcase {
     /**
      * Test getting agree url with triggerview set to 0.
      */
-    public function test_get_agree_url_with_triggerview_set_to_nil() {
+    public function test_get_agree_url_with_triggerview_set_to_nil(): void {
         global $PAGE;
 
         $_GET['id'] = 55;
@@ -121,7 +112,7 @@ class statement_test extends advanced_testcase {
     /**
      * Test getting agree url without triggerview set.
      */
-    public function test_get_agree_url_without_triggerview_set() {
+    public function test_get_agree_url_without_triggerview_set(): void {
         global $PAGE;
 
         $_GET['id'] = 777;
@@ -131,5 +122,4 @@ class statement_test extends advanced_testcase {
 
         $this->assertSame('https://www.example.com/moodle/mod/lti/launch.php?id=777&triggerview=1', $statement->get_agree_url());
     }
-
 }

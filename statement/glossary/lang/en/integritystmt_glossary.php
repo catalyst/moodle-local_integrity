@@ -26,6 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['glossary:changedefault'] = 'Change activity setting for Academic integrity - Glossary';
 $string['pluginname'] = 'Academic Integrity - Glossary';
 $string['privacy:metadata'] = 'Academic Integrity - Glossary does not store any personal data.';
-$string['glossary:changedefault'] = 'Change activity setting for Academic integrity - Glossary';

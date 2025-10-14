@@ -29,8 +29,8 @@ use local_integrity\statement_factory;
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig && $ADMIN->locate('localplugins')) {
-
-    $ADMIN->add('localplugins',
+    $ADMIN->add(
+        'localplugins',
         new admin_category('local_integrity', get_string('pluginname', 'local_integrity'))
     );
 

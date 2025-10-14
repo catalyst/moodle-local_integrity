@@ -28,8 +28,7 @@ use advanced_testcase;
  *
  * @covers \local_integrity\statement_factory;
  */
-class statement_factory_test extends advanced_testcase {
-
+final class statement_factory_test extends advanced_testcase {
     /**
      * A list of known statements.
      * @var string[]
@@ -62,7 +61,7 @@ class statement_factory_test extends advanced_testcase {
     /**
      * Test get statements.
      */
-    public function test_get_statements() {
+    public function test_get_statements(): void {
         $actual = statement_factory::get_statements();
 
         $this->assertCount(14, statement_factory::get_statements());
@@ -77,14 +76,14 @@ class statement_factory_test extends advanced_testcase {
     /**
      * Test getting invalid statement.
      */
-    public function test_get_invalid_statement() {
+    public function test_get_invalid_statement(): void {
         $this->assertNull(statement_factory::get_statement('invalid'));
     }
 
     /**
      * Test getting valid statement.
      */
-    public function test_getting_valid_statement() {
+    public function test_getting_valid_statement(): void {
         foreach ($this->knownstatements as $name) {
             $actual = statement_factory::get_statement($name);
             $this->assertInstanceOf('\\integritystmt_' . $name . '\\statement', $actual);
@@ -94,7 +93,7 @@ class statement_factory_test extends advanced_testcase {
     /**
      * Test that a list of enabled plugins is cached.
      */
-    public function test_get_enabled_plugins_cached() {
+    public function test_get_enabled_plugins_cached(): void {
         global $CFG;
 
         $cache = \cache::make('local_integrity', 'plugins');
@@ -105,7 +104,6 @@ class statement_factory_test extends advanced_testcase {
             $expected[] = $name;
         }
 
-        $this->assertSame($expected,  $cache->get($CFG->allversionshash));
+        $this->assertSame($expected, $cache->get($CFG->allversionshash));
     }
-
 }

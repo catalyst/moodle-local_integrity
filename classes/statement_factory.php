@@ -14,20 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Statement factory.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_integrity;
 
 use local_integrity\plugininfo\integritystmt;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Statement factory.
@@ -38,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class statement_factory {
-
     /**
      * Get list of all statement instances.
      *
@@ -101,5 +89,4 @@ class statement_factory {
 
         return new $class($name);
     }
-
 }

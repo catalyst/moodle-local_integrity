@@ -26,6 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['h5pactivity:changedefault'] = 'Change activity setting for Academic integrity - H5P (mod_h5pactivity)';
 $string['pluginname'] = 'Academic Integrity - H5P (mod_h5pactivity)';
 $string['privacy:metadata'] = 'Academic Integrity - H5P (mod_h5pactivity) does not store any personal data.';
-$string['h5pactivity:changedefault'] = 'Change activity setting for Academic integrity - H5P (mod_h5pactivity)';
