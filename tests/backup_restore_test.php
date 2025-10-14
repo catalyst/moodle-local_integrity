@@ -34,10 +34,10 @@ use context_module;
  * @covers \backup_local_integrity_plugin
  * @covers \restore_local_integrity_plugin
  */
-class backup_restore_test extends advanced_testcase {
+final class backup_restore_test extends advanced_testcase {
     /**
      * Course instance for testing.
-     * @var
+     * @var \stdClass
      */
     protected $course;
 
@@ -63,8 +63,14 @@ class backup_restore_test extends advanced_testcase {
 
         $backupid = 'test-local-integrity-backup';
 
-        $bc = new backup_controller(backup::TYPE_1COURSE, $this->course->id, backup::FORMAT_MOODLE,
-            backup::INTERACTIVE_NO, backup::MODE_GENERAL, $USER->id);
+        $bc = new backup_controller(
+            backup::TYPE_1COURSE,
+            $this->course->id,
+            backup::FORMAT_MOODLE,
+            backup::INTERACTIVE_NO,
+            backup::MODE_GENERAL,
+            $USER->id
+        );
         $bc->execute_plan();
 
         $results = $bc->get_results();
@@ -88,9 +94,14 @@ class backup_restore_test extends advanced_testcase {
 
         $newcourseid = restore_dbops::create_new_course('Test', 'test', $this->course->category);
 
-        $rc = new restore_controller($backupid, $newcourseid,
-            backup::INTERACTIVE_NO, backup::MODE_GENERAL, $USER->id,
-            backup::TARGET_NEW_COURSE);
+        $rc = new restore_controller(
+            $backupid,
+            $newcourseid,
+            backup::INTERACTIVE_NO,
+            backup::MODE_GENERAL,
+            $USER->id,
+            backup::TARGET_NEW_COURSE
+        );
 
         $this->assertTrue($rc->execute_precheck());
         $rc->execute_plan();
@@ -102,7 +113,7 @@ class backup_restore_test extends advanced_testcase {
     /**
      * Test duplicating an activity.
      */
-    public function test_duplicate_activity() {
+    public function test_duplicate_activity(): void {
         $this->setAdminUser();
 
         $plugin = 'test';
@@ -132,7 +143,7 @@ class backup_restore_test extends advanced_testcase {
         $this->assertEquals($settings->get('enabled'), $actual->get('enabled'));
     }
 
-    public function test_backup_restore_course() {
+    public function test_backup_restore_course(): void {
         $this->setAdminUser();
 
         $this->course = $this->getDataGenerator()->create_course();

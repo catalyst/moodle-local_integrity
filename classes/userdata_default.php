@@ -14,18 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Class containing user data.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_integrity;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class containing user data.
@@ -36,7 +25,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class userdata_default implements userdata_interface {
-
     /**
      * Table name.
      */
@@ -190,5 +178,4 @@ class userdata_default implements userdata_interface {
         $this->cache->delete($this->build_cache_key($userid));
         $this->cache->set($this->build_cache_key($userid), $this->get_user_data($userid));
     }
-
 }

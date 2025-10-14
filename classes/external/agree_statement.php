@@ -32,7 +32,6 @@ use local_integrity\statement_factory;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class agree_statement extends external_api {
-
     /**
      * Define the parameters for agree_statement webservice.
      *
@@ -62,7 +61,7 @@ class agree_statement extends external_api {
         $params = self::validate_parameters(self::execute_parameters(), [
             'name' => $name,
             'contextid' => $contextid,
-            'userid' => $userid
+            'userid' => $userid,
         ]);
 
         $statement = statement_factory::get_statement($params['name']);

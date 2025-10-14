@@ -34,9 +34,6 @@ use core_privacy\local\request\transform;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use local_integrity\settings;
-use local_integrity\userdata_default;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Privacy Subsystem implementation for local_integrity.
@@ -47,10 +44,9 @@ defined('MOODLE_INTERNAL') || die();
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-    \core_privacy\local\metadata\provider,
     \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider {
-
     /**
      * Retrieve the user metadata stored by plugin.
      *
@@ -92,7 +88,7 @@ class provider implements
         $contextlist = new contextlist();
 
         $params = [
-            'userid' => $userid
+            'userid' => $userid,
         ];
 
         $sql = "SELECT contextid
@@ -122,7 +118,7 @@ class provider implements
             return;
         }
 
-        list($insql, $params) = $DB->get_in_or_equal($contextids, SQL_PARAMS_NAMED);
+        [$insql, $params] = $DB->get_in_or_equal($contextids, SQL_PARAMS_NAMED);
         $params['usermodified'] = $contextlist->get_user()->id;
 
         $sql = "SELECT *
@@ -138,7 +134,7 @@ class provider implements
             $subcontext = [
                 get_string('pluginname', 'local_integrity'),
                 settings::TABLE,
-                $index
+                $index,
             ];
 
             $data = (object) [
@@ -146,7 +142,7 @@ class provider implements
                 'enabled' => $setting->enabled,
                 'usermodified' => $setting->usermodified,
                 'timecreated' => transform::datetime($setting->timecreated),
-                'timemodified' => transform::datetime($setting->timemodified)
+                'timemodified' => transform::datetime($setting->timemodified),
             ];
 
             $context = \context::instance_by_id($setting->contextid);
@@ -162,7 +158,7 @@ class provider implements
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
 
-        list($insql, $params) = $DB->get_in_or_equal($context->id, SQL_PARAMS_NAMED);
+        [$insql, $params] = $DB->get_in_or_equal($context->id, SQL_PARAMS_NAMED);
 
         // We don't want to delete records. Just anonymise the users.
         $DB->set_field_select('local_integrity_settings', 'usermodified', 0, "contextid $insql", $params);
@@ -183,14 +179,13 @@ class provider implements
 
         foreach ($contextlist->get_contexts() as $context) {
             $contextids[] = $context->id;
-
         }
 
         if (empty($contextids)) {
             return;
         }
 
-        list($insql, $params) = $DB->get_in_or_equal($contextids, SQL_PARAMS_NAMED);
+        [$insql, $params] = $DB->get_in_or_equal($contextids, SQL_PARAMS_NAMED);
         $params['usermodified'] = $contextlist->get_user()->id;
 
         // We don't want to delete records. Just anonymise the users.
@@ -212,7 +207,7 @@ class provider implements
                  WHERE contextid = :contextid";
 
         $params = [
-            'contextid' => $context->id
+            'contextid' => $context->id,
         ];
 
         $userlist->add_from_sql('userid', $sql, $params);
@@ -227,7 +222,7 @@ class provider implements
         global $DB;
 
         $userids = $userlist->get_userids();
-        list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+        [$insql, $inparams] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
 
         // We don't want to delete records. Just anonymise the users.
         $DB->set_field_select('local_integrity_settings', 'usermodified', 0, "usermodified {$insql}", $inparams);

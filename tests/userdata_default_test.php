@@ -28,8 +28,7 @@ use advanced_testcase;
  *
  * @covers \local_integrity\userdata_default
  */
-class userdata_default_test extends advanced_testcase {
-
+final class userdata_default_test extends advanced_testcase {
     /**
      * Set up tests.
      */
@@ -41,7 +40,7 @@ class userdata_default_test extends advanced_testcase {
     /**
      * Test empty data.
      */
-    public function test_empty_data() {
+    public function test_empty_data(): void {
         $user = $this->getDataGenerator()->create_user();
 
         $userdata = new userdata_default('test');
@@ -54,7 +53,7 @@ class userdata_default_test extends advanced_testcase {
     /**
      * Test can add and delete.
      */
-    public function test_can_add_and_delete() {
+    public function test_can_add_and_delete(): void {
         $user = $this->getDataGenerator()->create_user();
 
         $userdata = new userdata_default('test');
@@ -100,7 +99,7 @@ class userdata_default_test extends advanced_testcase {
     /**
      * Test can't add more than once.
      */
-    public function test_can_not_add_more_than_one_time() {
+    public function test_can_not_add_more_than_one_time(): void {
         $user = $this->getDataGenerator()->create_user();
 
         $userdata = new userdata_default('test');
@@ -118,7 +117,7 @@ class userdata_default_test extends advanced_testcase {
     /**
      * Test that data gets cached.
      */
-    public function test_data_cached() {
+    public function test_data_cached(): void {
         global $DB;
 
         $cache = \cache::make('local_integrity', 'userdata');
@@ -170,5 +169,4 @@ class userdata_default_test extends advanced_testcase {
         $userdata->remove_context_id(51, $user->id);
         $this->assertEquals(null, $cache->get('test_' . $user->id));
     }
-
 }

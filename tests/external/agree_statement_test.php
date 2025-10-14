@@ -37,9 +37,10 @@ use local_integrity\statement_factory;
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @covers \local_integrity\external\agree_statement
  */
-class agree_statement_test extends advanced_testcase {
-
+final class agree_statement_test extends advanced_testcase {
     /**
      * Set up tests.
      */
@@ -51,7 +52,7 @@ class agree_statement_test extends advanced_testcase {
     /**
      * Test agreeing statement with incorrect name.
      */
-    public function test_agree_statement_for_incorrect_statement_name() {
+    public function test_agree_statement_for_incorrect_statement_name(): void {
         $context = \context_system::instance();
 
         $this->setAdminUser();
@@ -71,7 +72,7 @@ class agree_statement_test extends advanced_testcase {
     /**
      * Test agreeing statement with correct name.
      */
-    public function test_agree_statement_for_correct_statement_name() {
+    public function test_agree_statement_for_correct_statement_name(): void {
         global $USER;
 
         $context = \context_system::instance();
@@ -92,7 +93,7 @@ class agree_statement_test extends advanced_testcase {
     /**
      * Test agreeing statement on behalf of others.
      */
-    public function test_agree_statement_on_behalf_of_others() {
+    public function test_agree_statement_on_behalf_of_others(): void {
         $context = \context_system::instance();
 
         $wsuser = $this->getDataGenerator()->create_user();

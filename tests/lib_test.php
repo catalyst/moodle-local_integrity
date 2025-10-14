@@ -27,8 +27,7 @@ use core_component;
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class lib_test extends advanced_testcase {
-
+final class lib_test extends advanced_testcase {
     /**
      * Set up tests.
      */
@@ -45,7 +44,7 @@ class lib_test extends advanced_testcase {
      * @return bool
      */
     protected function has_data_generator(string $name): bool {
-        $dir = core_component::get_component_directory('mod_'. $name);
+        $dir = core_component::get_component_directory('mod_' . $name);
         $lib = $dir . '/tests/generator/lib.php';
 
         if (!$dir || !is_readable($lib)) {
@@ -81,7 +80,7 @@ class lib_test extends advanced_testcase {
      * Test modifying an activity form standard elements.
      * @covers \local_integrity_coursemodule_standard_elements
      */
-    public function test_coursemodule_standard_elements() {
+    public function test_coursemodule_standard_elements(): void {
         global $PAGE;
 
         $this->setAdminUser();
@@ -100,7 +99,7 @@ class lib_test extends advanced_testcase {
 
             $module = $this->getDataGenerator()->create_module($name, ['course' => $course->id]);
             [$course, $cm] = get_course_and_cm_from_cmid($module->cmid);
-            list($cm, $context, $module, $data, $cw) = get_moduleinfo_data($cm, $course);
+            [$cm, $context, $module, $data, $cw] = get_moduleinfo_data($cm, $course);
 
             $form = new \MoodleQuickForm('test', 'post', '');
             $modform = new $formclass($data, $cw->section, $cm, $course);
@@ -116,7 +115,7 @@ class lib_test extends advanced_testcase {
      * Test modifying an activity form standard elements if no mod name provided.
      * @covers \local_integrity_coursemodule_standard_elements
      */
-    public function test_coursemodule_standard_elements_no_modname() {
+    public function test_coursemodule_standard_elements_no_modname(): void {
         global $PAGE;
 
         $this->setAdminUser();
@@ -157,7 +156,7 @@ class lib_test extends advanced_testcase {
      * Test submission of an activity form.
      * @covers \local_integrity_coursemodule_edit_post_actions
      */
-    public function test_coursemodule_edit_post_actions() {
+    public function test_coursemodule_edit_post_actions(): void {
         global $PAGE;
 
         $this->setAdminUser();
@@ -176,7 +175,7 @@ class lib_test extends advanced_testcase {
 
             [$course, $cm] = get_course_and_cm_from_cmid($module->cmid);
             $PAGE->set_course($course);
-            list($cm, $context, $module, $data, $cw) = get_moduleinfo_data($cm, $course);
+            [$cm, $context, $module, $data, $cw] = get_moduleinfo_data($cm, $course);
 
             $data->integrity_enabled = 0;
             local_integrity_coursemodule_edit_post_actions($data, $course);
@@ -194,7 +193,7 @@ class lib_test extends advanced_testcase {
      * Check that our hook is called when an activity is deleted.
      * @covers \local_integrity_pre_course_module_delete
      */
-    public function test_pre_course_module_delete_hook() {
+    public function test_pre_course_module_delete_hook(): void {
         $this->assertCount(0, settings::get_records());
 
         $course = $this->getDataGenerator()->create_course();
@@ -220,5 +219,4 @@ class lib_test extends advanced_testcase {
         course_delete_module($module2->cmid);
         $this->assertCount(0, settings::get_records());
     }
-
 }

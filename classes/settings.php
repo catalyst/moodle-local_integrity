@@ -14,20 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Class containing settings for activities.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_integrity;
 
 use core\persistent;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class containing settings for activities.
@@ -38,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class settings extends persistent {
-
     /**
      * Table name.
      */
@@ -154,5 +142,4 @@ class settings extends persistent {
 
         return $settings;
     }
-
 }

@@ -14,6 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace integritystmt_hsuforum;
+
+use advanced_testcase;
+
 /**
  * Tests for statement class.
  *
@@ -21,30 +25,15 @@
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-namespace integritystmt_hsuforum\tests;
-
-use advanced_testcase;
-use integritystmt_hsuforum\statement;
-
-defined('MOODLE_INTERNAL') || die();
-
-/**
- * Tests for statement class.
- *
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * @group local_integrity
+ * @covers \integritystmt_hsuforum\statement
  */
-class statement_test extends advanced_testcase {
-
+final class statement_test extends advanced_testcase {
     /**
      * Test a list of urls to display the statement at.
      */
-    public function test_get_display_urls() {
+    public function test_get_display_urls(): void {
         $statement = new statement('hsuforum');
         $expected = [
             '/mod/hsuforum/index.php',
@@ -56,5 +45,4 @@ class statement_test extends advanced_testcase {
 
         $this->assertSame($expected, $statement->get_display_urls());
     }
-
 }

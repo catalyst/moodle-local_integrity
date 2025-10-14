@@ -14,20 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Glossary statement class.
- *
- * @package     integritystmt_glossary
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace integritystmt_glossary;
 
 use local_integrity\statement_base;
-
-defined('MOODLE_INTERNAL') || die;
 
 /**
  * Glossary statement class.
@@ -38,7 +27,6 @@ defined('MOODLE_INTERNAL') || die;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class statement extends statement_base {
-
     /**
      * Get a list of URL to fire off the statement on.
      *
@@ -54,5 +42,4 @@ class statement extends statement_base {
             '/mod/glossary/deleteentry.php',
         ];
     }
-
 }

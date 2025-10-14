@@ -35,7 +35,7 @@ require_once($CFG->libdir . '/clilib.php');
         'cmids' => false,
         'userids' => false,
         'plugins' => false,
-        'help' => false
+        'help' => false,
     ],
     [
         'a' => 'all',
@@ -43,7 +43,7 @@ require_once($CFG->libdir . '/clilib.php');
         'm' => 'cmids',
         'u' => 'userids',
         'p' => 'plugins',
-        'h' => 'help'
+        'h' => 'help',
     ]
 );
 
@@ -82,7 +82,7 @@ if ($options['all']) {
 } else if (!empty($options['courseids'])) {
     $courseids = explode(',', $options['courseids']);
 
-    array_walk($courseids, function($courseid) {
+    array_walk($courseids, function ($courseid) {
         return trim($courseid);
     });
 
@@ -91,7 +91,7 @@ if ($options['all']) {
         if (!empty($coursecontext)) {
             $children = $coursecontext->get_child_contexts();
             if (!empty($children)) {
-                list($insql, $params) = $DB->get_in_or_equal(array_keys($children));
+                [$insql, $params] = $DB->get_in_or_equal(array_keys($children));
                 $DB->delete_records_select(\local_integrity\userdata_default::TABLE, "contextid $insql", $params);
             }
         }
@@ -106,11 +106,11 @@ if ($options['all']) {
     }
 } else if (!empty($options['userids'])) {
     $userids = explode(',', $options['userids']);
-    list($insql, $params) = $DB->get_in_or_equal($userids);
+    [$insql, $params] = $DB->get_in_or_equal($userids);
     $DB->delete_records_select(\local_integrity\userdata_default::TABLE, "userid $insql", $params);
 } else if (!empty($options['plugins'])) {
     $plugins = explode(',', $options['plugins']);
-    list($insql, $params) = $DB->get_in_or_equal($plugins);
+    [$insql, $params] = $DB->get_in_or_equal($plugins);
     $DB->delete_records_select(\local_integrity\userdata_default::TABLE, "plugin $insql", $params);
 } else {
     cli_writeln("Command must include one option of 'all', 'courseids', 'cmids' or 'userids'.");

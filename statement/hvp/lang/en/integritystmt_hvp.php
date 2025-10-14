@@ -26,6 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['hvp:changedefault'] = 'Change activity setting for Academic integrity - Interactive Content (mod_hvp)';
 $string['pluginname'] = 'Academic Integrity - Interactive Content (mod_hvp)';
 $string['privacy:metadata'] = 'Academic Integrity - Interactive Content (mod_hvp) does not store any personal data.';
-$string['hvp:changedefault'] = 'Change activity setting for Academic integrity - Interactive Content (mod_hvp)';

@@ -14,18 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Backup implementation.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_integrity\settings;
-
-defined('MOODLE_INTERNAL') || die;
 
 /**
  * Backup implementation.
@@ -36,7 +25,6 @@ defined('MOODLE_INTERNAL') || die;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_local_integrity_plugin extends backup_local_plugin {
-
     /**
      * Returns the information to be attached to a module instance
      */
@@ -61,5 +49,4 @@ class backup_local_integrity_plugin extends backup_local_plugin {
 
         return $plugin;
     }
-
 }

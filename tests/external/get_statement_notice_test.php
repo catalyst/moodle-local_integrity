@@ -27,9 +27,10 @@ use local_integrity\statement_factory;
  * @copyright   2021 Catalyst IT
  * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @covers \local_integrity\external\get_statement_notice
  */
-class get_statement_notice_test extends advanced_testcase {
-
+final class get_statement_notice_test extends advanced_testcase {
     /**
      * Set up tests.
      */
@@ -41,7 +42,7 @@ class get_statement_notice_test extends advanced_testcase {
     /**
      * Test requesting statement's notice with incorrect name.
      */
-    public function test_requesting_notice_for_incorrect_statement_name() {
+    public function test_requesting_notice_for_incorrect_statement_name(): void {
         $this->setAdminUser();
 
         $_POST['sesskey'] = sesskey();
@@ -59,7 +60,7 @@ class get_statement_notice_test extends advanced_testcase {
     /**
      * Test requesting statement's notice with incorrect name.
      */
-    public function test_requesting_notice_for_correct_statements() {
+    public function test_requesting_notice_for_correct_statements(): void {
         $this->setAdminUser();
         $_POST['sesskey'] = sesskey();
 

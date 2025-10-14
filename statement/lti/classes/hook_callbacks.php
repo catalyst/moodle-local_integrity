@@ -28,7 +28,6 @@ require_once($CFG->dirroot . '/local/integrity/statement/lti/lib.php');
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class hook_callbacks {
-
     /**
      * Listener for the after_config hook.
      *
@@ -43,5 +42,4 @@ class hook_callbacks {
 
         integritystmt_lti_after_config();
     }
-
 }

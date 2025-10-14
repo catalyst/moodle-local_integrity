@@ -32,8 +32,8 @@ $id = required_param('id', PARAM_INT); // Course Module ID.
 $triggerview = optional_param('triggerview', 1, PARAM_BOOL);
 
 $cm = get_coursemodule_from_id('lti', $id, 0, false, MUST_EXIST);
-$lti = $DB->get_record('lti', array('id' => $cm->instance), '*', MUST_EXIST);
-$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+$lti = $DB->get_record('lti', ['id' => $cm->instance], '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
 $context = context_module::instance($cm->id);
 
 require_login($course, true, $cm);
@@ -44,7 +44,7 @@ $PAGE->set_context($context);
 $PAGE->set_pagelayout('incourse');
 $PAGE->set_url(new moodle_url('/local/integrity/statement/lti/launch.php', ['id' => $cm->id, 'triggerview' => $triggerview]));
 
-$pagetitle = strip_tags($course->shortname.': '.format_string($lti->name));
+$pagetitle = strip_tags($course->shortname . ': ' . format_string($lti->name));
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($course->fullname);
 

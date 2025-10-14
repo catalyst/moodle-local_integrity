@@ -14,18 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Interface described user data.
- *
- * @package     local_integrity
- * @copyright   2021 Catalyst IT
- * @author      Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_integrity;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Interface described user data.
@@ -36,7 +25,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface userdata_interface {
-
     /**
      * Return a list of context ids for the user for the plugin.
      *
@@ -70,5 +58,4 @@ interface userdata_interface {
      * @return bool
      */
     public function is_context_id_exist(int $contextid, int $userid): bool;
-
 }

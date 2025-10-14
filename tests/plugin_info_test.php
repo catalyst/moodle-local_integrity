@@ -30,12 +30,11 @@ use core_plugin_manager;
  *
  * @covers \local_integrity\plugininfo\integritystmt
  */
-class plugin_info_test extends advanced_testcase {
-
+final class plugin_info_test extends advanced_testcase {
     /**
      * Test a list of enabled plugins.
      */
-    public function test_get_enabled_plugins() {
+    public function test_get_enabled_plugins(): void {
         $expected = [];
 
         foreach (core_plugin_manager::instance()->get_installed_plugins('integritystmt') as $name => $version) {
@@ -44,5 +43,4 @@ class plugin_info_test extends advanced_testcase {
 
         $this->assertSame($expected, integritystmt::get_enabled_plugins());
     }
-
 }
