@@ -22,6 +22,7 @@ Once agreed in a context, the statement won't be displayed again, unless reset m
 * capabilities to change a default state for each of the statements (integritystmt/PLUGIN_NAME:changedefault);
 * capability to bypass statement notice (local/integrity:bypassnotice);
 * a CLI script to reset user data for a course, an activity, a statement plugin, a user or all data in a system;
+* a CLI script to set a default value in pre-existing activity setting to enable or disable the academic integrity;
 
 
 ## Supported activities ##
