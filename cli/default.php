@@ -18,7 +18,7 @@
  * CLI script for default settings value for activity.
  *
  * @package    local_integrity
- * @copyright  2021 Catalyst IT
+ * @copyright  2025 Catalyst IT
  * @author     Guillaume BARAT (guillaumebarat@catalyst-au.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -36,7 +36,7 @@ require_once($CFG->libdir . '/clilib.php');
         'default' => false,
         'help' => false,
     ],
-[
+    [
         'd' => 'default',
         'h' => 'help',
     ]
@@ -49,7 +49,7 @@ if ($unrecognized) {
 
 if ($options['help']) {
     $help = <<<EOT
-Reset integrity statement agreements.
+Default value for academic integrity.
 
 Options:
  -d, --default             Set default integrity settings for each activity that has not been set yet.
