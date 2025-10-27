@@ -32,24 +32,24 @@ require(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/clilib.php');
 
 [$options, $unrecognized] = cli_get_params(
-        [
-                'all' => false,
-                'courseids' => false,
-                'cmids' => false,
-                'userids' => false,
-                'plugins' => false,
-                'default' => false,
-                'help' => false
-        ],
-        [
-                'a' => 'all',
-                'c' => 'courseids',
-                'm' => 'cmids',
-                'u' => 'userids',
-                'p' => 'plugins',
-                'd' => 'default',
-                'h' => 'help'
-        ]
+    [
+        'all' => false,
+        'courseids' => false,
+        'cmids' => false,
+        'userids' => false,
+        'plugins' => false,
+        'default' => false,
+        'help' => false,
+    ],
+    [
+        'a' => 'all',
+        'c' => 'courseids',
+        'm' => 'cmids',
+        'u' => 'userids',
+        'p' => 'plugins',
+        'd' => 'default',
+        'h' => 'help',
+    ]
 );
 
 if ($unrecognized) {
@@ -84,7 +84,7 @@ EOT;
     exit(0);
 }
 
-if (isset($options['default']) && in_array($options['default'], [0,1])) {
+if (isset($options['default']) && in_array($options['default'], [0, 1])) {
     $enabled = $options['default'];
     $stmt = statement_factory::get_statements();
     $pluginlist = integritystmt::get_enabled_plugins();
@@ -113,7 +113,7 @@ if (isset($options['default']) && in_array($options['default'], [0,1])) {
                 }
                 $buildobject = [];
                 foreach ($datacontextplugins as $datacontext) {
-                    if(!in_array($datacontext->contextid, $contextalreadysettup)) {
+                    if (!in_array($datacontext->contextid, $contextalreadysettup)) {
                         $buildobject[] = (object) [
                                 'id' => null,
                                 'contextid' => $datacontext->contextid,
