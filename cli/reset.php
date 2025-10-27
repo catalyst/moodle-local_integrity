@@ -91,14 +91,15 @@ if (isset($options['default']) && in_array($options['default'], [0, 1])) {
     foreach ($pluginlist as $name) {
         $pluginstmt[$name] = $stmt[$name]->get_plugin_name();
     }
-    list($insqlplugin, $paramsplugins) = $DB->get_in_or_equal(array_keys($pluginlist));
+    [$insqlplugin, $paramsplugins] = $DB->get_in_or_equal(array_keys($pluginlist));
+    exit;
     $courseids = $DB->get_records('course', null, 'id', 'id');
     foreach ($courseids as $courseid) {
         $coursecontext = context_course::instance($courseid->id, IGNORE_MISSING);
         if (!empty($coursecontext)) {
             $children = $coursecontext->get_child_contexts();
             if (!empty($children)) {
-                list($insql, $params) = $DB->get_in_or_equal(array_keys($children));
+                [$insql, $params] = $DB->get_in_or_equal(array_keys($children));
                 $sql = "SELECT ct.id contextid, m.name modulename
                             FROM {modules} m
                             INNER JOIN {course_modules} cm ON m.id = cm.module
