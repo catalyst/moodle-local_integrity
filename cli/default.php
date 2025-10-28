@@ -53,6 +53,7 @@ Default value for academic integrity.
 
 Options:
  -d, --default             Set default integrity settings for each activity that has not been set yet.
+ -h, --help                Print out this help
 
 Example:
 \$sudo -u www-data /usr/bin/php local/integrity/cli/default.php --default=0,1
@@ -63,49 +64,41 @@ EOT;
 }
 
 if (isset($options['default']) && in_array($options['default'], [0, 1])) {
+    $integritytable = \local_integrity\settings::TABLE;
     $enabled = $options['default'];
     $stmt = statement_factory::get_statements();
     $pluginlist = integritystmt::get_enabled_plugins();
+    $pluginstmt = [];
     foreach ($pluginlist as $name) {
         $pluginstmt[$name] = $stmt[$name]->get_plugin_name();
     }
     [$insqlplugin, $paramsplugins] = $DB->get_in_or_equal(array_keys($pluginlist));
-    $courseids = $DB->get_records('course', null, 'id', 'id');
-    foreach ($courseids as $courseid) {
-        $coursecontext = context_course::instance($courseid->id, IGNORE_MISSING);
-        if (!empty($coursecontext)) {
-            $children = $coursecontext->get_child_contexts();
-            if (!empty($children)) {
-                [$insql, $params] = $DB->get_in_or_equal(array_keys($children));
-                $sql = "SELECT ct.id contextid, m.name modulename
-                            FROM {modules} m
-                            INNER JOIN {course_modules} cm ON m.id = cm.module
-                            INNER JOIN {context} ct ON ct.instanceid = cm.id
-                            WHERE ct.contextlevel = 70 AND cm.course = $courseid->id AND m.name $insqlplugin
-                            ";
-                $check = $DB->get_records_select(\local_integrity\settings::TABLE, "contextid $insql", $params);
-                $contextalreadysettup = [];
-                $datacontextplugins = $DB->get_records_sql($sql, $paramsplugins);
-                foreach ($check as $activity) {
-                    $contextalreadysettup[] = $activity->contextid;
-                }
-                $buildobject = [];
-                foreach ($datacontextplugins as $datacontext) {
-                    if (!in_array($datacontext->contextid, $contextalreadysettup)) {
-                        $buildobject[] = (object) [
-                                'id' => null,
-                                'contextid' => $datacontext->contextid,
-                                'plugin' => $pluginstmt[$datacontext->modulename],
-                                'enabled' => $enabled,
-                                'usermodified' => 2,
-                                'timecreated' => time(),
-                                'timemodified' => time(),
-                        ];
-                    }
-                }
-                $DB->insert_records(\local_integrity\settings::TABLE, $buildobject);
-            }
-        }
+    $sql = "SELECT ct.id contextid, m.name modulename
+                          FROM {modules} m
+                    INNER JOIN {course_modules} cm ON m.id = cm.module
+                    INNER JOIN {context} ct ON ct.instanceid = cm.id
+                     LEFT JOIN {" . $integritytable . "} lis ON lis.contextid = ct.id
+                         WHERE ct.contextlevel = 70
+                           AND m.name $insqlplugin
+                           AND lis.contextid IS NULL";
+    $datacontextplugins = $DB->get_recordset_sql($sql, $paramsplugins);
+    $buildobject = [];
+    foreach ($datacontextplugins as $datacontext) {
+        $buildobject[] = (object) [
+                'id' => null,
+                'contextid' => $datacontext->contextid,
+                'plugin' => $pluginstmt[$datacontext->modulename],
+                'enabled' => $enabled,
+                'usermodified' => 2,
+                'timecreated' => time(),
+                'timemodified' => time(),
+        ];
+    }
+    $datacontextplugins->close();
+    // Split the object in batch of 2000.
+    $chunks = array_chunk($buildobject, 2000);
+    foreach ($chunks as $chunk) {
+        $DB->insert_records($integritytable, $chunk);
     }
     cli_writeln("Activity default setting all set.");
 }
