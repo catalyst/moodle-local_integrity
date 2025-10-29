@@ -48,7 +48,8 @@ if ($unrecognized) {
     cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
 }
 
-if ($options['help']) {
+// Display help in case if requested for a help text or if unexpected default value is provided.
+if ($options['help'] || (!isset($options['default']) || !in_array($options['default'], ['enable', 'disable'], true))) {
     $help = <<<EOT
 Default value for academic integrity.
 
