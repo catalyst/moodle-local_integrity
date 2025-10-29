@@ -25,7 +25,7 @@
 
 use local_integrity\plugininfo\integritystmt;
 use local_integrity\statement_factory;
-use \local_integrity\settings;
+use local_integrity\settings;
 
 define('CLI_SCRIPT', true);
 
