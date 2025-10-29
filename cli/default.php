@@ -25,6 +25,7 @@
 
 use local_integrity\plugininfo\integritystmt;
 use local_integrity\statement_factory;
+use \local_integrity\settings;
 
 define('CLI_SCRIPT', true);
 
@@ -33,7 +34,7 @@ require_once($CFG->libdir . '/clilib.php');
 
 [$options, $unrecognized] = cli_get_params(
     [
-        'default' => false,
+        'default' => null,
         'help' => false,
     ],
     [
@@ -56,16 +57,25 @@ Options:
  -h, --help                Print out this help
 
 Example:
-\$sudo -u www-data /usr/bin/php local/integrity/cli/default.php --default=0,1
+\$sudo -u www-data /usr/bin/php local/integrity/cli/default.php --default=enable,disable
 
 EOT;
     cli_writeln($help);
     exit(0);
 }
 
-if (isset($options['default']) && in_array($options['default'], [0, 1])) {
-    $integritytable = \local_integrity\settings::TABLE;
-    $enabled = $options['default'];
+if (isset($options['default']) && in_array($options['default'], ['enable', 'disable'], true)) {
+    $integritytable = settings::TABLE;
+    switch ($options['default']) {
+        case 'enable':
+            $enabled = 1;
+            break;
+        case 'disable':
+            $enabled = 0;
+            break;
+        default:
+            $enabled = null;
+    }
     $stmt = statement_factory::get_statements();
     $pluginlist = integritystmt::get_enabled_plugins();
     $pluginstmt = [];
@@ -82,24 +92,33 @@ if (isset($options['default']) && in_array($options['default'], [0, 1])) {
                            AND m.name $insqlplugin
                            AND lis.contextid IS NULL";
     $datacontextplugins = $DB->get_recordset_sql($sql, $paramsplugins);
-    $buildobject = [];
+    $batch = [];
+    $batchsize = 2000;
+    $time = time();
+    $insertedcount = 0;
     foreach ($datacontextplugins as $datacontext) {
-        $buildobject[] = (object) [
+        $batch[] = (object) [
                 'id' => null,
                 'contextid' => $datacontext->contextid,
                 'plugin' => $pluginstmt[$datacontext->modulename],
                 'enabled' => $enabled,
                 'usermodified' => 2,
-                'timecreated' => time(),
-                'timemodified' => time(),
+                'timecreated' => $time,
+                'timemodified' => $time,
         ];
+        // Insert batch once it reaches the limit.
+        if (count($batch) >= $batchsize) {
+            $DB->insert_records($integritytable, $batch);
+            $insertedcount += count($batch);
+            $batch = []; // Clean memory.
+        }
+    }
+    // Insert remaining records if any.
+    if (!empty($batch)) {
+        $DB->insert_records($integritytable, $batch);
+        $insertedcount += count($batch);
     }
     $datacontextplugins->close();
-    // Split the object in batch of 2000.
-    $chunks = array_chunk($buildobject, 2000);
-    foreach ($chunks as $chunk) {
-        $DB->insert_records($integritytable, $chunk);
-    }
-    cli_writeln("Activity default setting all set.");
+    cli_writeln("Activity default setting of $enabled was set for $insertedcount activities");
 }
 exit(0);
