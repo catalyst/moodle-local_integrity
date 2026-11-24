@@ -26,8 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_integrity';
-$plugin->release = 2025101501;
-$plugin->version = 2025101501;
+$plugin->release = 2025101502;
+$plugin->version = 2025101502;
 $plugin->requires = 2024100700;
 $plugin->supported = [405, 501];
 $plugin->maturity = MATURITY_STABLE;
